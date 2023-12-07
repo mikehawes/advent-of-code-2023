@@ -32,7 +32,14 @@ class Hand:
                 self.value = 7
 
     def __eq__(self, other):
-        return self.value == other.value
+        return self.cards == other.cards
 
     def __lt__(self, other):
-        return self.value < other.value
+        if self.value < other.value:
+            return True
+        if self.value > other.value:
+            return False
+        for i in range(0, len(self.cards)):
+            if self.cards[i] < other.cards[i]:
+                return True
+        return False

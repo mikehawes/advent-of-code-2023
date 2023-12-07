@@ -3,7 +3,7 @@ import unittest
 from day7.hand import Hand
 
 
-class TestHand(unittest.TestCase):
+class TestCompareHandByType(unittest.TestCase):
 
     def test_should_find_high_card_is_less_than_one_pair(self):
         self.assertLess(Hand("23456"), Hand("A23A4"))
@@ -22,3 +22,12 @@ class TestHand(unittest.TestCase):
 
     def test_should_find_four_of_a_kind_is_less_than_five_of_a_kind(self):
         self.assertLess(Hand("AA8AA"), Hand("AAAAA"))
+
+
+class TestCompareHandByCardValue(unittest.TestCase):
+
+    def test_should_find_hand_stronger_by_first_card(self):
+        self.assertLess(Hand("2AAAA"), Hand("33332"))
+
+    def test_should_find_hand_stronger_by_third_card(self):
+        self.assertLess(Hand("77788"), Hand("77888"))
