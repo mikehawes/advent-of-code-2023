@@ -31,3 +31,22 @@ class TestCompareHandByCardValue(unittest.TestCase):
 
     def test_should_find_hand_stronger_by_third_card(self):
         self.assertLess(Hand("77788"), Hand("77888"))
+
+    def test_should_find_ten_stronger_than_nine(self):
+        self.assertLess(Hand("92222"), Hand("T2222"))
+
+    def test_should_find_jack_stronger_than_ten(self):
+        self.assertLess(Hand("T2222"), Hand("J2222"))
+
+    def test_should_find_queen_stronger_than_jack(self):
+        self.assertLess(Hand("J2222"), Hand("Q2222"))
+
+    def test_should_find_king_stronger_than_queen(self):
+        self.assertLess(Hand("Q2222"), Hand("K2222"))
+
+    def test_should_find_ace_stronger_than_king(self):
+        self.assertLess(Hand("K2222"), Hand("A2222"))
+
+    def test_should_find_first_card_stronger_regardless_of_compare_order(self):
+        self.assertLess(Hand("936A5"), Hand("T75Q2"))
+        self.assertGreater(Hand("T75Q2"), Hand("936A5"))

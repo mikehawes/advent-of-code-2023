@@ -1,5 +1,21 @@
 import functools
 
+value_by_card = {
+    '2': 2,
+    '3': 3,
+    '4': 4,
+    '5': 5,
+    '6': 6,
+    '7': 7,
+    '8': 8,
+    '9': 9,
+    'T': 10,
+    'J': 11,
+    'Q': 12,
+    'K': 13,
+    'A': 14
+}
+
 
 @functools.total_ordering
 class Hand:
@@ -40,6 +56,13 @@ class Hand:
         if self.value > other.value:
             return False
         for i in range(0, len(self.cards)):
-            if self.cards[i] < other.cards[i]:
+            my_card = value_by_card[self.cards[i]]
+            other_card = value_by_card[other.cards[i]]
+            if my_card < other_card:
                 return True
+            if my_card > other_card:
+                return False
         return False
+
+    def __repr__(self):
+        return '{} (value {})'.format(self.cards, self.value)
