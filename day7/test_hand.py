@@ -7,8 +7,8 @@ def hand(cards):
     return Hand.from_cards(cards)
 
 
-def with_joker(cards):
-    return Hand.from_cards_with_joker(cards)
+def with_jokers(cards):
+    return Hand.from_cards_with_jokers(cards)
 
 
 class TestCompareHandByType(unittest.TestCase):
@@ -63,13 +63,13 @@ class TestCompareHandByCardValue(unittest.TestCase):
 class TestApplyJoker(unittest.TestCase):
 
     def test_should_find_joker_weaker_for_same_hand(self):
-        self.assertLess(with_joker("J2222"), with_joker("22222"))
+        self.assertLess(with_jokers("J2222"), with_jokers("22222"))
 
     def test_should_find_hand_stronger_when_joker_turns_hand_into_five_of_a_kind(self):
-        self.assertGreater(with_joker("J2222"), with_joker("32222"))
+        self.assertGreater(with_jokers("J2222"), with_jokers("32222"))
 
     def test_should_find_five_jokers_stronger_than_four_of_a_kind(self):
-        self.assertGreater(with_joker("JJJJJ"), with_joker("32222"))
+        self.assertGreater(with_jokers("JJJJJ"), with_jokers("32222"))
 
     def test_should_find_five_jokers_weaker_than_other_five_of_a_kind(self):
-        self.assertLess(with_joker("JJJJJ"), with_joker("22222"))
+        self.assertLess(with_jokers("JJJJJ"), with_jokers("22222"))

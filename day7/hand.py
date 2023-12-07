@@ -1,6 +1,6 @@
 import functools
 
-value_by_card_no_joker = {
+value_by_card_no_jokers = {
     '2': 2,
     '3': 3,
     '4': 4,
@@ -16,7 +16,7 @@ value_by_card_no_joker = {
     'A': 14
 }
 
-value_by_card_with_joker = {
+value_by_card_with_jokers = {
     'J': 1,
     '2': 2,
     '3': 3,
@@ -37,7 +37,7 @@ value_by_card_with_joker = {
 class Hand:
     def __init__(self, cards, value_by_card=None, use_jokers=False):
         if value_by_card is None:
-            value_by_card = value_by_card_no_joker
+            value_by_card = value_by_card_no_jokers
         self.cards = cards
         self.card_values = list(map(lambda c: value_by_card[c], cards))
         self.count_by_card = {}
@@ -76,11 +76,11 @@ class Hand:
 
     @staticmethod
     def from_cards(cards):
-        return Hand(cards, value_by_card_no_joker, False)
+        return Hand(cards, value_by_card_no_jokers, False)
 
     @staticmethod
-    def from_cards_with_joker(cards):
-        return Hand(cards, value_by_card_with_joker, True)
+    def from_cards_with_jokers(cards):
+        return Hand(cards, value_by_card_with_jokers, True)
 
     def __eq__(self, other):
         return self.cards == other.cards
