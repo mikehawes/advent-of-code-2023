@@ -1,3 +1,4 @@
+import datetime
 import time
 
 from day8.graph import read_path_and_graph
@@ -8,20 +9,19 @@ def count_steps(path, graph):
     state = graph.start_state()
     print('Starting nodes:', nodes)
     path_index = graph.path_index(path, index_length=100000)
-    print('Indexed paths')
     start_time = time.time()
     while True:
         next_state = path_index.next_state(state)
         if next_state.at_end:
+            print('Finished')
+            print('Prev state:', state)
+            print(' End state:', next_state)
+            print('Time traversing states:', datetime.timedelta(seconds=time.time() - start_time))
             return next_state.steps
         if next_state.iterations % 10000000 == 0:
-            now = time.time()
-            print('Iterations:', next_state.iterations)
-            print('Steps:', next_state.steps)
-            print('Prev nodes:', state.current_nodes)
-            print('Nodes:', next_state.current_nodes)
-            print('Path offset:', next_state.path_offset)
-            print('Seconds elapsed:', round(now - start_time, 2))
+            print('Prev state:', state)
+            print(' New state:', next_state)
+            print('Time traversing states:', datetime.timedelta(seconds=time.time() - start_time))
         state = next_state
 
 

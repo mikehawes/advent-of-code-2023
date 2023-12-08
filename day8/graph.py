@@ -1,4 +1,6 @@
+import datetime
 import re
+import time
 
 
 class Node:
@@ -93,9 +95,12 @@ class PathIndex:
         self.path_len = len(path)
         self.index_length = index_length
         self.indexes_by_node_number = []
+        start_time = time.time()
         for i, node in enumerate(nodes):
-            print("Computing path index for node {}, {} of {}".format(node, i + 1, len(nodes)))
+            print("Computing path index for node {}, {} of {}, time so far: {}"
+                  .format(node, i + 1, len(nodes), datetime.timedelta(seconds=time.time() - start_time)))
             self.indexes_by_node_number.append(NodePathIndex(node, nodes, path, index_length))
+        print('Built path index, took', datetime.timedelta(seconds=time.time() - start_time))
 
     def next_state(self, state):
         next_nodes = []
