@@ -6,26 +6,26 @@ from day8.graph import InitNode, Graph
 
 def count_steps(path, graph):
     nodes = graph.start_nodes()
+    state = graph.start_state()
+    path_index = graph.path_index(path)
     print('Starting nodes:', nodes)
     start_time = time.time()
-    steps = 0
     while True:
-        for direction in path:
-            next_nodes = graph.get_next_nodes(nodes, direction)
-            steps += 1
-            if all(map(lambda n: n.is_end, next_nodes)):
-                return steps
-            if steps % 100000000 == 0:
-                now = time.time()
-                print('Steps:', steps)
-                print('Nodes:', nodes)
-                print('Direction:', direction)
-                print('Next nodes:', next_nodes)
-                print('Seconds elapsed:', round(now - start_time, 2))
-            nodes = next_nodes
+        next_state = path_index.next_state(state)
+        if next_state.at_end:
+            return next_state.steps
+        if next_state.iterations % 100000000 == 0:
+            now = time.time()
+            print('Iterations:', next_state.iterations)
+            print('Steps:', next_state.steps)
+            print('Prev nodes:', state.current_nodes)
+            print('Nodes:', next_state.current_nodes)
+            print('Path offset:', next_state.path_offset)
+            print('Seconds elapsed:', round(now - start_time, 2))
+        state = next_state
 
 
-def count_steps_from_a_to_z_as_ghost(input_file):
+def read_path_and_graph(input_file):
     init_nodes = []
     with open(input_file, 'r') as file:
         path = file.readline().strip()
@@ -35,8 +35,12 @@ def count_steps_from_a_to_z_as_ghost(input_file):
                 init_nodes.append(InitNode(nodes[0], nodes[1], nodes[2]))
 
     graph = Graph(init_nodes)
+    return path, graph
+
+
+def count_steps_from_a_to_z_as_ghost(input_file):
+    path, graph = read_path_and_graph(input_file)
 
     print('{} directions:'.format(len(path)), path)
     print('{} nodes:'.format(graph.count()), graph)
     return count_steps(path, graph)
-
