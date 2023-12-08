@@ -18,12 +18,12 @@ def count_steps(path, paths_by_node, start, end):
 
 
 def count_steps_from_a_to_z(input_file):
-    file = open(input_file, 'r')
-    path = file.readline().strip()
-    paths_by_node = {}
-    for line in file:
-        nodes = re.findall("[A-Z]+", line)
-        if len(nodes) == 3:
-            paths_by_node[nodes[0]] = (nodes[1], nodes[2])
+    with open(input_file, 'r') as file:
+        path = file.readline().strip()
+        paths_by_node = {}
+        for line in file:
+            nodes = re.findall("[A-Z]+", line)
+            if len(nodes) == 3:
+                paths_by_node[nodes[0]] = (nodes[1], nodes[2])
     return count_steps(path, paths_by_node, 'AAA', 'ZZZ')
 
