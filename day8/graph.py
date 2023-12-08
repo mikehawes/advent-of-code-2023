@@ -82,10 +82,6 @@ class PathIndex:
         for node in nodes:
             self.indexes_by_node_number.append(NodePathIndex(node, nodes, path))
 
-    def get_next_nodes(self, nodes, path_offset):
-        direction = self.path[path_offset]
-        return list(map(lambda n: n.get_next_node(self.nodes, direction), nodes))
-
     def next_state(self, state):
         next_nodes = []
         end_nodes_by_offset = {}
