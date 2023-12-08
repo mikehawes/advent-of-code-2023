@@ -22,4 +22,4 @@ class TestDay8Part2(unittest.TestCase):
         self.assertEqual(6, count_steps_from_a_to_z_as_ghost('example3'))
 
     def test_should_get_steps_for_input(self):
-        self.assertEqual(22289513667691, count_steps_from_a_to_z_as_ghost('input'))
+        self.assertEqual(22_289_513_667_691, count_steps_from_a_to_z_as_ghost('input'))

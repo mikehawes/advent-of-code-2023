@@ -48,14 +48,29 @@ class TestGraph(unittest.TestCase):
         path, graph = read_path_and_graph('input')
         path_index = graph.path_index(path, 1000)
         before = NodePathState(current_nodes=graph.nodes_by_labels(['JGL', 'LTN', 'QNN', 'GGT', 'NXT', 'DCF']),
-                               steps=22000000000000,
+                               steps=22_000_000_000_000,
                                path_offset=24)
         after_by_graph = graph.next_state(before, path, max_steps=1000)
         after_by_index = path_index.next_state(before)
         self.assertEqual(
             repr(NodePathState(current_nodes=graph.nodes_by_labels(['FDV', 'FKJ', 'VRL', 'NNL', 'GGX', 'RKP']),
-                               steps=22000000001000,
+                               steps=22_000_000_001_000,
                                path_offset=145,
                                iterations=1)),
             repr(after_by_graph))
         self.assertEqual(repr(after_by_graph), repr(after_by_index))
+
+    def test_should_find_answer(self):
+        path, graph = read_path_and_graph('input')
+        path_index = graph.path_index(path, 100000)
+        before = NodePathState(current_nodes=graph.nodes_by_labels(['NKB', 'KFK', 'VVT', 'TTQ', 'FKH', 'GFV']),
+                               steps=22_289_513_600_000,
+                               path_offset=285)
+        result = path_index.next_state(before)
+        self.assertEqual(
+            repr(NodePathState(current_nodes=graph.nodes_by_labels(['DHZ', 'QLZ', 'BJZ', 'NVZ', 'ZZZ', 'KQZ']),
+                               steps=22_289_513_667_691,
+                               path_offset=0,
+                               iterations=1,
+                               at_end=True)),
+            repr(result))
