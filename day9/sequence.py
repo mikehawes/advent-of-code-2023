@@ -5,8 +5,7 @@ class SequenceDeltas:
     def __init__(self, numbers):
         self.numbers = numbers
         self.deltas = []
-        max_delta = 1
-        while max_delta != 0:
+        while any(filter(lambda d: d != 0, numbers)):
             deltas = []
             for i in range(0, len(numbers) - 1):
                 a = numbers[i]
@@ -16,16 +15,13 @@ class SequenceDeltas:
                 raise 'Found empty deltas'
             else:
                 self.deltas.append(deltas)
-                max_delta = max(deltas)
             numbers = deltas
 
     def guess_next_value(self):
-        last_delta = 0
-        next_delta = 0
+        delta = 0
         for deltas in self.deltas:
-            next_delta = deltas[-1] + last_delta
-            last_delta = next_delta
-        return self.numbers[-1] + next_delta
+            delta += deltas[-1]
+        return self.numbers[-1] + delta
 
 
 def read_sequence_from_line(line):

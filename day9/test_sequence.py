@@ -18,4 +18,4 @@ class TestSequence(unittest.TestCase):
         verify(print_sequences(detect_sequences_from_file('input')))
 
     def test_should_sum_guesses_for_input(self):
-        self.assertEqual(1584748752, sum_next_guesses_from_file('input'))
+        self.assertEqual(1584748274, sum_next_guesses_from_file('input'))
