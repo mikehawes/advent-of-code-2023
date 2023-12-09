@@ -16,6 +16,7 @@ def join_numbers(numbers, number_width):
 def print_sequences(sequences):
     output = io.StringIO()
     padding = 1
+    total_of_next_values = 0
     for sequence in sequences:
         sequence_strings = list(number_strings(sequence.numbers))
         max_number_len = max(map(len, sequence_strings)) + padding
@@ -27,6 +28,10 @@ def print_sequences(sequences):
                 join_numbers(deltas, max_number_len)),
                 file=output)
             indent += 1
-        print('Next value:', sequence.guess_next_value(), file=output)
+        next_value = sequence.guess_next_value()
+        total_of_next_values += next_value
+        print('Next value:', next_value, file=output)
         print(file=output)
+
+    print('Total of next values:', total_of_next_values, file=output)
     return output.getvalue()
