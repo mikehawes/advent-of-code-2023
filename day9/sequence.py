@@ -24,11 +24,9 @@ class SequenceDeltas:
         return self.numbers[-1] + delta
 
     def guess_previous_value(self):
-        last_delta = 0
         delta = 0
         for deltas in reversed(self.deltas):
-            delta = deltas[0] - last_delta
-            last_delta = delta
+            delta = deltas[0] - delta
         return self.numbers[0] - delta
 
 
