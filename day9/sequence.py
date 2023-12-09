@@ -6,14 +6,17 @@ class SequenceDeltas:
         self.numbers = numbers
         self.deltas = []
         max_delta = 1
-        while max_delta > 0:
+        while max_delta != 0:
             deltas = []
             for i in range(0, len(numbers) - 1):
                 a = numbers[i]
                 b = numbers[i + 1]
                 deltas.append(b - a)
-            self.deltas.append(deltas)
-            max_delta = max(deltas)
+            if len(deltas) == 0:
+                raise 'Found empty deltas'
+            else:
+                self.deltas.append(deltas)
+                max_delta = max(deltas)
             numbers = deltas
 
     def guess_next_value(self):
@@ -26,7 +29,7 @@ class SequenceDeltas:
 
 
 def read_sequence_from_line(line):
-    return list(map(int, re.findall("[0-9]+", line)))
+    return list(map(int, re.findall("-?[0-9]+", line)))
 
 
 def read_sequences_from_file(input_file):
@@ -37,3 +40,8 @@ def read_sequences_from_file(input_file):
 def detect_sequences_from_file(input_file):
     sequences = read_sequences_from_file(input_file)
     return list(map(SequenceDeltas, sequences))
+
+
+def sum_next_guesses_from_file(input_file):
+    sequences = detect_sequences_from_file(input_file)
+    return sum(map(lambda s: s.guess_next_value(), sequences))
