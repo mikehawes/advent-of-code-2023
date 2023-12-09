@@ -16,6 +16,14 @@ class SequenceDeltas:
             max_delta = max(deltas)
             numbers = deltas
 
+    def guess_next_value(self):
+        last_delta = 0
+        next_delta = 0
+        for deltas in self.deltas:
+            next_delta = deltas[-1] + last_delta
+            last_delta = next_delta
+        return self.numbers[-1] + next_delta
+
 
 def read_sequence_from_line(line):
     return list(map(int, re.findall("[0-9]+", line)))

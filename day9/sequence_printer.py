@@ -27,5 +27,6 @@ def print_sequences(sequences):
                 join_numbers(deltas, max_number_len)),
                 file=output)
             indent += 1
+        print('Next value:', sequence.guess_next_value(), file=output)
         print(file=output)
     return output.getvalue()
