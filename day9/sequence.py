@@ -23,6 +23,14 @@ class SequenceDeltas:
             delta += deltas[-1]
         return self.numbers[-1] + delta
 
+    def guess_previous_value(self):
+        last_delta = 0
+        delta = 0
+        for deltas in reversed(self.deltas):
+            delta = deltas[0] - last_delta
+            last_delta = delta
+        return self.numbers[0] - delta
+
 
 def read_sequence_from_line(line):
     return list(map(int, re.findall("-?[0-9]+", line)))
@@ -36,8 +44,3 @@ def read_sequences_from_file(input_file):
 def detect_sequences_from_file(input_file):
     sequences = read_sequences_from_file(input_file)
     return list(map(SequenceDeltas, sequences))
-
-
-def sum_next_guesses_from_file(input_file):
-    sequences = detect_sequences_from_file(input_file)
-    return sum(map(lambda s: s.guess_next_value(), sequences))

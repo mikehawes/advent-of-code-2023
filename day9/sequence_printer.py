@@ -17,6 +17,7 @@ def print_sequences(sequences):
     output = io.StringIO()
     padding = 1
     total_of_next_values = 0
+    total_of_previous_values = 0
     for sequence in sequences:
         sequence_strings = list(number_strings(sequence.numbers))
         max_number_len = max(map(len, sequence_strings)) + padding
@@ -29,9 +30,13 @@ def print_sequences(sequences):
                 file=output)
             indent += 1
         next_value = sequence.guess_next_value()
+        previous_value = sequence.guess_previous_value()
         total_of_next_values += next_value
+        total_of_previous_values += previous_value
         print('Next value:', next_value, file=output)
+        print('Previous value:', previous_value, file=output)
         print(file=output)
 
     print('Total of next values:', total_of_next_values, file=output)
+    print('Total of previous values:', total_of_previous_values, file=output)
     return output.getvalue()
