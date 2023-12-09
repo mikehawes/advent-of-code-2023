@@ -4,6 +4,17 @@ import re
 class SequenceDeltas:
     def __init__(self, numbers):
         self.numbers = numbers
+        self.deltas = []
+        max_delta = 1
+        while max_delta > 0:
+            deltas = []
+            for i in range(0, len(numbers) - 1):
+                a = numbers[i]
+                b = numbers[i + 1]
+                deltas.append(b - a)
+            self.deltas.append(deltas)
+            max_delta = max(deltas)
+            numbers = deltas
 
 
 def read_sequence_from_line(line):
