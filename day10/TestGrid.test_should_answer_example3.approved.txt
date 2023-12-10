@@ -2,11 +2,11 @@ Furthest position on path: 23
 Enclosed tiles: 4
 
 OOOOOOOOOOO
-OS-------7O
-O|F-----7|O
-O||OOOOO||O
-O||OOOOO||O
-O|L-7OF-J|O
-O|**|O|**|O
-OL--JOL--JO
+OS═══════╗O
+O║╔═════╗║O
+O║║OOOOO║║O
+O║║OOOOO║║O
+O║╚═╗O╔═╝║O
+O║**║O║**║O
+O╚══╝O╚══╝O
 OOOOOOOOOOO

@@ -1,13 +1,13 @@
 Furthest position on path: 70
 Enclosed tiles: 8
 
-OF----7F7F7F7F-7OOOO
-O|F--7||||||||FJOOOO
-O||OFJ||||||||L7OOOO
-FJL7L7LJLJ||LJ*L-7OO
-L--JOL7***LJS7F-7L7O
-OOOOF-J**F7FJ|L7L7L7
-OOOOL7*F7||L7|*L7L7|
-OOOOO|FJLJ|FJ|F7|OLJ
-OOOOFJL-7O||O||||OOO
-OOOOL---JOLJOLJLJOOO
+O╔════╗╔╗╔╗╔╗╔═╗OOOO
+O║╔══╗║║║║║║║║╔╝OOOO
+O║║O╔╝║║║║║║║║╚╗OOOO
+╔╝╚╗╚╗╚╝╚╝║║╚╝*╚═╗OO
+╚══╝O╚╗***╚╝S╗╔═╗╚╗O
+OOOO╔═╝**╔╗╔╝║╚╗╚╗╚╗
+OOOO╚╗*╔╗║║╚╗║*╚╗╚╗║
+OOOOO║╔╝╚╝║╔╝║╔╗║O╚╝
+OOOO╔╝╚═╗O║║O║║║║OOO
+OOOO╚═══╝O╚╝O╚╝╚╝OOO

@@ -10,13 +10,31 @@ def listed_node_at(nodes, x, y):
     return None
 
 
+def draw_contents(node):
+    match node.contents:
+        case '-':
+            return '═'
+        case '|':
+            return '║'
+        case 'L':
+            return '╚'
+        case 'J':
+            return '╝'
+        case 'F':
+            return '╔'
+        case '7':
+            return '╗'
+        case _:
+            return node.contents
+
+
 def print_outside(grid, path, output):
     outside_by_loc_str = path.outside_nodes_by_loc_str()
     for y, line in enumerate(grid.lines):
         for x, contents in enumerate(line):
             path_node = listed_node_at(path.nodes, x, y)
             if path_node:
-                output.write(path_node.contents)
+                output.write(draw_contents(path_node))
             elif to_loc_str(x, y) in outside_by_loc_str:
                 output.write('O')
             else:
