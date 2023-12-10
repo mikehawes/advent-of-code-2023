@@ -1,6 +1,3 @@
-from itertools import chain
-
-
 class Node:
     def __init__(self, x, y, contents):
         self.x = x
@@ -33,14 +30,17 @@ class Grid:
 
     def connected_nodes(self):
         start_node = self.start_node()
-        connected_by_location = {start_node.loc_str(): start_node}
+        connected_by_location = {}
         nodes = [start_node]
-        while len(nodes) > 0:
-            nodes = list(filter(lambda n: n.loc_str() not in connected_by_location,
-                                chain.from_iterable(map(self.next_nodes_of, nodes))))
-            for node in nodes:
-                connected_by_location[node.loc_str()] = node
-        return connected_by_location.values()
+        node = start_node
+        while True:
+            nodes.append(node)
+            connected_by_location[node.loc_str()] = node
+            next_nodes = list(filter(lambda n: n.loc_str() not in connected_by_location,
+                                     self.next_nodes_of(node)))
+            if len(next_nodes) == 0:
+                return nodes
+            node = next_nodes[0]
 
     def nodes_in_path(self):
         return [self.start_node()]

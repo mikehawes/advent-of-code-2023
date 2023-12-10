@@ -28,6 +28,11 @@ class TestGrid(unittest.TestCase):
         path = grid.connected_nodes()
         verify(print_nodes_in_grid(path, grid))
 
+    def test_should_find_connected_nodes_for_input(self):
+        grid = read_grid_from_file('input')
+        path = grid.connected_nodes()
+        verify(print_nodes_in_grid(path, grid))
+
     def test_should_find_path_for_example1(self):
         grid = read_grid_from_file('example1')
         path = grid.nodes_in_path()
