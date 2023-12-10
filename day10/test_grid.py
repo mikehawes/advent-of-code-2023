@@ -3,44 +3,19 @@ import unittest
 from approvaltests import verify
 
 from day10.grid import read_grid_from_file
-from day10.grid_printer import print_grid, print_node, print_nodes_in_grid
+from day10.grid_printer import print_answers
 
 
 class TestGrid(unittest.TestCase):
 
-    def test_should_read_grid_for_example1(self):
+    def test_should_answer_example1(self):
         grid = read_grid_from_file('example1')
-        self.assertEquals(open('example1', 'r').read(),
-                          print_grid(grid))
+        verify(print_answers(grid))
 
-    def test_should_find_start_for_example1(self):
-        grid = read_grid_from_file('example1')
-        self.assertEquals('S at 1,1',
-                          print_node(grid.start_node()))
-
-    def test_should_find_connected_nodes_for_example1(self):
-        grid = read_grid_from_file('example1')
-        path = grid.connected_nodes()
-        verify(print_nodes_in_grid(path, grid))
-
-    def test_should_find_connected_nodes_for_example2(self):
+    def test_should_answer_example2(self):
         grid = read_grid_from_file('example2')
-        path = grid.connected_nodes()
-        verify(print_nodes_in_grid(path, grid))
+        verify(print_answers(grid))
 
-    def test_should_find_connected_nodes_for_input(self):
+    def test_should_answer_input(self):
         grid = read_grid_from_file('input')
-        path = grid.connected_nodes()
-        verify(print_nodes_in_grid(path, grid))
-
-    def test_should_find_furthest_position_for_example1(self):
-        grid = read_grid_from_file('example1')
-        self.assertEquals(4, grid.furthest_position_on_path())
-
-    def test_should_find_furthest_position_for_example2(self):
-        grid = read_grid_from_file('example2')
-        self.assertEquals(8, grid.furthest_position_on_path())
-
-    def test_should_find_furthest_position_for_input(self):
-        grid = read_grid_from_file('input')
-        self.assertEquals(7107, grid.furthest_position_on_path())
+        verify(print_answers(grid))

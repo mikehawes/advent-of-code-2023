@@ -1,3 +1,5 @@
+Furthest position on path: 4
+
 .....
 .S-7.
 .|.|.

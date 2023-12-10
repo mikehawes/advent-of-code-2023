@@ -1,3 +1,5 @@
+Furthest position on path: 8
+
 ..F7.
 .FJ|.
 SJ.L7

@@ -16,6 +16,10 @@ def contents_connect(prev_node, next_node, prev_contents, next_contents):
     return True
 
 
+def furthest_position_on_path(nodes):
+    return int(len(nodes) / 2)
+
+
 class Grid:
     def __init__(self, lines):
         self.lines = lines
@@ -41,9 +45,6 @@ class Grid:
             if len(next_nodes) == 0:
                 return nodes
             node = next_nodes[0]
-
-    def furthest_position_on_path(self):
-        return int(len(self.connected_nodes()) / 2)
 
     def next_nodes_of(self, node):
         return filter(lambda n: n is not None, [
