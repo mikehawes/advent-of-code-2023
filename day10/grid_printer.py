@@ -1,6 +1,6 @@
 import io
 
-from day10.grid import furthest_position_on_path
+from day10.grid import Path
 
 
 def listed_node_at(nodes, x, y):
@@ -25,9 +25,9 @@ def print_nodes_in_grid(nodes, grid, output=None):
 
 
 def print_answers(grid):
-    nodes = grid.connected_nodes()
+    path = Path(grid, grid.start_node())
     output = io.StringIO()
-    print('Furthest position on path:', furthest_position_on_path(nodes), file=output)
+    print('Furthest position on path:', path.furthest_position(), file=output)
     print(file=output)
-    print_nodes_in_grid(nodes, grid, output)
+    print_nodes_in_grid(path.nodes, grid, output)
     return output.getvalue()

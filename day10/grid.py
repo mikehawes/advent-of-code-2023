@@ -16,10 +16,6 @@ def contents_connect(prev_node, next_node, prev_contents, next_contents):
     return True
 
 
-def furthest_position_on_path(nodes):
-    return int(len(nodes) / 2)
-
-
 class Grid:
     def __init__(self, lines):
         self.lines = lines
@@ -31,20 +27,6 @@ class Grid:
             for x, contents in enumerate(line):
                 if contents == 'S':
                     return Node(x, y, contents)
-
-    def connected_nodes(self):
-        start_node = self.start_node()
-        connected_by_location = {}
-        nodes = [start_node]
-        node = start_node
-        while True:
-            nodes.append(node)
-            connected_by_location[node.loc_str()] = node
-            next_nodes = list(filter(lambda n: n.loc_str() not in connected_by_location,
-                                     self.next_nodes_of(node)))
-            if len(next_nodes) == 0:
-                return nodes
-            node = next_nodes[0]
 
     def next_nodes_of(self, node):
         return filter(lambda n: n is not None, [
@@ -100,6 +82,28 @@ class Grid:
 
     def node_at(self, x, y):
         return Node(x, y, self.lines[y][x])
+
+
+class Path:
+    def __init__(self, grid, start_node):
+        self.grid = grid
+        self.start_node = start_node
+        connected_by_loc_str = {}
+        nodes = [start_node]
+        node = start_node
+        while True:
+            nodes.append(node)
+            connected_by_loc_str[node.loc_str()] = node
+            next_nodes = list(filter(lambda n: n.loc_str() not in connected_by_loc_str,
+                                     grid.next_nodes_of(node)))
+            if len(next_nodes) == 0:
+                break
+            node = next_nodes[0]
+        self.nodes = nodes
+        self.connected_by_location = connected_by_loc_str
+
+    def furthest_position(self):
+        return int(len(self.nodes) / 2)
 
 
 def read_grid_from_file(input_file):
