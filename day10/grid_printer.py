@@ -28,6 +28,7 @@ def print_answers(grid):
     path = Path(grid, grid.start_node())
     output = io.StringIO()
     print('Furthest position on path:', path.furthest_position(), file=output)
+    print('Enclosed tiles:', path.count_enclosed_tiles(), file=output)
     print(file=output)
     print_nodes_in_grid(path.nodes, grid, output)
     return output.getvalue()
