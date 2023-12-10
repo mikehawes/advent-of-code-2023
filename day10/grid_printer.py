@@ -35,7 +35,7 @@ def print_answers(grid):
 def print_outside(grid):
     path = Path(grid, grid.start_node())
     output = io.StringIO()
-    outside_by_loc_str = path.outside_tiles_by_loc_str()
+    outside_by_loc_str = path.outside_nodes_by_loc_str()
     for y, line in enumerate(grid.lines):
         for x, contents in enumerate(line):
             path_node = listed_node_at(path.nodes, x, y)

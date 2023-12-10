@@ -136,9 +136,11 @@ class Path:
         return int(len(self.nodes) / 2)
 
     def count_enclosed_tiles(self):
-        return self.grid.num_nodes() - len(self.nodes) - len(self.outside_tiles_by_loc_str().values())
+        grid_nodes = self.grid.num_nodes()
+        outside_nodes_by_loc_str = self.outside_nodes_by_loc_str()
+        return grid_nodes - len(self.nodes) - len(outside_nodes_by_loc_str.values())
 
-    def outside_tiles_by_loc_str(self):
+    def outside_nodes_by_loc_str(self):
         outside_by_loc_str = {}
         for node in self.grid.all_nodes():
             loc_str = node.loc_str()
