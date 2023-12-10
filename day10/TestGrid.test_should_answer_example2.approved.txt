@@ -1,8 +1,8 @@
 Furthest position on path: 8
 Enclosed tiles: 1
 
-..F7.
-.FJ|.
-SJ.L7
+OOF7O
+OFJ|O
+SJ*L7
 |F--J
-LJ...
+LJOOO
