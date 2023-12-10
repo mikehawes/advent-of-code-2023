@@ -1,6 +1,6 @@
 import io
 
-from day10.grid import Path
+from day10.grid import Path, loc_str
 
 
 def listed_node_at(nodes, x, y):
@@ -10,9 +10,7 @@ def listed_node_at(nodes, x, y):
     return None
 
 
-def print_nodes_in_grid(nodes, grid, output=None):
-    if not output:
-        output = io.StringIO()
+def print_nodes_in_grid(nodes, grid, output):
     for y, line in enumerate(grid.lines):
         for x, contents in enumerate(line):
             path_node = listed_node_at(nodes, x, y)
@@ -31,4 +29,21 @@ def print_answers(grid):
     print('Enclosed tiles:', path.count_enclosed_tiles(), file=output)
     print(file=output)
     print_nodes_in_grid(path.nodes, grid, output)
+    return output.getvalue()
+
+
+def print_outside(grid):
+    path = Path(grid, grid.start_node())
+    output = io.StringIO()
+    outside_by_loc_str = path.outside_tiles_by_loc_str()
+    for y, line in enumerate(grid.lines):
+        for x, contents in enumerate(line):
+            path_node = listed_node_at(path.nodes, x, y)
+            if path_node:
+                output.write(path_node.contents)
+            elif loc_str(x, y) in outside_by_loc_str:
+                output.write('O')
+            else:
+                output.write('.')
+        print('', file=output)
     return output.getvalue()

@@ -1,6 +1,10 @@
 from itertools import chain
 
 
+def loc_str(x, y):
+    return '{},{}'.format(x, y)
+
+
 class Node:
     def __init__(self, x, y, contents):
         self.x = x
@@ -8,7 +12,7 @@ class Node:
         self.contents = contents
 
     def loc_str(self):
-        return '{},{}'.format(self.x, self.y)
+        return loc_str(self.x, self.y)
 
 
 def contents_connect(prev_node, next_node, prev_contents, next_contents):
@@ -140,12 +144,13 @@ class Path:
         return int(len(self.nodes) / 2)
 
     def count_enclosed_tiles(self):
-        grid = self.grid
-        outside_by_loc_str = {}
-        for outer_node in grid.outer_nodes():
-            self.add_connected_outside_tiles(outer_node, outside_by_loc_str)
+        return self.grid.num_nodes() - len(self.nodes) - len(self.outside_tiles_by_loc_str().values())
 
-        return grid.num_nodes() - len(self.nodes) - len(outside_by_loc_str)
+    def outside_tiles_by_loc_str(self):
+        outside_by_loc_str = {}
+        for outer_node in self.grid.outer_nodes():
+            self.add_connected_outside_tiles(outer_node, outside_by_loc_str)
+        return outside_by_loc_str
 
     def add_connected_outside_tiles(self, outer_node, outside_by_loc_str):
         loc_str = outer_node.loc_str()
