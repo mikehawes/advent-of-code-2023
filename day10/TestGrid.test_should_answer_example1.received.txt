@@ -1,8 +1,0 @@
-Furthest position on path: 4
-Enclosed tiles: 1
-
-.....
-.S-7.
-.|.|.
-.L-J.
-.....

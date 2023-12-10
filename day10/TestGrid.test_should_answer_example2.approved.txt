@@ -1,4 +1,5 @@
 Furthest position on path: 8
+Enclosed tiles: 1
 
 ..F7.
 .FJ|.

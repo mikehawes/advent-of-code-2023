@@ -31,15 +31,23 @@ class Grid:
                 if contents == 'S':
                     return Node(x, y, contents)
 
-    def next_nodes_of(self, node):
-        return filter(lambda n: n is not None, [
-            self.left_connection_of(node),
-            self.right_connection_of(node),
-            self.top_connection_of(node),
-            self.bottom_connection_of(node)
-        ])
+    def connected_pipes_of(self, pipe):
+        return filter(lambda n: n is not None, (
+            self.left_pipe_connection(pipe),
+            self.right_pipe_connection(pipe),
+            self.top_pipe_connection(pipe),
+            self.bottom_pipe_connection(pipe)
+        ))
 
-    def left_connection_of(self, node):
+    def adjacent_nodes_of(self, node):
+        return filter(lambda n: n is not None, (
+            self.left_of(node),
+            self.right_of(node),
+            self.above(node),
+            self.below(node)
+        ))
+
+    def left_pipe_connection(self, node):
         found = self.left_of(node)
         if found and contents_connect(node, found,
                                       ('-', 'J', '7'),
@@ -53,7 +61,7 @@ class Grid:
             return None
         return self.node_at(node.x - 1, node.y)
 
-    def right_connection_of(self, node):
+    def right_pipe_connection(self, node):
         found = self.right_of(node)
         if found and contents_connect(node, found,
                                       ('-', 'F', 'L'),
@@ -67,7 +75,7 @@ class Grid:
             return None
         return self.node_at(node.x + 1, node.y)
 
-    def top_connection_of(self, node):
+    def top_pipe_connection(self, node):
         found = self.above(node)
         if found and contents_connect(node, found,
                                       ('|', 'J', 'L'),
@@ -81,7 +89,7 @@ class Grid:
             return None
         return self.node_at(node.x, node.y - 1)
 
-    def bottom_connection_of(self, node):
+    def bottom_pipe_connection(self, node):
         found = self.below(node)
         if found and contents_connect(node, found,
                                       ('|', 'F', '7'),
@@ -114,19 +122,19 @@ class Path:
     def __init__(self, grid, start_node):
         self.grid = grid
         self.start_node = start_node
-        connected_by_loc_str = {}
+        nodes_by_loc_str = {}
         nodes = []
         node = start_node
         while True:
             nodes.append(node)
-            connected_by_loc_str[node.loc_str()] = node
-            next_nodes = list(filter(lambda n: n.loc_str() not in connected_by_loc_str,
-                                     grid.next_nodes_of(node)))
+            nodes_by_loc_str[node.loc_str()] = node
+            next_nodes = list(filter(lambda n: n.loc_str() not in nodes_by_loc_str,
+                                     grid.connected_pipes_of(node)))
             if len(next_nodes) == 0:
                 break
             node = next_nodes[0]
         self.nodes = nodes
-        self.connected_by_location = connected_by_loc_str
+        self.nodes_by_loc_str = nodes_by_loc_str
 
     def furthest_position(self):
         return int(len(self.nodes) / 2)
@@ -135,10 +143,21 @@ class Path:
         grid = self.grid
         outside_by_loc_str = {}
         for outer_node in grid.outer_nodes():
-            loc_str = outer_node.loc_str()
-            if loc_str not in self.connected_by_location and loc_str not in outside_by_loc_str:
-                outside_by_loc_str[loc_str] = outer_node
+            self.add_connected_outside_tiles(outer_node, outside_by_loc_str)
+
         return grid.num_nodes() - len(self.nodes) - len(outside_by_loc_str)
+
+    def add_connected_outside_tiles(self, outer_node, outside_by_loc_str):
+        loc_str = outer_node.loc_str()
+        if loc_str in outside_by_loc_str or loc_str in self.nodes_by_loc_str:
+            return
+        outside_by_loc_str[loc_str] = outer_node
+        for adjacent in self.grid.adjacent_nodes_of(outer_node):
+            self.add_connected_outside_tiles(adjacent, outside_by_loc_str)
+
+    def is_uncounted_outside(self, node, outside_by_loc_str):
+        loc_str = node.loc_str()
+        return loc_str not in outside_by_loc_str and loc_str not in self.nodes_by_loc_str
 
 
 def read_grid_from_file(input_file):

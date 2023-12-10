@@ -16,6 +16,14 @@ class TestGrid(unittest.TestCase):
         grid = read_grid_from_file('example2')
         verify(print_answers(grid))
 
+    def test_should_answer_example3(self):
+        grid = read_grid_from_file('example3')
+        verify(print_answers(grid))
+
+    def test_should_answer_example4(self):
+        grid = read_grid_from_file('example4')
+        verify(print_answers(grid))
+
     def test_should_answer_input(self):
         grid = read_grid_from_file('input')
         verify(print_answers(grid))
