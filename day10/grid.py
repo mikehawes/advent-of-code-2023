@@ -42,8 +42,8 @@ class Grid:
                 return nodes
             node = next_nodes[0]
 
-    def nodes_in_path(self):
-        return [self.start_node()]
+    def furthest_position_on_path(self):
+        return int(len(self.connected_nodes()) / 2)
 
     def next_nodes_of(self, node):
         return filter(lambda n: n is not None, [

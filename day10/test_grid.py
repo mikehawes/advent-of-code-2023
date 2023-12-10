@@ -33,7 +33,14 @@ class TestGrid(unittest.TestCase):
         path = grid.connected_nodes()
         verify(print_nodes_in_grid(path, grid))
 
-    def test_should_find_path_for_example1(self):
+    def test_should_find_furthest_position_for_example1(self):
         grid = read_grid_from_file('example1')
-        path = grid.nodes_in_path()
-        verify(print_nodes_in_grid(path, grid))
+        self.assertEquals(4, grid.furthest_position_on_path())
+
+    def test_should_find_furthest_position_for_example2(self):
+        grid = read_grid_from_file('example2')
+        self.assertEquals(8, grid.furthest_position_on_path())
+
+    def test_should_find_furthest_position_for_input(self):
+        grid = read_grid_from_file('input')
+        self.assertEquals(7107, grid.furthest_position_on_path())
