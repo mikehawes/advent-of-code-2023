@@ -11,6 +11,14 @@ class Node:
         return '{},{}'.format(self.x, self.y)
 
 
+def contents_connect(prev_node, next_node, prev_contents, next_contents):
+    if prev_node.contents != 'S' and prev_node.contents not in prev_contents:
+        return False
+    if next_node.contents not in next_contents:
+        return False
+    return True
+
+
 class Grid:
     def __init__(self, lines):
         self.lines = lines
@@ -40,28 +48,54 @@ class Grid:
     def next_nodes_of(self, node):
         return filter(lambda n: n is not None, [
             self.left_connection_of(node),
-            self.right_connection_of(node)
+            self.right_connection_of(node),
+            self.top_connection_of(node),
+            self.bottom_connection_of(node)
         ])
 
     def left_connection_of(self, node):
         if node.x == 0:
             return None
-        if node.contents not in ('-', 'J', '7', 'S'):
-            return None
         left = self.node_at(node.x - 1, node.y)
-        if left.contents not in ('-', 'F', 'L'):
+        if contents_connect(node, left,
+                            ('-', 'J', '7'),
+                            ('-', 'F', 'L')):
+            return left
+        else:
             return None
-        return left
 
     def right_connection_of(self, node):
         if node.x == self.width - 1:
             return None
-        if node.contents not in ('-', 'F', 'L', 'S'):
-            return None
         right = self.node_at(node.x + 1, node.y)
-        if right.contents not in ('-', 'J', '7'):
+        if contents_connect(node, right,
+                            ('-', 'F', 'L'),
+                            ('-', 'J', '7')):
+            return right
+        else:
             return None
-        return right
+
+    def top_connection_of(self, node):
+        if node.y == 0:
+            return None
+        top = self.node_at(node.x, node.y - 1)
+        if contents_connect(node, top,
+                            ('|', 'J', 'L'),
+                            ('|', 'F', '7')):
+            return top
+        else:
+            return None
+
+    def bottom_connection_of(self, node):
+        if node.y == self.height - 1:
+            return None
+        bottom = self.node_at(node.x, node.y + 1)
+        if contents_connect(node, bottom,
+                            ('|', 'F', '7'),
+                            ('|', 'J', 'L')):
+            return bottom
+        else:
+            return None
 
     def node_at(self, x, y):
         return Node(x, y, self.lines[y][x])
