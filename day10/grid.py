@@ -1,7 +1,9 @@
+import io
+import re
 from itertools import chain
 
 
-def loc_str(x, y):
+def to_loc_str(x, y):
     return '{},{}'.format(x, y)
 
 
@@ -12,7 +14,7 @@ class Node:
         self.contents = contents
 
     def loc_str(self):
-        return loc_str(self.x, self.y)
+        return to_loc_str(self.x, self.y)
 
 
 def contents_connect(prev_node, next_node, prev_contents, next_contents):
@@ -41,14 +43,6 @@ class Grid:
             self.right_pipe_connection(pipe),
             self.top_pipe_connection(pipe),
             self.bottom_pipe_connection(pipe)
-        ))
-
-    def adjacent_nodes_of(self, node):
-        return filter(lambda n: n is not None, (
-            self.left_of(node),
-            self.right_of(node),
-            self.above(node),
-            self.below(node)
         ))
 
     def left_pipe_connection(self, node):
@@ -107,13 +101,11 @@ class Grid:
             return None
         return self.node_at(node.x, node.y + 1)
 
-    def outer_nodes(self):
-        return chain.from_iterable((
-            map(lambda n: self.node_at(n, 0), range(0, self.width)),  # top side
-            map(lambda n: self.node_at(0, n), range(1, self.height - 1)),  # left side
-            map(lambda n: self.node_at(self.width - 1, n), range(1, self.height - 1)),  # right side
-            map(lambda n: self.node_at(n, self.height - 1), range(0, self.width))  # bottom side
-        ))
+    def all_nodes(self):
+        return chain.from_iterable(
+            map(lambda x: map(lambda y: self.node_at(x, y),
+                              range(0, self.height)),
+                range(0, self.width)))
 
     def node_at(self, x, y):
         return Node(x, y, self.lines[y][x])
@@ -148,21 +140,23 @@ class Path:
 
     def outside_tiles_by_loc_str(self):
         outside_by_loc_str = {}
-        for outer_node in self.grid.outer_nodes():
-            self.add_connected_outside_tiles(outer_node, outside_by_loc_str)
+        for node in self.grid.all_nodes():
+            loc_str = node.loc_str()
+            if loc_str in self.nodes_by_loc_str:
+                continue
+            line_to_right = self.grid.lines[node.y][node.x + 1:]
+            to_right_on_path = self.get_characters_on_path(node, line_to_right)
+            num_transitions = len(re.findall(r'\||L-*7|F-*J', to_right_on_path))
+            if num_transitions % 2 == 0:
+                outside_by_loc_str[loc_str] = node
         return outside_by_loc_str
 
-    def add_connected_outside_tiles(self, outer_node, outside_by_loc_str):
-        loc_str = outer_node.loc_str()
-        if loc_str in outside_by_loc_str or loc_str in self.nodes_by_loc_str:
-            return
-        outside_by_loc_str[loc_str] = outer_node
-        for adjacent in self.grid.adjacent_nodes_of(outer_node):
-            self.add_connected_outside_tiles(adjacent, outside_by_loc_str)
-
-    def is_uncounted_outside(self, node, outside_by_loc_str):
-        loc_str = node.loc_str()
-        return loc_str not in outside_by_loc_str and loc_str not in self.nodes_by_loc_str
+    def get_characters_on_path(self, node, line_to_right):
+        out = io.StringIO()
+        for i in range(0, len(line_to_right)):
+            if to_loc_str(node.x + 1 + i, node.y) in self.nodes_by_loc_str:
+                out.write(line_to_right[i])
+        return out.getvalue()
 
 
 def read_grid_from_file(input_file):

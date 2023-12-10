@@ -1,6 +1,6 @@
 import io
 
-from day10.grid import Path, loc_str
+from day10.grid import Path, to_loc_str
 
 
 def listed_node_at(nodes, x, y):
@@ -41,7 +41,7 @@ def print_outside(grid):
             path_node = listed_node_at(path.nodes, x, y)
             if path_node:
                 output.write(path_node.contents)
-            elif loc_str(x, y) in outside_by_loc_str:
+            elif to_loc_str(x, y) in outside_by_loc_str:
                 output.write('O')
             else:
                 output.write('.')
