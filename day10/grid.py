@@ -148,7 +148,7 @@ class Path:
                 continue
             line_to_right = self.grid.lines[node.y][node.x + 1:]
             to_right_on_path = self.get_characters_on_path(node, line_to_right)
-            num_transitions = len(re.findall(r'\||L-*7|F-*J', to_right_on_path))
+            num_transitions = len(re.findall(r'\||L([-S])*7|F[-S]*J', to_right_on_path))
             if num_transitions % 2 == 0:
                 outside_by_loc_str[loc_str] = node
         return outside_by_loc_str
