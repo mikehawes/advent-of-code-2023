@@ -15,6 +15,9 @@ class Grid:
                 if contents == 'S':
                     return Node(x, y, contents)
 
+    def nodes_in_path(self):
+        return []
+
 
 def read_grid_from_file(input_file):
     with open(input_file, 'r') as file:
