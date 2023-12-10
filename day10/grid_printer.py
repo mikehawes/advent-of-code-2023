@@ -12,18 +12,18 @@ def print_node(node):
     return '{} at {},{}'.format(node.contents, node.x, node.y)
 
 
-def node_in_path_at(nodes, x, y):
+def listed_node_at(nodes, x, y):
     for node in nodes:
         if node.x == x and node.y == y:
             return node
     return None
 
 
-def print_path_in_grid(nodes, grid):
+def print_nodes_in_grid(nodes, grid):
     output = io.StringIO()
     for y, line in enumerate(grid.lines):
         for x, contents in enumerate(line):
-            path_node = node_in_path_at(nodes, x, y)
+            path_node = listed_node_at(nodes, x, y)
             if path_node:
                 output.write(path_node.contents)
             else:

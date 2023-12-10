@@ -4,6 +4,9 @@ class Node:
         self.y = y
         self.contents = contents
 
+    def loc_str(self):
+        return '{},{}'.format(self.x, self.y)
+
 
 class Grid:
     def __init__(self, lines):
@@ -15,8 +18,13 @@ class Grid:
                 if contents == 'S':
                     return Node(x, y, contents)
 
+    def connected_nodes(self):
+        start_node = self.start_node()
+        connected_by_location = {start_node.loc_str(): start_node}
+        return connected_by_location.values()
+
     def nodes_in_path(self):
-        return []
+        return [self.start_node()]
 
 
 def read_grid_from_file(input_file):

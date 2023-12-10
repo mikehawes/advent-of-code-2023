@@ -3,7 +3,7 @@ import unittest
 from approvaltests import verify
 
 from day10.grid import read_grid_from_file
-from day10.grid_printer import print_grid, print_node, print_path_in_grid
+from day10.grid_printer import print_grid, print_node, print_nodes_in_grid
 
 
 class TestGrid(unittest.TestCase):
@@ -18,7 +18,12 @@ class TestGrid(unittest.TestCase):
         self.assertEquals('S at 1,1',
                           print_node(grid.start_node()))
 
+    def test_should_find_connected_nodes_for_example1(self):
+        grid = read_grid_from_file('example1')
+        path = grid.connected_nodes()
+        verify(print_nodes_in_grid(path, grid))
+
     def test_should_find_path_for_example1(self):
         grid = read_grid_from_file('example1')
         path = grid.nodes_in_path()
-        verify(print_path_in_grid(path, grid))
+        verify(print_nodes_in_grid(path, grid))
