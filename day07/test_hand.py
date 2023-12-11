@@ -1,6 +1,6 @@
 import unittest
 
-from day7.hand import Hand
+from day07.hand import Hand
 
 
 def hand(cards):

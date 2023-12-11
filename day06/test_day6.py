@@ -1,7 +1,7 @@
 import unittest
 
-from day6.day6p1 import multiply_ways_to_beat
-from day6.day6p2 import ways_to_beat_multiplied_race
+from day06.day6p1 import multiply_ways_to_beat
+from day06.day6p2 import ways_to_beat_multiplied_race
 
 
 class TestDay6Part1(unittest.TestCase):

@@ -1,7 +1,7 @@
 import unittest
 
-from day8.day8p2 import read_path_and_graph
-from day8.graph import NodePathState
+from day08.day8p2 import read_path_and_graph
+from day08.graph import NodePathState
 
 
 class TestGraph(unittest.TestCase):

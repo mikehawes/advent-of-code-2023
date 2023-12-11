@@ -1,8 +1,7 @@
 import unittest
 
-from day7.day7p1p2 import get_total_winnings_for_hands
-
-from day7.hand import Hand
+from day07.day7p1p2 import get_total_winnings_for_hands
+from day07.hand import Hand
 
 
 class TestDay7Part1(unittest.TestCase):

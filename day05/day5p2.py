@@ -1,6 +1,6 @@
 import re
 
-from day5.entry_ranges import EntryRange, RangeMapping, RangeMappings
+from day05.entry_ranges import EntryRange, RangeMapping, RangeMappings
 
 initial_seed_ranges = []
 next_type_by_type = {}

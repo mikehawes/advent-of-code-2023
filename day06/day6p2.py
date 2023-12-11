@@ -1,6 +1,6 @@
 import re
 
-from day6.race import count_winning_options
+from day06.race import count_winning_options
 
 
 def ways_to_beat_multiplied_race(input_file):

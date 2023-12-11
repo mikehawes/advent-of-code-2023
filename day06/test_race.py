@@ -1,6 +1,6 @@
 import unittest
 
-from day6.race import get_button_press_times, count_winning_options
+from day06.race import get_button_press_times, count_winning_options
 
 
 class TestRace(unittest.TestCase):

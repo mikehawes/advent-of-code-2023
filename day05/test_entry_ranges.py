@@ -1,6 +1,6 @@
 import unittest
 
-from day5.entry_ranges import RangeMapping, EntryRange, RangeMappings
+from day05.entry_ranges import RangeMapping, EntryRange, RangeMappings
 
 
 def single_range(start, length):

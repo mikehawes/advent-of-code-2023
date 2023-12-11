@@ -1,7 +1,7 @@
 import unittest
 
-from day8.day8p1 import count_steps_from_a_to_z
-from day8.day8p2 import count_steps_from_a_to_z_as_ghost
+from day08.day8p1 import count_steps_from_a_to_z
+from day08.day8p2 import count_steps_from_a_to_z_as_ghost
 
 
 class TestDay8Part1(unittest.TestCase):

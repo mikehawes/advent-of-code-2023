@@ -1,7 +1,7 @@
 import datetime
 import time
 
-from day8.graph import read_path_and_graph
+from day08.graph import read_path_and_graph
 
 
 def count_steps(path, graph):

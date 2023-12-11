@@ -2,8 +2,8 @@ import unittest
 
 from approvaltests.approvals import verify
 
-from day9.sequence import detect_sequences_from_file
-from day9.sequence_printer import print_sequences
+from day09.sequence import detect_sequences_from_file
+from day09.sequence_printer import print_sequences
 
 
 class TestSequence(unittest.TestCase):

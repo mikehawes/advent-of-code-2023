@@ -1,4 +1,4 @@
-from day7.hand import Hand
+from day07.hand import Hand
 
 
 def read_hand_and_bid(line, hand_constructor):
