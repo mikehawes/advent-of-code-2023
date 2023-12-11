@@ -15,3 +15,9 @@ class TestGalaxies(unittest.TestCase):
 
     def test_should_sum_distances_in_input(self):
         self.assertEqual(9684228, sum_galaxy_distances_from_file('input'))
+
+    def test_should_sum_distances_in_example_with_larger_expansion(self):
+        self.assertEqual(1030, sum_galaxy_distances_from_file('example', expansion=10))
+
+    def test_should_sum_distances_in_input_with_larger_expansion(self):
+        self.assertEqual(483844716556, sum_galaxy_distances_from_file('input', expansion=1000000))

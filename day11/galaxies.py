@@ -40,6 +40,7 @@ class Galaxies:
     def sum_distances(self, expansion):
         galaxies = self.galaxies
         total_distance = 0
+        extra_expansion = expansion - 1
         for i, a in enumerate(galaxies[:len(galaxies) - 1]):
             for b in galaxies[i + 1:]:
                 ax, bx, ay, by = (a[0], b[0], a[1], b[1])
@@ -51,10 +52,10 @@ class Galaxies:
                 dist_y = y2 - y1
                 for x in range(x1 + 1, x2):
                     if x in self.expansion_by_x:
-                        dist_x += expansion
+                        dist_x += extra_expansion
                 for y in range(y1 + 1, y2):
                     if y in self.expansion_by_y:
-                        dist_y += expansion
+                        dist_y += extra_expansion
                 total_distance += dist_x + dist_y
         return total_distance
 
@@ -70,6 +71,6 @@ def read_and_expand_space_from_file(input_file):
     return read_galaxies_from_file(input_file).expand_lines()
 
 
-def sum_galaxy_distances_from_file(input_file):
+def sum_galaxy_distances_from_file(input_file, expansion=2):
     galaxies = read_galaxies_from_file(input_file)
-    return galaxies.sum_distances(1)
+    return galaxies.sum_distances(expansion)
