@@ -17,6 +17,11 @@ class Galaxies:
                     break
             if col_empty:
                 self.expansion_by_x[x] = True
+        self.galaxies = []
+        for y, line in enumerate(lines):
+            for x, contents in enumerate(line):
+                if contents == '#':
+                    self.galaxies.append((x, y))
 
     def expand_lines(self):
         expanded_lines = []
@@ -32,6 +37,27 @@ class Galaxies:
                 expanded_lines.append(expanded_line)
         return expanded_lines
 
+    def sum_distances(self, expansion):
+        galaxies = self.galaxies
+        total_distance = 0
+        for i, a in enumerate(galaxies[:len(galaxies) - 1]):
+            for b in galaxies[i + 1:]:
+                ax, bx, ay, by = (a[0], b[0], a[1], b[1])
+                x1 = min(ax, bx)
+                x2 = max(ax, bx)
+                y1 = min(ay, by)
+                y2 = max(ay, by)
+                dist_x = x2 - x1
+                dist_y = y2 - y1
+                for x in range(x1 + 1, x2):
+                    if x in self.expansion_by_x:
+                        dist_x += expansion
+                for y in range(y1 + 1, y2):
+                    if y in self.expansion_by_y:
+                        dist_y += expansion
+                total_distance += dist_x + dist_y
+        return total_distance
+
 
 def read_galaxies_from_file(input_file):
     with open(input_file, 'r') as file:
@@ -45,16 +71,5 @@ def read_and_expand_space_from_file(input_file):
 
 
 def sum_galaxy_distances_from_file(input_file):
-    lines = read_and_expand_space_from_file(input_file)
-    galaxies = []
-    for y, line in enumerate(lines):
-        for x, contents in enumerate(line):
-            if contents == '#':
-                galaxies.append((x, y))
-    total_distance = 0
-    for i, a in enumerate(galaxies[:len(galaxies) - 1]):
-        for b in galaxies[i + 1:]:
-            dist_x = abs(b[0] - a[0])
-            dist_y = abs(b[1] - a[1])
-            total_distance += dist_x + dist_y
-    return total_distance
+    galaxies = read_galaxies_from_file(input_file)
+    return galaxies.sum_distances(1)
