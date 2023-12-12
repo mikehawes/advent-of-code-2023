@@ -24,6 +24,8 @@ def print_working_spring_arrangements_for_file(input_file):
                     output.write(', {} unknown area{}'.format(unknown_areas, '' if unknown_areas == 1 else 's'))
                 if known_areas > 0:
                     output.write(', {} known area{}'.format(known_areas, '' if known_areas == 1 else 's'))
+                fillings = area.generate_all_fillings()
+                output.write(', {} fillings'.format(len(fillings)))
                 print(file=output)
         print(file=output)
     return output.getvalue()

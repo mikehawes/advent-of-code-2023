@@ -1,20 +1,14 @@
 import re
 
 
-class KnownDamagedArea:
+class Area:
     def __init__(self, match):
         self.match = match
         self.start = match.start()
         self.end = match.end()
         self.length = self.end - self.start
-
-
-class UnknownArea:
-    def __init__(self, match):
-        self.match = match
-        self.start = match.start()
-        self.end = match.end()
-        self.length = self.end - self.start
+        self.contents = match.group(0)
+        self.known = self.contents.startswith('#')
 
 
 class DamagedArea:
@@ -24,10 +18,23 @@ class DamagedArea:
         self.end = match.end()
         self.length = self.end - self.start
         self.contents = match.group(0)
-        self.known_damaged = list(map(KnownDamagedArea, re.finditer('#+', self.contents)))
-        self.unknown_areas = list(map(UnknownArea, re.finditer(r'\?+', self.contents)))
+        self.areas = list(map(Area, re.finditer(r'#+|\?+', self.contents)))
+        self.known_damaged = list(filter(lambda a: a.known, self.areas))
+        self.unknown_areas = list(filter(lambda a: not a.known, self.areas))
         self.fully_known = len(self.known_damaged) == 1 and self.length == self.known_damaged[0].length
         self.fully_unknown = len(self.unknown_areas) == 1 and self.length == self.unknown_areas[0].length
+
+    def generate_all_fillings(self, area_index=0, area_offset=0, filling_start=''):
+        if area_index >= len(self.areas):
+            return [filling_start]
+        area = self.areas[area_index]
+        if area.known:
+            return self.generate_all_fillings(area_index + 1, 0, filling_start + area.contents)
+        if area_offset >= area.length:
+            return self.generate_all_fillings(area_index + 1, 0, filling_start)
+        fillings_with_damaged = self.generate_all_fillings(area_index, area_offset + 1, filling_start + '#')
+        fillings_with_undamaged = self.generate_all_fillings(area_index, area_offset + 1, filling_start + '.')
+        return fillings_with_damaged + fillings_with_undamaged
 
 
 class SpringConditionRecord:
