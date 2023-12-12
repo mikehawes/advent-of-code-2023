@@ -1,4 +1,6 @@
+import datetime
 import re
+import time
 from math import prod
 
 
@@ -123,7 +125,17 @@ def compute_spring_arrangements_from_file(input_file, multiple=1, count_only=Fal
 
 
 def compute_spring_arrangements_from_records(records, multiple=1, count_only=False):
-    return list(map(lambda r: r.arrangements(multiple=multiple, count_only=count_only), records))
+    arrangements = []
+    num_records = len(records)
+    start = time.time()
+    print('Computing arrangements for {} records'.format(num_records))
+    for i, record in enumerate(records):
+        record_arrangements = record.arrangements(multiple=multiple, count_only=count_only)
+        arrangements.append(record_arrangements)
+        print("Computed {} of {} records, count {}, time so far: {}"
+              .format(i + 1, num_records, record_arrangements.arrangements_count,
+                      datetime.timedelta(seconds=time.time() - start)))
+    return arrangements
 
 
 def total_spring_arrangements(arrangements):
