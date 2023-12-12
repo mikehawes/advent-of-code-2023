@@ -12,7 +12,7 @@ def print_working_spring_arrangements_for_file(input_file):
         print('{} arrangements'.format('?'), file=output)
         print('{} damaged area{}:'.format(damaged_areas, '' if damaged_areas == 1 else 's'), file=output)
         for area in record.damaged_areas:
-            output.write('{}-{}: {} - '.format(area.start, area.end, area.contents))
+            output.write('{}-{}: {} - length {}, '.format(area.start, area.end, area.contents, area.length))
             if area.fully_known:
                 print('fully known', file=output)
             else:
