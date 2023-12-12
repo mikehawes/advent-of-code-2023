@@ -7,5 +7,14 @@ def print_working_spring_arrangements_for_file(input_file):
     records = read_spring_conditions_from_file(input_file)
     output = io.StringIO()
     for record in records:
-        print('{} {}'.format(record.springs, ','.join(record.damaged_groups)), file=output)
+        print('{} {}'.format(record.springs, ','.join(map(str, record.damaged_counts))), file=output)
+        damaged_areas = len(record.damaged_areas)
+        print('{} arrangements'.format('?'), file=output)
+        print('{} damaged area{}:'.format(damaged_areas, '' if damaged_areas == 1 else 's'), file=output)
+        for area in record.damaged_areas:
+            known_areas = len(area.known_damaged)
+            print('{}-{}: {} - {} known damaged area{}'.format(
+                area.start, area.end, area.contents,
+                known_areas, '' if known_areas == 1 else 's'), file=output)
+        print(file=output)
     return output.getvalue()
