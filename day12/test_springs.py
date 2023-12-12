@@ -55,3 +55,7 @@ class TestSprings(unittest.TestCase):
     def test_should_multiply_arrangements_3(self):
         record = SpringConditionRecord("..???.??.?", [1, 1, 1])
         self.assertEqual(5_752_544, record.count_arrangements(multiple=5))
+
+    def test_should_multiply_arrangements_4(self):
+        record = SpringConditionRecord("?###????????", [3, 2, 1])
+        self.assertEqual(7_593_750, record.count_arrangements(multiple=6))
