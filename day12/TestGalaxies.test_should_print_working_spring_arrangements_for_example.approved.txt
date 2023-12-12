@@ -2,7 +2,7 @@
 ? arrangements
 2 damaged areas:
 0-3: ??? - 0 known damaged areas
-4-7: ### - 1 known damaged area
+4-7: ### - fully known
 
 .??..??...?##. 1,1,3
 ? arrangements
@@ -20,15 +20,15 @@
 ? arrangements
 3 damaged areas:
 0-4: ???? - 0 known damaged areas
-5-6: # - 1 known damaged area
-9-10: # - 1 known damaged area
+5-6: # - fully known
+9-10: # - fully known
 
 ????.######..#####. 1,6,5
 ? arrangements
 3 damaged areas:
 0-4: ???? - 0 known damaged areas
-5-11: ###### - 1 known damaged area
-13-18: ##### - 1 known damaged area
+5-11: ###### - fully known
+13-18: ##### - fully known
 
 ?###???????? 3,2,1
 ? arrangements
