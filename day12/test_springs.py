@@ -9,3 +9,6 @@ class TestGalaxies(unittest.TestCase):
 
     def test_should_print_working_spring_arrangements_for_example(self):
         verify(print_working_spring_arrangements_for_file('example'))
+
+    def test_should_print_working_spring_arrangements_for_input(self):
+        verify(print_working_spring_arrangements_for_file('input'))
