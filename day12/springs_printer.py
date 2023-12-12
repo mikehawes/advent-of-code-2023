@@ -1,14 +1,15 @@
 import io
 
-from day12.springs import read_spring_conditions_from_file
+from day12.springs import compute_spring_arrangements_from_file, total_spring_arrangements
 
 
-def print_working_spring_arrangements_for_file(input_file):
-    records = read_spring_conditions_from_file(input_file)
-    record_arrangements = list(map(lambda r: r.arrangements(), records))
-    total_arrangements = sum(map(lambda a: len(a.arrangements), record_arrangements))
+def print_working_spring_arrangements_for_file(input_file, multiple=1):
+    record_arrangements = compute_spring_arrangements_from_file(input_file, multiple=multiple)
+    total_arrangements = total_spring_arrangements(record_arrangements)
     output = io.StringIO()
     print('Total arrangements:', total_arrangements, file=output)
+    if multiple > 1:
+        print('Multiplied by', multiple, file=output)
     print(file=output)
     for arrangements in record_arrangements:
         record = arrangements.record

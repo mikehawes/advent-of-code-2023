@@ -3,15 +3,16 @@ from math import prod
 
 
 class Area:
-    def __init__(self, match):
-        self.match = match
-        self.start = match.start()
-        self.end = match.end()
-        self.length = self.end - self.start
-        self.contents = match.group(0)
+    def __init__(self, contents):
+        self.length = len(contents)
+        self.contents = contents
         self.type = self.contents[0]
         self.known = self.type != '?'
         self.damaged = self.type == '#'
+
+
+def area_from_match(match):
+    return Area(match.group(0))
 
 
 def generate_arrangements(areas, damaged_counts, remaining_unknown, remaining_unknown_damaged,
@@ -66,7 +67,7 @@ class DamagedArea:
         self.end = match.end()
         self.length = self.end - self.start
         self.contents = match.group(0)
-        self.areas = list(map(Area, re.finditer(r'#+|\?+', self.contents)))
+        self.areas = list(map(area_from_match, re.finditer(r'#+|\?+', self.contents)))
         self.known_damaged = list(filter(lambda a: a.known, self.areas))
         self.unknown_areas = list(filter(lambda a: not a.known, self.areas))
         self.fully_known = len(self.known_damaged) == 1 and self.length == self.known_damaged[0].length
@@ -85,15 +86,21 @@ class SpringConditionRecord:
     def __init__(self, springs, damaged_counts):
         self.springs = springs
         self.damaged_counts = damaged_counts
-        self.areas = list(map(Area, re.finditer(r'#+|\.+|\?+', springs)))
+        self.areas = list(map(area_from_match, re.finditer(r'#+|\.+|\?+', springs)))
         self.damaged_areas = list(map(DamagedArea, re.finditer(r'[?#]+', springs)))
 
-    def arrangements(self):
-        fillings_count = prod(map(lambda a: 1 if a.known else 2 ** a.length, self.areas))
-        unknown = sum(map(lambda a: a.length, filter(lambda a: not a.known, self.areas)))
-        known_damaged = sum(map(lambda a: a.length, filter(lambda a: a.damaged, self.areas)))
-        unknown_damaged = sum(self.damaged_counts) - known_damaged
-        arrangements = generate_arrangements(self.areas, self.damaged_counts, unknown, unknown_damaged)
+    def arrangements(self, multiple=1):
+        areas = []
+        for i in range(0, multiple):
+            if i != 0:
+                areas.append(Area('?'))
+            areas.extend(self.areas)
+        damaged_counts = self.damaged_counts * multiple
+        fillings_count = prod(map(lambda a: 1 if a.known else 2 ** a.length, areas))
+        unknown = sum(map(lambda a: a.length, filter(lambda a: not a.known, areas)))
+        known_damaged = sum(map(lambda a: a.length, filter(lambda a: a.damaged, areas)))
+        unknown_damaged = sum(damaged_counts) - known_damaged
+        arrangements = generate_arrangements(areas, damaged_counts, unknown, unknown_damaged)
         return SpringArrangements(self, fillings_count, arrangements)
 
 
@@ -105,3 +112,17 @@ def read_spring_condition_line(line):
 def read_spring_conditions_from_file(input_file):
     with open(input_file, 'r') as file:
         return list(map(read_spring_condition_line, file))
+
+
+def compute_spring_arrangements_from_file(input_file, multiple=1):
+    records = read_spring_conditions_from_file(input_file)
+    return list(map(lambda r: r.arrangements(multiple=multiple), records))
+
+
+def total_spring_arrangements(arrangements):
+    return sum(map(lambda a: a.arrangements_count, arrangements))
+
+
+def total_spring_arrangements_from_file(input_file, multiple=1):
+    record_arrangements = compute_spring_arrangements_from_file(input_file, multiple=multiple)
+    return total_spring_arrangements(record_arrangements)
