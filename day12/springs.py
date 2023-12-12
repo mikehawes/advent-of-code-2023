@@ -16,46 +16,46 @@ def area_from_match(match):
 
 
 def generate_arrangements(areas, damaged_counts, remaining_unknown, remaining_unknown_damaged,
-                          damaged_count=0, force_undamaged=False,
+                          count_only, damaged_count=0, force_undamaged=False,
                           area_index=0, area_offset=0, filling_start=''):
     if remaining_unknown < remaining_unknown_damaged:
-        return []
+        return 0 if count_only else []
     if len(damaged_counts) == 0:
         force_undamaged = True
     elif damaged_count > damaged_counts[0]:
-        return []
+        return 0 if count_only else []
     elif damaged_count == damaged_counts[0]:
         damaged_counts = damaged_counts[1:]
         damaged_count = 0
         force_undamaged = True
     if area_index >= len(areas):
         if len(damaged_counts) > 0:
-            return []
+            return 0 if count_only else []
         else:
-            return [filling_start]
+            return 1 if count_only else [filling_start]
     area = areas[area_index]
     if area.known:
         if force_undamaged and area.damaged:
-            return []
+            return 0 if count_only else []
         if damaged_count > 0 and not area.damaged:
-            return []
+            return 0 if count_only else []
         found_damaged = area.length if area.damaged else 0
         return generate_arrangements(areas, damaged_counts, remaining_unknown, remaining_unknown_damaged,
-                                     damaged_count + found_damaged, False,
+                                     count_only, damaged_count + found_damaged, False,
                                      area_index + 1, 0, filling_start + area.contents)
     if area_offset >= area.length:
         return generate_arrangements(areas, damaged_counts, remaining_unknown, remaining_unknown_damaged,
-                                     damaged_count, force_undamaged,
+                                     count_only, damaged_count, force_undamaged,
                                      area_index + 1, 0, filling_start)
-    arrangements = []
+    arrangements = 0 if count_only else []
     if damaged_count == 0:
         arrangements += generate_arrangements(areas, damaged_counts, remaining_unknown - 1, remaining_unknown_damaged,
-                                              0, False,
+                                              count_only, 0, False,
                                               area_index, area_offset + 1, filling_start + '.')
     if not force_undamaged:
         arrangements += generate_arrangements(areas, damaged_counts, remaining_unknown - 1,
                                               remaining_unknown_damaged - 1,
-                                              damaged_count + 1, force_undamaged,
+                                              count_only, damaged_count + 1, force_undamaged,
                                               area_index, area_offset + 1, filling_start + '#')
     return arrangements
 
@@ -78,8 +78,11 @@ class SpringArrangements:
     def __init__(self, record, fillings_count, arrangements):
         self.record = record
         self.fillings_count = fillings_count
-        self.arrangements = arrangements
-        self.arrangements_count = len(arrangements)
+        if isinstance(arrangements, list):
+            self.arrangements = arrangements
+            self.arrangements_count = len(arrangements)
+        else:
+            self.arrangements_count = arrangements
 
 
 class SpringConditionRecord:
@@ -89,7 +92,7 @@ class SpringConditionRecord:
         self.areas = list(map(area_from_match, re.finditer(r'#+|\.+|\?+', springs)))
         self.damaged_areas = list(map(DamagedArea, re.finditer(r'[?#]+', springs)))
 
-    def arrangements(self, multiple=1):
+    def arrangements(self, multiple=1, count_only=False):
         areas = []
         for i in range(0, multiple):
             if i != 0:
@@ -100,7 +103,7 @@ class SpringConditionRecord:
         unknown = sum(map(lambda a: a.length, filter(lambda a: not a.known, areas)))
         known_damaged = sum(map(lambda a: a.length, filter(lambda a: a.damaged, areas)))
         unknown_damaged = sum(damaged_counts) - known_damaged
-        arrangements = generate_arrangements(areas, damaged_counts, unknown, unknown_damaged)
+        arrangements = generate_arrangements(areas, damaged_counts, unknown, unknown_damaged, count_only)
         return SpringArrangements(self, fillings_count, arrangements)
 
 
@@ -114,9 +117,9 @@ def read_spring_conditions_from_file(input_file):
         return list(map(read_spring_condition_line, file))
 
 
-def compute_spring_arrangements_from_file(input_file, multiple=1):
+def compute_spring_arrangements_from_file(input_file, multiple=1, count_only=False):
     records = read_spring_conditions_from_file(input_file)
-    return list(map(lambda r: r.arrangements(multiple=multiple), records))
+    return list(map(lambda r: r.arrangements(multiple=multiple, count_only=count_only), records))
 
 
 def total_spring_arrangements(arrangements):
@@ -124,5 +127,5 @@ def total_spring_arrangements(arrangements):
 
 
 def total_spring_arrangements_from_file(input_file, multiple=1):
-    record_arrangements = compute_spring_arrangements_from_file(input_file, multiple=multiple)
+    record_arrangements = compute_spring_arrangements_from_file(input_file, multiple=multiple, count_only=True)
     return total_spring_arrangements(record_arrangements)
