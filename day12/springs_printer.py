@@ -13,10 +13,11 @@ def print_working_spring_arrangements_for_file(input_file):
     for arrangements in record_arrangements:
         record = arrangements.record
         print('{} {}'.format(record.springs, ','.join(map(str, record.damaged_counts))), file=output)
-        num_fillings = len(arrangements.fillings)
-        num_arrangements = len(arrangements.arrangements)
+        num_fillings = arrangements.fillings_count
+        arrangements_count = arrangements.arrangements_count
         print('{} filling{}'.format(num_fillings, '' if num_fillings == 1 else 's'), file=output)
-        print('{} arrangement{}:'.format(num_arrangements, '' if num_arrangements == 1 else 's'), file=output)
+        print('{} possible arrangement{}:'
+              .format(arrangements_count, '' if arrangements_count == 1 else 's'), file=output)
         for arrangement in arrangements.arrangements:
             print(arrangement, file=output)
         damaged_areas = len(record.damaged_areas)

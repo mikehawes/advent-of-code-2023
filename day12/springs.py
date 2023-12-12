@@ -1,4 +1,5 @@
 import re
+from math import prod
 
 
 class Area:
@@ -10,33 +11,52 @@ class Area:
         self.contents = match.group(0)
         self.type = self.contents[0]
         self.known = self.type != '?'
+        self.damaged = self.type == '#'
 
 
-def generate_all_fillings(areas, area_index=0, area_offset=0, filling_start=''):
+def generate_arrangements(areas, damaged_counts, remaining_unknown, remaining_unknown_damaged,
+                          damaged_count=0, force_undamaged=False,
+                          area_index=0, area_offset=0, filling_start=''):
+    if remaining_unknown < remaining_unknown_damaged:
+        return []
+    if len(damaged_counts) == 0:
+        force_undamaged = True
+    elif damaged_count > damaged_counts[0]:
+        return []
+    elif damaged_count == damaged_counts[0]:
+        damaged_counts = damaged_counts[1:]
+        damaged_count = 0
+        force_undamaged = True
     if area_index >= len(areas):
-        return [filling_start]
+        if len(damaged_counts) > 0:
+            return []
+        else:
+            return [filling_start]
     area = areas[area_index]
     if area.known:
-        return generate_all_fillings(areas, area_index + 1, 0, filling_start + area.contents)
+        if force_undamaged and area.damaged:
+            return []
+        if damaged_count > 0 and not area.damaged:
+            return []
+        found_damaged = area.length if area.damaged else 0
+        return generate_arrangements(areas, damaged_counts, remaining_unknown, remaining_unknown_damaged,
+                                     damaged_count + found_damaged, False,
+                                     area_index + 1, 0, filling_start + area.contents)
     if area_offset >= area.length:
-        return generate_all_fillings(areas, area_index + 1, 0, filling_start)
-    fillings_with_damaged = generate_all_fillings(areas, area_index, area_offset + 1, filling_start + '#')
-    fillings_with_undamaged = generate_all_fillings(areas, area_index, area_offset + 1, filling_start + '.')
-    return fillings_with_damaged + fillings_with_undamaged
-
-
-def find_damaged_counts(springs):
-    counts = []
-    num_damaged = 0
-    for spring in springs:
-        if spring == '#':
-            num_damaged += 1
-        elif num_damaged > 0:
-            counts.append(num_damaged)
-            num_damaged = 0
-    if num_damaged > 0:
-        counts.append(num_damaged)
-    return counts
+        return generate_arrangements(areas, damaged_counts, remaining_unknown, remaining_unknown_damaged,
+                                     damaged_count, force_undamaged,
+                                     area_index + 1, 0, filling_start)
+    arrangements = []
+    if damaged_count == 0:
+        arrangements += generate_arrangements(areas, damaged_counts, remaining_unknown - 1, remaining_unknown_damaged,
+                                              0, False,
+                                              area_index, area_offset + 1, filling_start + '.')
+    if not force_undamaged:
+        arrangements += generate_arrangements(areas, damaged_counts, remaining_unknown - 1,
+                                              remaining_unknown_damaged - 1,
+                                              damaged_count + 1, force_undamaged,
+                                              area_index, area_offset + 1, filling_start + '#')
+    return arrangements
 
 
 class DamagedArea:
@@ -52,15 +72,13 @@ class DamagedArea:
         self.fully_known = len(self.known_damaged) == 1 and self.length == self.known_damaged[0].length
         self.fully_unknown = len(self.unknown_areas) == 1 and self.length == self.unknown_areas[0].length
 
-    def generate_all_fillings(self):
-        return generate_all_fillings(self.areas)
-
 
 class SpringArrangements:
-    def __init__(self, record, fillings, arrangements):
+    def __init__(self, record, fillings_count, arrangements):
         self.record = record
-        self.fillings = fillings
+        self.fillings_count = fillings_count
         self.arrangements = arrangements
+        self.arrangements_count = len(arrangements)
 
 
 class SpringConditionRecord:
@@ -70,23 +88,13 @@ class SpringConditionRecord:
         self.areas = list(map(Area, re.finditer(r'#+|\.+|\?+', springs)))
         self.damaged_areas = list(map(DamagedArea, re.finditer(r'[?#]+', springs)))
 
-    def generate_all_fillings(self):
-        return generate_all_fillings(self.areas)
-
-    def possible_fillings(self, fillings=None):
-        if not fillings:
-            fillings = self.generate_all_fillings()
-        possible = []
-        for filling in fillings:
-            damaged_counts = find_damaged_counts(filling)
-            if damaged_counts == self.damaged_counts:
-                possible.append(filling)
-        return possible
-
     def arrangements(self):
-        fillings = self.generate_all_fillings()
-        arrangements = self.possible_fillings(fillings)
-        return SpringArrangements(self, fillings, arrangements)
+        fillings_count = prod(map(lambda a: 1 if a.known else 2 ** a.length, self.areas))
+        unknown = sum(map(lambda a: a.length, filter(lambda a: not a.known, self.areas)))
+        known_damaged = sum(map(lambda a: a.length, filter(lambda a: a.damaged, self.areas)))
+        unknown_damaged = sum(self.damaged_counts) - known_damaged
+        arrangements = generate_arrangements(self.areas, self.damaged_counts, unknown, unknown_damaged)
+        return SpringArrangements(self, fillings_count, arrangements)
 
 
 def read_spring_condition_line(line):
