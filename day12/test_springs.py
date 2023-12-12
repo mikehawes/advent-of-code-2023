@@ -35,6 +35,9 @@ class TestGalaxies(unittest.TestCase):
     def test_should_multiply_working_spring_arrangements_by_5_for_example(self):
         self.assertEqual(525152, total_spring_arrangements_from_file('example', multiple=5))
 
+    def test_should_multiply_working_spring_arrangements_by_6_for_example(self):
+        self.assertEqual(7737356, total_spring_arrangements_from_file('example', multiple=6))
+
     @unittest.skip('Too slow')
     def test_should_multiply_working_spring_arrangements_by_5_for_input(self):
         self.assertEqual(0, total_spring_arrangements_from_file('input', multiple=5))
