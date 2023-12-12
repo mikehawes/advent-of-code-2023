@@ -14,11 +14,11 @@ class TestSprings(unittest.TestCase):
 
     def test_should_count_arrangements_1(self):
         record = SpringConditionRecord("???.###", [1, 1, 3])
-        self.assertEqual(1, record.arrangements().arrangements_count)
+        self.assertEqual(1, record.count_arrangements())
 
     def test_should_count_arrangements_2(self):
         record = SpringConditionRecord("?.#??.??#?", [2, 1, 1])
-        self.assertEqual(1, record.arrangements().arrangements_count)
+        self.assertEqual(1, record.count_arrangements())
 
     def test_should_print_working_spring_arrangements_for_input(self):
         verify(print_working_spring_arrangements_for_file('input'))
@@ -44,4 +44,14 @@ class TestSprings(unittest.TestCase):
 
     def test_should_multiply_arrangements_1(self):
         record = SpringConditionRecord("???.###", [1, 1, 3])
-        self.assertEqual(1, record.arrangements(multiple=2).arrangements_count)
+        self.assertEqual(1, record.count_arrangements(multiple=2))
+
+    def test_should_multiply_arrangements_2(self):
+        record = SpringConditionRecord("..???.??.?", [1, 1, 1])
+        counts = list(map(lambda multiple: record.count_arrangements(multiple=multiple),
+                          [1, 2, 3, 4]))
+        self.assertEqual([9, 226, 6360, 188_488], counts)
+
+    def test_should_multiply_arrangements_3(self):
+        record = SpringConditionRecord("..???.??.?", [1, 1, 1])
+        self.assertEqual(5_752_544, record.count_arrangements(multiple=5))

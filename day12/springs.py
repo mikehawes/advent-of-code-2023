@@ -108,6 +108,9 @@ class SpringConditionRecord:
         arrangements = generate_arrangements(areas, damaged_counts, unknown, unknown_damaged, count_only)
         return SpringArrangements(self, fillings_count, arrangements)
 
+    def count_arrangements(self, multiple=1):
+        return self.arrangements(multiple=multiple, count_only=True).arrangements_count
+
 
 def read_spring_condition_line(line):
     parts = line.rstrip().split(' ')
