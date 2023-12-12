@@ -119,6 +119,10 @@ def read_spring_conditions_from_file(input_file):
 
 def compute_spring_arrangements_from_file(input_file, multiple=1, count_only=False):
     records = read_spring_conditions_from_file(input_file)
+    return compute_spring_arrangements_from_records(records, multiple, count_only)
+
+
+def compute_spring_arrangements_from_records(records, multiple=1, count_only=False):
     return list(map(lambda r: r.arrangements(multiple=multiple, count_only=count_only), records))
 
 
@@ -128,4 +132,9 @@ def total_spring_arrangements(arrangements):
 
 def total_spring_arrangements_from_file(input_file, multiple=1):
     record_arrangements = compute_spring_arrangements_from_file(input_file, multiple=multiple, count_only=True)
+    return total_spring_arrangements(record_arrangements)
+
+
+def total_spring_arrangements_from_records(records, multiple=1):
+    record_arrangements = compute_spring_arrangements_from_records(records, multiple=multiple, count_only=True)
     return total_spring_arrangements(record_arrangements)
