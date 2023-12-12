@@ -9,6 +9,14 @@ class KnownDamagedArea:
         self.length = self.end - self.start
 
 
+class UnknownArea:
+    def __init__(self, match):
+        self.match = match
+        self.start = match.start()
+        self.end = match.end()
+        self.length = self.end - self.start
+
+
 class DamagedArea:
     def __init__(self, match):
         self.match = match
@@ -17,7 +25,9 @@ class DamagedArea:
         self.length = self.end - self.start
         self.contents = match.group(0)
         self.known_damaged = list(map(KnownDamagedArea, re.finditer('#+', self.contents)))
+        self.unknown_areas = list(map(UnknownArea, re.finditer(r'\?+', self.contents)))
         self.fully_known = len(self.known_damaged) == 1 and self.length == self.known_damaged[0].length
+        self.fully_unknown = len(self.unknown_areas) == 1 and self.length == self.unknown_areas[0].length
 
 
 class SpringConditionRecord:
