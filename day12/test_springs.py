@@ -31,10 +31,10 @@ class TestSprings(unittest.TestCase):
         records = read_spring_conditions_from_file('example')
         totals = list(map(lambda multiple: total_spring_arrangements_from_records(records, multiple),
                           [1, 2, 3, 4, 5]))
-        self.assertEqual([21, 206, 2612, 36308, 525152], totals)
+        self.assertEqual([21, 206, 2_612, 36_308, 525_152], totals)
 
     def test_should_unfold_working_spring_arrangements_5_times_for_example(self):
-        self.assertEqual(525152, total_spring_arrangements_from_file('example', multiple=5))
+        self.assertEqual(525_152, total_spring_arrangements_from_file('example', multiple=5))
 
     def test_should_unfold_working_spring_arrangements_6_times_for_example(self):
         self.assertEqual(7_737_356, total_spring_arrangements_from_file('example', multiple=6))
@@ -76,20 +76,20 @@ class TestSpringsInputLine41(unittest.TestCase):
 
     def test_should_find_arrangements_for_partial_unfolding_5_times(self):
         self.assertEqual([
-            ['????#???? 1,2,1,1', 3880],
-            ['????#???? 1,2,1', 3381560],
-            ['????#???? 1,2', 366283],
-            ['??? 1', 3003],
+            ['????#???? 1,2,1,1', 3_880],
+            ['????#???? 1,2,1', 3_381_560],
+            ['????#???? 1,2', 366_283],
+            ['??? 1', 3_003],
             ['??? 1,1', 1]],
             list_of_record_and_arrangement_count(self.partial_records, multiple=5))
 
     @unittest.skip('A bit too slow')
     def test_should_find_arrangements_unfolding_4_times(self):
         self.assertEqual([
-            ['????#????.??? 1,2,1,1', 50316280],
+            ['????#????.??? 1,2,1,1', 50_316_280],
             ['????#???? 1,2,1,1', 542],
-            ['????#???? 1,2,1', 140574],
-            ['????#???? 1,2', 22933],
+            ['????#???? 1,2,1', 140_574],
+            ['????#???? 1,2', 22_933],
             ['??? 1', 495],
             ['??? 1,1', 1]],
             list_of_record_and_arrangement_count(self.records, multiple=4))
@@ -106,7 +106,7 @@ class TestSpringsInputLine41(unittest.TestCase):
 
     def test_should_find_arrangements_unfolding_2_times(self):
         self.assertEqual([
-            ['????#????.??? 1,2,1,1', 4414],
+            ['????#????.??? 1,2,1,1', 4_414],
             ['????#???? 1,2,1,1', 11],
             ['????#???? 1,2,1', 256],
             ['????#???? 1,2', 97],
