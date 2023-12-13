@@ -18,8 +18,11 @@ def area_from_match(match):
 
 
 class FindArrangementsState:
-    def __init__(self, damaged_counts, remaining_unknown, remaining_unknown_damaged,
-                 damaged_count=0, force_undamaged=False, area_index=0, area_offset=0):
+    def __init__(self, damaged_counts=None, remaining_unknown=None, remaining_unknown_damaged=None,
+                 damaged_count=0, force_undamaged=False, area_index=0, area_offset=0, valid=True):
+        if not valid:
+            self.valid = False
+            return
         self.damaged_counts = damaged_counts
         self.remaining_unknown = remaining_unknown
         self.remaining_unknown_damaged = remaining_unknown_damaged
@@ -27,61 +30,62 @@ class FindArrangementsState:
         self.force_undamaged = force_undamaged
         self.area_index = area_index
         self.area_offset = area_offset
+        self.valid = True
+        if remaining_unknown < remaining_unknown_damaged:
+            self.valid = False
+        elif len(damaged_counts) == 0:
+            self.force_undamaged = True
+        elif damaged_count > damaged_counts[0]:
+            self.valid = False
+        elif damaged_count == damaged_counts[0]:
+            self.damaged_counts = damaged_counts[1:]
+            self.damaged_count = 0
+            self.force_undamaged = True
 
-    def after_known_area(self, damaged_counts, damaged_count, area):
+    def after_known_area(self, area):
+        if self.force_undamaged and area.damaged:
+            return FindArrangementsState(valid=False)
+        if self.damaged_count > 0 and not area.damaged:
+            return FindArrangementsState(valid=False)
         found_damaged = area.length if area.damaged else 0
-        return FindArrangementsState(damaged_counts, self.remaining_unknown, self.remaining_unknown_damaged,
-                                     damaged_count + found_damaged, False, self.area_index + 1, 0)
+        return FindArrangementsState(self.damaged_counts, self.remaining_unknown, self.remaining_unknown_damaged,
+                                     self.damaged_count + found_damaged, False, self.area_index + 1, 0)
 
-    def next_area(self, damaged_counts, damaged_count, force_undamaged):
-        return FindArrangementsState(damaged_counts, self.remaining_unknown, self.remaining_unknown_damaged,
-                                     damaged_count, force_undamaged, self.area_index + 1, 0)
+    def next_area(self):
+        return FindArrangementsState(self.damaged_counts, self.remaining_unknown, self.remaining_unknown_damaged,
+                                     self.damaged_count, self.force_undamaged, self.area_index + 1, 0)
 
-    def chose_unknown_undamaged(self, damaged_counts):
-        return FindArrangementsState(damaged_counts, self.remaining_unknown - 1, self.remaining_unknown_damaged,
+    def chose_unknown_undamaged(self):
+        return FindArrangementsState(self.damaged_counts, self.remaining_unknown - 1, self.remaining_unknown_damaged,
                                      0, False, self.area_index, self.area_offset + 1)
 
-    def chose_unknown_damaged(self, damaged_counts, damaged_count):
-        return FindArrangementsState(damaged_counts, self.remaining_unknown - 1, self.remaining_unknown_damaged - 1,
-                                     damaged_count + 1, False, self.area_index, self.area_offset + 1)
+    def chose_unknown_damaged(self):
+        return FindArrangementsState(self.damaged_counts, self.remaining_unknown - 1,
+                                     self.remaining_unknown_damaged - 1,
+                                     self.damaged_count + 1, False, self.area_index, self.area_offset + 1)
 
 
 def generate_arrangements(areas, state, count_only, filling_start=''):
-    if state.remaining_unknown < state.remaining_unknown_damaged:
+    if not state.valid:
         return 0 if count_only else []
-    damaged_counts = state.damaged_counts
-    damaged_count = state.damaged_count
-    force_undamaged = state.force_undamaged
-    if len(damaged_counts) == 0:
-        force_undamaged = True
-    elif damaged_count > damaged_counts[0]:
-        return 0 if count_only else []
-    elif damaged_count == damaged_counts[0]:
-        damaged_counts = damaged_counts[1:]
-        damaged_count = 0
-        force_undamaged = True
     if state.area_index >= len(areas):
-        if len(damaged_counts) > 0:
+        if len(state.damaged_counts) > 0:
             return 0 if count_only else []
         else:
             return 1 if count_only else [filling_start]
     area = areas[state.area_index]
     if area.known:
-        if force_undamaged and area.damaged:
-            return 0 if count_only else []
-        if damaged_count > 0 and not area.damaged:
-            return 0 if count_only else []
-        return generate_arrangements(areas, state.after_known_area(damaged_counts, damaged_count, area),
+        return generate_arrangements(areas, state.after_known_area(area),
                                      count_only, filling_start + area.contents)
     if state.area_offset >= area.length:
-        return generate_arrangements(areas, state.next_area(damaged_counts, damaged_count, force_undamaged),
+        return generate_arrangements(areas, state.next_area(),
                                      count_only, filling_start)
     arrangements = 0 if count_only else []
-    if damaged_count == 0:
-        arrangements += generate_arrangements(areas, state.chose_unknown_undamaged(damaged_counts),
+    if state.damaged_count == 0:
+        arrangements += generate_arrangements(areas, state.chose_unknown_undamaged(),
                                               count_only, filling_start + '.')
-    if not force_undamaged:
-        arrangements += generate_arrangements(areas, state.chose_unknown_damaged(damaged_counts, damaged_count),
+    if not state.force_undamaged:
+        arrangements += generate_arrangements(areas, state.chose_unknown_damaged(),
                                               count_only, filling_start + '#')
     return arrangements
 

@@ -53,7 +53,6 @@ class TestSprings(unittest.TestCase):
                           [1, 2, 3, 4]))
         self.assertEqual([9, 226, 6360, 188_488], counts)
 
-    @unittest.skip('Too slow')
     def test_should_multiply_arrangements_3(self):
         record = SpringConditionRecord("..???.??.?", [1, 1, 1])
         self.assertEqual(5_752_544, record.count_arrangements(multiple=5))
