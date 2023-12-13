@@ -1,4 +1,4 @@
-def compute_reflections_number_from_file(input_file):
+def load_patterns_from_file(input_file):
     with open(input_file, 'r') as file:
         pattern_lines = []
         patterns = []
@@ -10,6 +10,11 @@ def compute_reflections_number_from_file(input_file):
             else:
                 pattern_lines.append(line)
         patterns.append(pattern_lines)
+        return patterns
+
+
+def compute_reflections_number_from_file(input_file):
+    patterns = load_patterns_from_file(input_file)
 
     total = 0
     for pattern_lines in patterns:
