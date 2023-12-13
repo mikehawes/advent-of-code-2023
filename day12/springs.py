@@ -20,7 +20,7 @@ def area_from_match(match):
 class FindArrangementsState:
     def __init__(self, damaged_counts=None, remaining_unknown=None, remaining_unknown_damaged=None,
                  damaged_count=0, force_undamaged=False, area_index=0, area_offset=0, valid=True):
-        if not valid:
+        if not valid or remaining_unknown < remaining_unknown_damaged:
             self.valid = False
             return
         self.damaged_counts = damaged_counts
@@ -31,9 +31,7 @@ class FindArrangementsState:
         self.area_index = area_index
         self.area_offset = area_offset
         self.valid = True
-        if remaining_unknown < remaining_unknown_damaged:
-            self.valid = False
-        elif len(damaged_counts) == 0:
+        if not damaged_counts:
             self.force_undamaged = True
         elif damaged_count > damaged_counts[0]:
             self.valid = False
@@ -122,7 +120,7 @@ def count_arrangements(areas, state):
                 return arrangements
             continue
         if state.area_index >= len(areas):
-            if len(state.damaged_counts) == 0:
+            if not state.damaged_counts:
                 arrangements += 1
             if state_stack:
                 state = state_stack.pop()
@@ -137,10 +135,11 @@ def count_arrangements(areas, state):
             state = state.next_area()
             continue
         if state.damaged_count == 0:
-            state_stack.append(state.chose_unknown_undamaged())
-        if not state.force_undamaged:
-            state_stack.append(state.chose_unknown_damaged())
-        state = state_stack.pop()
+            if not state.force_undamaged:
+                state_stack.append(state.chose_unknown_damaged())
+            state = state.chose_unknown_undamaged()
+        elif not state.force_undamaged:
+            state = state.chose_unknown_damaged()
 
 
 class DamagedArea:
