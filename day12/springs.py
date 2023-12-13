@@ -66,28 +66,45 @@ class FindArrangementsState:
 
 
 def generate_arrangements(areas, state, count_only, filling_start=''):
-    if not state.valid:
-        return 0 if count_only else []
-    if state.area_index >= len(areas):
-        if len(state.damaged_counts) > 0:
-            return 0 if count_only else []
-        else:
-            return 1 if count_only else [filling_start]
-    area = areas[state.area_index]
-    if area.known:
-        return generate_arrangements(areas, state.after_known_area(area),
-                                     count_only, filling_start + area.contents)
-    if state.area_offset >= area.length:
-        return generate_arrangements(areas, state.next_area(),
-                                     count_only, filling_start)
+    state_stack = []
+    filling_stack = []
     arrangements = 0 if count_only else []
-    if state.damaged_count == 0:
-        arrangements += generate_arrangements(areas, state.chose_unknown_undamaged(),
-                                              count_only, filling_start + '.')
-    if not state.force_undamaged:
-        arrangements += generate_arrangements(areas, state.chose_unknown_damaged(),
-                                              count_only, filling_start + '#')
-    return arrangements
+    while True:
+        if not state.valid:
+            if state_stack:
+                state = state_stack.pop()
+                filling_start = filling_stack.pop()
+            else:
+                return arrangements
+            continue
+        if state.area_index >= len(areas):
+            if len(state.damaged_counts) == 0:
+                if count_only:
+                    arrangements += 1
+                else:
+                    arrangements.append(filling_start)
+            if state_stack:
+                state = state_stack.pop()
+                filling_start = filling_stack.pop()
+            else:
+                return arrangements
+            continue
+        area = areas[state.area_index]
+        if area.known:
+            state = state.after_known_area(area)
+            filling_start += area.contents
+            continue
+        if state.area_offset >= area.length:
+            state = state.next_area()
+            continue
+        if state.damaged_count == 0:
+            state_stack.append(state.chose_unknown_undamaged())
+            filling_stack.append(filling_start + '.')
+        if not state.force_undamaged:
+            state_stack.append(state.chose_unknown_damaged())
+            filling_stack.append(filling_start + '#')
+        state = state_stack.pop()
+        filling_start = filling_stack.pop()
 
 
 class DamagedArea:
