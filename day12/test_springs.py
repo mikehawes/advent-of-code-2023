@@ -58,3 +58,31 @@ class TestSprings(unittest.TestCase):
     def test_should_multiply_arrangements_input_line_41(self):
         record = SpringConditionRecord("????#????.???", [1, 2, 1, 1])
         self.assertEqual(0, record.count_arrangements(multiple=5))
+
+    def test_should_multiply_arrangements_input_line_41_a(self):
+        record = SpringConditionRecord("????#????", [1, 2, 1, 1])
+        self.assertEqual(3880, record.count_arrangements(multiple=5))
+
+    def test_should_multiply_arrangements_input_line_41_b(self):
+        record = SpringConditionRecord("????#????", [1, 2])
+        self.assertEqual(366283, record.count_arrangements(multiple=5))
+
+    def test_should_multiply_arrangements_input_line_41_with_lower_multiple(self):
+        record = SpringConditionRecord("????#????.???", [1, 2, 1, 1])
+        self.assertEqual(50_316_280, record.count_arrangements(multiple=4))
+
+    def test_should_multiply_arrangements_input_line_41_with_lower_multiple_a(self):
+        record = SpringConditionRecord("????#????", [1, 2, 1, 1])
+        self.assertEqual(542, record.count_arrangements(multiple=4))
+
+    def test_should_multiply_arrangements_input_line_41_with_lower_multiple_b(self):
+        record = SpringConditionRecord("????#????", [1, 2, 1])
+        self.assertEqual(140574, record.count_arrangements(multiple=4))
+
+    def test_should_multiply_arrangements_input_line_41_with_lower_multiple_c(self):
+        record = SpringConditionRecord("????#????", [1, 2])
+        self.assertEqual(22933, record.count_arrangements(multiple=4))
+
+    def test_should_multiply_arrangements_input_line_41_with_lower_multiple_d(self):
+        record = SpringConditionRecord("???", [1])
+        self.assertEqual(495, record.count_arrangements(multiple=4))
