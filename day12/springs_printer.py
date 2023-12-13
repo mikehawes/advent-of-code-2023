@@ -1,7 +1,7 @@
 import io
 
-from day12.springs import total_spring_arrangements, \
-    read_spring_conditions_from_file, compute_spring_arrangements_from_records
+from day12.arrangements import total_spring_arrangements, compute_spring_arrangements_from_records, count_arrangements
+from day12.springs import read_spring_conditions_from_file
 
 
 def print_damaged_counts(record):
@@ -13,7 +13,7 @@ def print_record(record):
 
 
 def list_of_record_and_arrangement_count(records, multiple=1):
-    return list(map(lambda r: [print_record(r), r.count_arrangements(multiple=multiple)], records))
+    return list(map(lambda r: [print_record(r), count_arrangements(r.unfold(multiple))], records))
 
 
 def print_working_spring_arrangements_for_file(input_file, multiple=1):

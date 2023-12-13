@@ -1,9 +1,5 @@
-import datetime
 import itertools
 import re
-import time
-
-from day12.arrangements import generate_arrangements
 
 
 class Area:
@@ -41,12 +37,6 @@ class SpringConditionRecord:
         self.areas = list(map(area_from_match, re.finditer(r'#+|\.+|\?+', springs)))
         self.damaged_areas = list(map(DamagedArea, re.finditer(r'[?#]+', springs)))
 
-    def arrangements(self, count_only=False):
-        return generate_arrangements(self, count_only)
-
-    def count_arrangements(self, multiple=1):
-        return self.unfold(multiple).arrangements(count_only=True).arrangements_count
-
     def unfold(self, multiple):
         if multiple == 1:
             return self
@@ -63,36 +53,3 @@ def read_spring_condition_line(line):
 def read_spring_conditions_from_file(input_file):
     with open(input_file, 'r') as file:
         return list(map(read_spring_condition_line, file))
-
-
-def compute_spring_arrangements_from_file(input_file, multiple=1, count_only=False):
-    records = read_spring_conditions_from_file(input_file)
-    return compute_spring_arrangements_from_records(records, multiple, count_only)
-
-
-def compute_spring_arrangements_from_records(records, multiple=1, count_only=False):
-    arrangements = []
-    num_records = len(records)
-    start = time.time()
-    print('Computing arrangements for {} records'.format(num_records))
-    for i, record in enumerate(records):
-        record_arrangements = record.unfold(multiple).arrangements(count_only=count_only)
-        arrangements.append(record_arrangements)
-        print("Computed {} of {} records, count {}, time so far: {}"
-              .format(i + 1, num_records, record_arrangements.arrangements_count,
-                      datetime.timedelta(seconds=time.time() - start)))
-    return arrangements
-
-
-def total_spring_arrangements(arrangements):
-    return sum(map(lambda a: a.arrangements_count, arrangements))
-
-
-def total_spring_arrangements_from_file(input_file, multiple=1):
-    record_arrangements = compute_spring_arrangements_from_file(input_file, multiple=multiple, count_only=True)
-    return total_spring_arrangements(record_arrangements)
-
-
-def total_spring_arrangements_from_records(records, multiple=1):
-    record_arrangements = compute_spring_arrangements_from_records(records, multiple=multiple, count_only=True)
-    return total_spring_arrangements(record_arrangements)

@@ -1,10 +1,14 @@
+import datetime
 import math
+import time
+
+from day12.springs import read_spring_conditions_from_file, SpringConditionRecord
 
 
 class SpringArrangements:
-    def __init__(self, record, fillings_count, arrangements):
+    def __init__(self, record, arrangements):
         self.record = record
-        self.fillings_count = fillings_count
+        self.fillings_count = math.prod(map(lambda a: 1 if a.known else 2 ** a.length, record.areas))
         if isinstance(arrangements, list):
             self.arrangements = arrangements
             self.arrangements_count = len(arrangements)
@@ -59,16 +63,71 @@ class FindArrangementsState:
 
 
 def generate_arrangements(record, count_only):
-    fillings_count = math.prod(map(lambda a: 1 if a.known else 2 ** a.length, record.areas))
+    arrangements = __generate_arrangements(record, count_only)
+    return SpringArrangements(record, arrangements)
+
+
+def count_arrangements(record):
+    return __generate_arrangements(record, count_only=True)
+
+
+def compute_spring_arrangements_from_file(input_file, multiple=1, count_only=False):
+    records = read_spring_conditions_from_file(input_file)
+    return compute_spring_arrangements_from_records(records, multiple, count_only)
+
+
+def compute_spring_arrangements_from_records(records, multiple=1, count_only=False):
+    arrangements = []
+    num_records = len(records)
+    start = time.time()
+    print('Computing arrangements for {} records'.format(num_records))
+    for i, record in enumerate(records):
+        record_arrangements = generate_arrangements(record.unfold(multiple), count_only=count_only)
+        arrangements.append(record_arrangements)
+        print("Computed {} of {} records, count {}, time so far: {}"
+              .format(i + 1, num_records, record_arrangements.arrangements_count,
+                      datetime.timedelta(seconds=time.time() - start)))
+    return arrangements
+
+
+def total_spring_arrangements(arrangements):
+    return sum(map(lambda a: a.arrangements_count, arrangements))
+
+
+def total_spring_arrangements_from_file(input_file, multiple=1):
+    record_arrangements = compute_spring_arrangements_from_file(input_file, multiple=multiple, count_only=True)
+    return total_spring_arrangements(record_arrangements)
+
+
+def total_spring_arrangements_from_records(records, multiple=1):
+    record_arrangements = compute_spring_arrangements_from_records(records, multiple=multiple, count_only=True)
+    return total_spring_arrangements(record_arrangements)
+
+
+def __generate_arrangments_index(record, count_only):
+    length = len(record.springs)
+    index_start = int(length / 2)
+    index_springs = record.springs[index_start:]
+    arrangements_by_remaining_counts = {}
+    for i in range(0, len(record.damaged_counts)):
+        remaining_counts = record.damaged_counts[i:]
+        remaining_counts_str = ','.join(map(str, remaining_counts))
+        index_record = SpringConditionRecord(index_springs, remaining_counts)
+        index_arrangements = generate_arrangements(index_record, count_only)
+        if index_arrangements.arrangements_count > 0:
+            arrangements_by_remaining_counts[remaining_counts_str] = index_arrangements
+
+
+def __initial_state(record):
     unknown = sum(map(lambda a: a.length, filter(lambda a: not a.known, record.areas)))
     known_damaged = sum(map(lambda a: a.length, filter(lambda a: a.damaged, record.areas)))
     unknown_damaged = sum(record.damaged_counts) - known_damaged
-    state = FindArrangementsState(record.damaged_counts, unknown, unknown_damaged)
-    arrangements = __generate_arrangements_with_state(record.areas, state, count_only)
-    return SpringArrangements(record, fillings_count, arrangements)
+    return FindArrangementsState(record.damaged_counts, unknown, unknown_damaged)
 
 
-def __generate_arrangements_with_state(areas, state, count_only):
+def __generate_arrangements(record, count_only):
+    state = __initial_state(record)
+    areas = record.areas
     state_stack = []
     filling_stack = []
     filling_start = ''
