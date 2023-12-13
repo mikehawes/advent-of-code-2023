@@ -65,10 +65,17 @@ class FindArrangementsState:
                                      self.damaged_count + 1, False, self.area_index, self.area_offset + 1)
 
 
-def generate_arrangements(areas, state, count_only, filling_start=''):
+def generate_arrangements(areas, damaged_counts, count_only):
+    unknown = sum(map(lambda a: a.length, filter(lambda a: not a.known, areas)))
+    known_damaged = sum(map(lambda a: a.length, filter(lambda a: a.damaged, areas)))
+    unknown_damaged = sum(damaged_counts) - known_damaged
+    state = FindArrangementsState(damaged_counts, unknown, unknown_damaged)
+    if count_only:
+        return count_arrangements(areas, state)
     state_stack = []
     filling_stack = []
-    arrangements = 0 if count_only else []
+    filling_start = ''
+    arrangements = []
     while True:
         if not state.valid:
             if state_stack:
@@ -79,10 +86,7 @@ def generate_arrangements(areas, state, count_only, filling_start=''):
             continue
         if state.area_index >= len(areas):
             if len(state.damaged_counts) == 0:
-                if count_only:
-                    arrangements += 1
-                else:
-                    arrangements.append(filling_start)
+                arrangements.append(filling_start)
             if state_stack:
                 state = state_stack.pop()
                 filling_start = filling_stack.pop()
@@ -105,6 +109,38 @@ def generate_arrangements(areas, state, count_only, filling_start=''):
             filling_stack.append(filling_start + '#')
         state = state_stack.pop()
         filling_start = filling_stack.pop()
+
+
+def count_arrangements(areas, state):
+    state_stack = []
+    arrangements = 0
+    while True:
+        if not state.valid:
+            if state_stack:
+                state = state_stack.pop()
+            else:
+                return arrangements
+            continue
+        if state.area_index >= len(areas):
+            if len(state.damaged_counts) == 0:
+                arrangements += 1
+            if state_stack:
+                state = state_stack.pop()
+            else:
+                return arrangements
+            continue
+        area = areas[state.area_index]
+        if area.known:
+            state = state.after_known_area(area)
+            continue
+        if state.area_offset >= area.length:
+            state = state.next_area()
+            continue
+        if state.damaged_count == 0:
+            state_stack.append(state.chose_unknown_undamaged())
+        if not state.force_undamaged:
+            state_stack.append(state.chose_unknown_damaged())
+        state = state_stack.pop()
 
 
 class DamagedArea:
@@ -147,11 +183,7 @@ class SpringConditionRecord:
             areas.extend(self.areas)
         damaged_counts = self.damaged_counts * multiple
         fillings_count = prod(map(lambda a: 1 if a.known else 2 ** a.length, areas))
-        unknown = sum(map(lambda a: a.length, filter(lambda a: not a.known, areas)))
-        known_damaged = sum(map(lambda a: a.length, filter(lambda a: a.damaged, areas)))
-        unknown_damaged = sum(damaged_counts) - known_damaged
-        arrangements = generate_arrangements(areas, FindArrangementsState(damaged_counts, unknown, unknown_damaged),
-                                             count_only)
+        arrangements = generate_arrangements(areas, damaged_counts, count_only)
         return SpringArrangements(self, fillings_count, arrangements)
 
     def count_arrangements(self, multiple=1):
