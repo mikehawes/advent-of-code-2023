@@ -69,78 +69,52 @@ def generate_arrangements(areas, damaged_counts, count_only):
     known_damaged = sum(map(lambda a: a.length, filter(lambda a: a.damaged, areas)))
     unknown_damaged = sum(damaged_counts) - known_damaged
     state = FindArrangementsState(damaged_counts, unknown, unknown_damaged)
-    if count_only:
-        return count_arrangements(areas, state)
     state_stack = []
     filling_stack = []
     filling_start = ''
-    arrangements = []
+    arrangements = 0 if count_only else []
     while True:
         if not state.valid:
             if state_stack:
                 state = state_stack.pop()
-                filling_start = filling_stack.pop()
+                if not count_only:
+                    filling_start = filling_stack.pop()
             else:
                 return arrangements
             continue
         if state.area_index >= len(areas):
             if len(state.damaged_counts) == 0:
-                arrangements.append(filling_start)
+                if count_only:
+                    arrangements += 1
+                else:
+                    arrangements.append(filling_start)
             if state_stack:
                 state = state_stack.pop()
-                filling_start = filling_stack.pop()
+                if not count_only:
+                    filling_start = filling_stack.pop()
             else:
                 return arrangements
             continue
         area = areas[state.area_index]
         if area.known:
             state = state.after_known_area(area)
-            filling_start += area.contents
+            if not count_only:
+                filling_start += area.contents
             continue
         if state.area_offset >= area.length:
             state = state.next_area()
             continue
         if state.damaged_count == 0:
             state_stack.append(state.chose_unknown_undamaged())
-            filling_stack.append(filling_start + '.')
+            if not count_only:
+                filling_stack.append(filling_start + '.')
         if not state.force_undamaged:
             state_stack.append(state.chose_unknown_damaged())
-            filling_stack.append(filling_start + '#')
+            if not count_only:
+                filling_stack.append(filling_start + '#')
         state = state_stack.pop()
-        filling_start = filling_stack.pop()
-
-
-def count_arrangements(areas, state):
-    state_stack = []
-    arrangements = 0
-    while True:
-        if not state.valid:
-            if state_stack:
-                state = state_stack.pop()
-            else:
-                return arrangements
-            continue
-        if state.area_index >= len(areas):
-            if not state.damaged_counts:
-                arrangements += 1
-            if state_stack:
-                state = state_stack.pop()
-            else:
-                return arrangements
-            continue
-        area = areas[state.area_index]
-        if area.known:
-            state = state.after_known_area(area)
-            continue
-        if state.area_offset >= area.length:
-            state = state.next_area()
-            continue
-        if state.damaged_count == 0:
-            if not state.force_undamaged:
-                state_stack.append(state.chose_unknown_damaged())
-            state = state.chose_unknown_undamaged()
-        elif not state.force_undamaged:
-            state = state.chose_unknown_damaged()
+        if not count_only:
+            filling_start = filling_stack.pop()
 
 
 class DamagedArea:
