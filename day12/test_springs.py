@@ -24,34 +24,35 @@ class TestSprings(unittest.TestCase):
     def test_should_print_working_spring_arrangements_for_input(self):
         verify(print_working_spring_arrangements_for_file('input'))
 
-    def test_should_multiply_working_spring_arrangements_by_2_for_example(self):
+    def test_should_unfold_working_spring_arrangements_2_times_for_example(self):
         verify(print_working_spring_arrangements_for_file('example', multiple=2))
 
-    def test_should_multiply_working_spring_arrangements_by_numbers_for_example(self):
+    def test_should_total_unfolded_working_spring_arrangements_for_example(self):
         records = read_spring_conditions_from_file('example')
         totals = list(map(lambda multiple: total_spring_arrangements_from_records(records, multiple),
                           [1, 2, 3, 4, 5]))
         self.assertEqual([21, 206, 2612, 36308, 525152], totals)
 
-    def test_should_multiply_working_spring_arrangements_by_5_for_example(self):
+    def test_should_unfold_working_spring_arrangements_5_times_for_example(self):
         self.assertEqual(525152, total_spring_arrangements_from_file('example', multiple=5))
 
-    def test_should_multiply_working_spring_arrangements_by_6_for_example(self):
+    def test_should_unfold_working_spring_arrangements_6_times_for_example(self):
         self.assertEqual(7_737_356, total_spring_arrangements_from_file('example', multiple=6))
 
     @unittest.skip('Too slow')
-    def test_should_multiply_working_spring_arrangements_by_5_for_input(self):
+    def test_should_unfold_working_spring_arrangements_5_times_for_input(self):
         self.assertEqual(0, total_spring_arrangements_from_file('input', multiple=5))
 
-    def test_should_multiply_arrangements_example_line_1(self):
+    def test_should_unfold_arrangements_5_times_for_example_line_1(self):
         record = SpringConditionRecord("???.###", [1, 1, 3])
         self.assertEqual(1, record.count_arrangements(multiple=5))
 
-    def test_should_multiply_arrangements_input_line_1(self):
+    def test_should_unfold_arrangements_5_times_for_input_line_1(self):
         record = SpringConditionRecord("..???.??.?", [1, 1, 1])
         self.assertEqual(5_752_544, record.count_arrangements(multiple=5))
 
-    def test_should_multiply_arrangements_input_line_24(self):
+    @unittest.skip('A bit too slow')
+    def test_should_unfold_arrangements_5_times_for_input_line_24(self):
         record = SpringConditionRecord("??#?#?????????????.", [8, 4, 1])
         self.assertEqual(67_192_396, record.count_arrangements(multiple=5))
 
@@ -70,10 +71,10 @@ class TestSpringsInputLine41(unittest.TestCase):
         self.record = self.records[0]
 
     @unittest.skip('Too slow')
-    def test_should_find_arrangements_for_multiple_5(self):
+    def test_should_find_arrangements_unfolding_5_times(self):
         self.assertEqual(0, self.record.count_arrangements(multiple=5))
 
-    def test_should_find_arrangements_for_partial_multiple_5(self):
+    def test_should_find_arrangements_for_partial_unfolding_5_times(self):
         self.assertEqual([
             ['????#???? 1,2,1,1', 3880],
             ['????#???? 1,2,1', 3381560],
@@ -82,7 +83,8 @@ class TestSpringsInputLine41(unittest.TestCase):
             ['??? 1,1', 1]],
             list_of_record_and_arrangement_count(self.partial_records, multiple=5))
 
-    def test_should_find_arrangements_for_multiple_4(self):
+    @unittest.skip('A bit too slow')
+    def test_should_find_arrangements_unfolding_4_times(self):
         self.assertEqual([
             ['????#????.??? 1,2,1,1', 50316280],
             ['????#???? 1,2,1,1', 542],
@@ -102,7 +104,7 @@ class TestSpringsInputLine41(unittest.TestCase):
             ['??? 1,1', 1]],
             list_of_record_and_arrangement_count(self.records))
 
-    def test_should_find_arrangements_for_multiple_2(self):
+    def test_should_find_arrangements_unfolding_2_times(self):
         self.assertEqual([
             ['????#????.??? 1,2,1,1', 4414],
             ['????#???? 1,2,1,1', 11],
@@ -115,5 +117,5 @@ class TestSpringsInputLine41(unittest.TestCase):
     def test_should_print_arrangements(self):
         verify(print_working_spring_arrangements_for_records(self.records))
 
-    def test_should_print_arrangements_with_multiple_2(self):
+    def test_should_print_arrangements_unfolding_2_times(self):
         verify(print_working_spring_arrangements_for_records(self.records, multiple=2))

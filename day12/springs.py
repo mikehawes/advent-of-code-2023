@@ -1,4 +1,5 @@
 import datetime
+import itertools
 import re
 import time
 from math import prod
@@ -168,25 +169,27 @@ class SpringArrangements:
 
 
 class SpringConditionRecord:
-    def __init__(self, springs, damaged_counts):
+    def __init__(self, springs, damaged_counts, unfolded_from=None):
         self.springs = springs
         self.damaged_counts = damaged_counts
+        self.unfolded_from = unfolded_from
         self.areas = list(map(area_from_match, re.finditer(r'#+|\.+|\?+', springs)))
         self.damaged_areas = list(map(DamagedArea, re.finditer(r'[?#]+', springs)))
 
-    def arrangements(self, multiple=1, count_only=False):
-        areas = []
-        for i in range(0, multiple):
-            if i != 0:
-                areas.append(Area('?'))
-            areas.extend(self.areas)
-        damaged_counts = self.damaged_counts * multiple
-        fillings_count = prod(map(lambda a: 1 if a.known else 2 ** a.length, areas))
-        arrangements = generate_arrangements(areas, damaged_counts, count_only)
+    def arrangements(self, count_only=False):
+        fillings_count = prod(map(lambda a: 1 if a.known else 2 ** a.length, self.areas))
+        arrangements = generate_arrangements(self.areas, self.damaged_counts, count_only)
         return SpringArrangements(self, fillings_count, arrangements)
 
     def count_arrangements(self, multiple=1):
-        return self.arrangements(multiple=multiple, count_only=True).arrangements_count
+        return self.unfold(multiple).arrangements(count_only=True).arrangements_count
+
+    def unfold(self, multiple):
+        if multiple == 1:
+            return self
+        springs = '?'.join(itertools.repeat(self.springs, multiple))
+        damaged_counts = self.damaged_counts * multiple
+        return SpringConditionRecord(springs, damaged_counts, unfolded_from=self)
 
 
 def read_spring_condition_line(line):
@@ -210,7 +213,7 @@ def compute_spring_arrangements_from_records(records, multiple=1, count_only=Fal
     start = time.time()
     print('Computing arrangements for {} records'.format(num_records))
     for i, record in enumerate(records):
-        record_arrangements = record.arrangements(multiple=multiple, count_only=count_only)
+        record_arrangements = record.unfold(multiple).arrangements(count_only=count_only)
         arrangements.append(record_arrangements)
         print("Computed {} of {} records, count {}, time so far: {}"
               .format(i + 1, num_records, record_arrangements.arrangements_count,

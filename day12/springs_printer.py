@@ -27,11 +27,13 @@ def print_working_spring_arrangements_for_records(records, multiple=1):
     output = io.StringIO()
     print('Total arrangements:', total_arrangements, file=output)
     if multiple > 1:
-        print('Multiplied by', multiple, file=output)
+        print('Unfolded {} times'.format(multiple), file=output)
     print(file=output)
     for arrangements in record_arrangements:
         record = arrangements.record
-        print('{} {}'.format(record.springs, print_damaged_counts(record)), file=output)
+        print(print_record(record), file=output)
+        if record.unfolded_from:
+            print('Unfolded from:', print_record(record.unfolded_from), file=output)
         num_fillings = arrangements.fillings_count
         arrangements_count = arrangements.arrangements_count
         print('{} filling{}'.format(num_fillings, '' if num_fillings == 1 else 's'), file=output)
