@@ -124,14 +124,16 @@ class SpringArrangementsIndex:
             return arrangements
 
 
-def __generate_arrangments_index(record):
-    half_length = int(len(record.springs) / 2)
+def __generate_arrangments_index(record, indexes_so_far, prev_index):
+    target_pos = int(len(record.springs) / (2 ** (indexes_so_far + 1)))
     pos = 0
     index_start = len(record.springs)
     area_index = len(record.areas)
     area_offset = 0
     for i, area in enumerate(record.areas):
-        if not area.known and pos > half_length:
+        if prev_index and i == prev_index.area_index:
+            return prev_index
+        if not area.known and pos > target_pos:
             area_index = i
             index_start = pos
             area_offset = 0
@@ -145,7 +147,8 @@ def __generate_arrangments_index(record):
     refuse_undamaged_start = False
     while remaining_counts:
         index_record = SpringConditionRecord(index_springs, remaining_counts)
-        index_arrangements = __generate_arrangements(index_record, False, generate_index=False)
+        index_arrangements = __generate_arrangements(
+            index_record, count_only=False, generate_indexes=0, index=prev_index)
         if refuse_undamaged_start:
             index_arrangements = list(filter(lambda a: a.startswith('#'), index_arrangements))
         if index_arrangements:
@@ -166,30 +169,22 @@ def __initial_state(record):
     return FindArrangementsState(record.damaged_counts, unknown, unknown_damaged)
 
 
-def __generate_arrangements(record, count_only, generate_index=True):
+def __generate_arrangements(record, count_only, generate_indexes=1, index=None):
     state = __initial_state(record)
-    if generate_index:
-        index = __generate_arrangments_index(record)
-    else:
-        index = None
+    for i in range(0, generate_indexes):
+        index = __generate_arrangments_index(record, i, index)
     areas = record.areas
     state_stack = []
     filling_stack = []
     filling_start = ''
     arrangements = 0 if count_only else []
     while True:
-        if not state.valid:
-            if state_stack:
-                state = state_stack.pop()
-                if not count_only:
-                    filling_start = filling_stack.pop()
-            else:
-                return arrangements
-            continue
         terminated = False
-        if (index and state.damaged_counts
-                and state.area_index == index.area_index
-                and state.area_offset == index.area_offset):
+        if not state.valid:
+            terminated = True
+        elif (index and state.damaged_counts
+              and state.area_index == index.area_index
+              and state.area_offset == index.area_offset):
             terminated = True
             remaining = index.remaining_arrangements_for_state(state)
             if count_only:
