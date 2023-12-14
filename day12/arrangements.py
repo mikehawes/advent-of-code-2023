@@ -75,22 +75,17 @@ def count_arrangements(record):
     return __generate_arrangements(record, count_only=True)
 
 
-def compute_spring_arrangements_from_file(input_file, multiple=1, count_only=False):
-    records = read_spring_conditions_from_file(input_file)
-    return compute_spring_arrangements_from_records(records, multiple, count_only)
-
-
-def compute_spring_arrangements_from_records(records, multiple=1, count_only=False):
+def compute_spring_arrangements_from_records(records, multiple=1, count_only=False, log=None):
     arrangements = []
     num_records = len(records)
     start = time.time()
-    print('Computing arrangements for {} records'.format(num_records))
+    print('Computing arrangements for {} records'.format(num_records), file=log, flush=True)
     for i, record in enumerate(records):
         record_arrangements = generate_arrangements(record.unfold(multiple), count_only=count_only)
         arrangements.append(record_arrangements)
         print("Computed {} of {} records, count {}, time so far: {}"
               .format(i + 1, num_records, record_arrangements.arrangements_count,
-                      datetime.timedelta(seconds=time.time() - start)))
+                      datetime.timedelta(seconds=time.time() - start)), file=log, flush=True)
     return arrangements
 
 
@@ -98,8 +93,10 @@ def total_spring_arrangements(arrangements):
     return sum(map(lambda a: a.arrangements_count, arrangements))
 
 
-def total_spring_arrangements_from_file(input_file, multiple=1):
-    record_arrangements = compute_spring_arrangements_from_file(input_file, multiple=multiple, count_only=True)
+def total_spring_arrangements_from_file(input_file, multiple=1, log=None):
+    records = read_spring_conditions_from_file(input_file)
+    record_arrangements = compute_spring_arrangements_from_records(
+        records, multiple=multiple, count_only=True, log=log)
     return total_spring_arrangements(record_arrangements)
 
 

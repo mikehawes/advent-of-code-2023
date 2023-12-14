@@ -4,7 +4,7 @@ from approvaltests import verify
 
 from day12.arrangements import total_spring_arrangements_from_file, total_spring_arrangements_from_records, \
     count_arrangements, generate_arrangements_list
-from day12.springs import SpringConditionRecord, read_spring_conditions_from_file, read_spring_condition_line
+from day12.springs import read_spring_conditions_from_file, read_spring_condition_line
 from day12.springs_printer import print_working_spring_arrangements_for_file, list_of_record_and_arrangement_count, \
     print_working_spring_arrangements_for_records, print_record
 
@@ -54,19 +54,30 @@ class TestSprings(unittest.TestCase):
 
     @unittest.skip('Too slow')
     def test_should_unfold_working_spring_arrangements_5_times_for_input(self):
-        self.assertEqual(0, total_spring_arrangements_from_file('input', multiple=5))
+        with open('output.log', 'w') as output:
+            self.assertEqual(0, total_spring_arrangements_from_file('input', multiple=5, log=output))
 
     def test_should_unfold_arrangements_5_times_for_example_line_1(self):
-        record = SpringConditionRecord("???.###", [1, 1, 3])
+        record = read_spring_condition_line("???.### 1,1,3")
         self.assertEqual(1, count_arrangements(record.unfold(5)))
 
     def test_should_unfold_arrangements_5_times_for_input_line_1(self):
-        record = SpringConditionRecord("..???.??.?", [1, 1, 1])
+        record = read_spring_condition_line("..???.??.? 1,1,1")
         self.assertEqual(5_752_544, count_arrangements(record.unfold(5)))
 
     def test_should_unfold_arrangements_5_times_for_input_line_24(self):
-        record = SpringConditionRecord("??#?#?????????????.", [8, 4, 1])
+        record = read_spring_condition_line("??#?#?????????????. 8,4,1")
         self.assertEqual(67_192_396, count_arrangements(record.unfold(5)))
+
+    @unittest.skip('Too slow')
+    def test_should_unfold_arrangements_5_times_for_input_line_78(self):
+        record = read_spring_condition_line("?????????.????????# 1,1,1,2,4")
+        self.assertEqual(17_850_414_810_217, count_arrangements(record.unfold(5)))
+
+    @unittest.skip('Too slow')
+    def test_should_unfold_arrangements_5_times_for_input_line_167(self):
+        record = read_spring_condition_line("?#?#?#?????????????? 6,1,1,1,1,1")
+        self.assertEqual(0, count_arrangements(record.unfold(5)))
 
 
 class TestSpringsInputLine41(unittest.TestCase):
