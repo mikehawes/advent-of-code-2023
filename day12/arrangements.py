@@ -16,6 +16,49 @@ class SpringArrangements:
             self.arrangements_count = arrangements
 
 
+def generate_arrangements(record, count_only=False):
+    arrangements = __generate_arrangements(record, count_only)
+    return SpringArrangements(record, arrangements)
+
+
+def generate_arrangements_list(record):
+    return __generate_arrangements(record, count_only=False)
+
+
+def count_arrangements(record):
+    return __generate_arrangements(record, count_only=True)
+
+
+def compute_spring_arrangements_from_records(records, multiple=1, count_only=False, log=None):
+    arrangements = []
+    num_records = len(records)
+    start = time.time()
+    print('Computing arrangements for {} records'.format(num_records), file=log, flush=True)
+    for i, record in enumerate(records):
+        record_arrangements = generate_arrangements(record.unfold(multiple), count_only=count_only)
+        arrangements.append(record_arrangements)
+        print("Computed {} of {} records, count {}, time so far: {}"
+              .format(i + 1, num_records, record_arrangements.arrangements_count,
+                      datetime.timedelta(seconds=time.time() - start)), file=log, flush=True)
+    return arrangements
+
+
+def total_spring_arrangements(arrangements):
+    return sum(map(lambda a: a.arrangements_count, arrangements))
+
+
+def total_spring_arrangements_from_file(input_file, multiple=1, log=None):
+    records = read_spring_conditions_from_file(input_file)
+    record_arrangements = compute_spring_arrangements_from_records(
+        records, multiple=multiple, count_only=True, log=log)
+    return total_spring_arrangements(record_arrangements)
+
+
+def total_spring_arrangements_from_records(records, multiple=1):
+    record_arrangements = compute_spring_arrangements_from_records(records, multiple=multiple, count_only=True)
+    return total_spring_arrangements(record_arrangements)
+
+
 class FindArrangementsState:
     def __init__(self, damaged_counts=None, remaining_unknown=None, remaining_unknown_damaged=None,
                  damaged_count=0, force_undamaged=False, area_index=0, area_offset=0, valid=True):
@@ -60,49 +103,6 @@ class FindArrangementsState:
         return FindArrangementsState(self.damaged_counts, self.remaining_unknown - 1,
                                      self.remaining_unknown_damaged - 1,
                                      self.damaged_count + 1, False, self.area_index, self.area_offset + 1)
-
-
-def generate_arrangements(record, count_only=False):
-    arrangements = __generate_arrangements(record, count_only)
-    return SpringArrangements(record, arrangements)
-
-
-def generate_arrangements_list(record):
-    return __generate_arrangements(record, count_only=False)
-
-
-def count_arrangements(record):
-    return __generate_arrangements(record, count_only=True)
-
-
-def compute_spring_arrangements_from_records(records, multiple=1, count_only=False, log=None):
-    arrangements = []
-    num_records = len(records)
-    start = time.time()
-    print('Computing arrangements for {} records'.format(num_records), file=log, flush=True)
-    for i, record in enumerate(records):
-        record_arrangements = generate_arrangements(record.unfold(multiple), count_only=count_only)
-        arrangements.append(record_arrangements)
-        print("Computed {} of {} records, count {}, time so far: {}"
-              .format(i + 1, num_records, record_arrangements.arrangements_count,
-                      datetime.timedelta(seconds=time.time() - start)), file=log, flush=True)
-    return arrangements
-
-
-def total_spring_arrangements(arrangements):
-    return sum(map(lambda a: a.arrangements_count, arrangements))
-
-
-def total_spring_arrangements_from_file(input_file, multiple=1, log=None):
-    records = read_spring_conditions_from_file(input_file)
-    record_arrangements = compute_spring_arrangements_from_records(
-        records, multiple=multiple, count_only=True, log=log)
-    return total_spring_arrangements(record_arrangements)
-
-
-def total_spring_arrangements_from_records(records, multiple=1):
-    record_arrangements = compute_spring_arrangements_from_records(records, multiple=multiple, count_only=True)
-    return total_spring_arrangements(record_arrangements)
 
 
 class SpringArrangementsIndex:
