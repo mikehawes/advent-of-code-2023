@@ -3,8 +3,8 @@ import unittest
 from approvaltests import verify
 
 from day12.arrangements import total_spring_arrangements_from_file, total_spring_arrangements_from_records, \
-    count_arrangements
-from day12.springs import SpringConditionRecord, read_spring_conditions_from_file
+    count_arrangements, generate_arrangements_list
+from day12.springs import SpringConditionRecord, read_spring_conditions_from_file, read_spring_condition_line
 from day12.springs_printer import print_working_spring_arrangements_for_file, list_of_record_and_arrangement_count, \
     print_working_spring_arrangements_for_records, print_record
 
@@ -14,13 +14,25 @@ class TestSprings(unittest.TestCase):
     def test_should_print_working_spring_arrangements_for_example(self):
         verify(print_working_spring_arrangements_for_file('example'))
 
-    def test_should_count_arrangements_1(self):
-        record = SpringConditionRecord("???.###", [1, 1, 3])
+    def test_should_count_arrangements_for_example_line_1(self):
+        record = read_spring_condition_line("???.### 1,1,3")
         self.assertEqual(1, count_arrangements(record))
 
-    def test_should_count_arrangements_2(self):
-        record = SpringConditionRecord("?.#??.??#?", [2, 1, 1])
+    def test_should_find_arrangements_for_example_line_3(self):
+        record = read_spring_condition_line("?#?#?#?#?#?#?#? 1,3,1,6")
+        self.assertEqual(['.#.###.#.######'], generate_arrangements_list(record))
+
+    def test_should_find_arrangements_for_input_line_4(self):
+        record = read_spring_condition_line("?#.#?#??#??? 1,7,1")
+        self.assertEqual(['.#.#######.#'], generate_arrangements_list(record))
+
+    def test_should_count_arrangements_for_input_line_9(self):
+        record = read_spring_condition_line("?.#??.??#? 2,1,1")
         self.assertEqual(1, count_arrangements(record))
+
+    def test_should_find_arrangements_for_input_line_11(self):
+        record = read_spring_condition_line("?###?.??#??..? 5,4")
+        self.assertEqual(['#####.####....', '#####..####...'], generate_arrangements_list(record))
 
     def test_should_print_working_spring_arrangements_for_input(self):
         verify(print_working_spring_arrangements_for_file('input'))
@@ -61,12 +73,12 @@ class TestSprings(unittest.TestCase):
 class TestSpringsInputLine41(unittest.TestCase):
     def setUp(self):
         self.records = [
-            SpringConditionRecord("????#????.???", [1, 2, 1, 1]),
-            SpringConditionRecord("????#????", [1, 2, 1, 1]),
-            SpringConditionRecord("????#????", [1, 2, 1]),
-            SpringConditionRecord("????#????", [1, 2]),
-            SpringConditionRecord("???", [1]),
-            SpringConditionRecord("???", [1, 1])
+            read_spring_condition_line("????#????.??? 1,2,1,1"),
+            read_spring_condition_line("????#???? 1,2,1,1"),
+            read_spring_condition_line("????#???? 1,2,1"),
+            read_spring_condition_line("????#???? 1,2"),
+            read_spring_condition_line("??? 1"),
+            read_spring_condition_line("??? 1,1")
         ]
         self.partial_records = self.records[1:]
         self.record = self.records[0]

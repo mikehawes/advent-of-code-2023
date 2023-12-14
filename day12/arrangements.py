@@ -62,9 +62,13 @@ class FindArrangementsState:
                                      self.damaged_count + 1, False, self.area_index, self.area_offset + 1)
 
 
-def generate_arrangements(record, count_only):
+def generate_arrangements(record, count_only=False):
     arrangements = __generate_arrangements(record, count_only)
     return SpringArrangements(record, arrangements)
+
+
+def generate_arrangements_list(record):
+    return __generate_arrangements(record, count_only=False)
 
 
 def count_arrangements(record):
@@ -104,18 +108,58 @@ def total_spring_arrangements_from_records(records, multiple=1):
     return total_spring_arrangements(record_arrangements)
 
 
-def __generate_arrangments_index(record, count_only):
-    length = len(record.springs)
-    index_start = int(length / 2)
-    index_springs = record.springs[index_start:]
+class SpringArrangementsIndex:
+    def __init__(self, area_index, area_offset, arrangements_by_remaining_counts):
+        self.area_index = area_index
+        self.area_offset = area_offset
+        self.arrangements_by_remaining_counts = arrangements_by_remaining_counts
+
+    def remaining_arrangements_for_state(self, state):
+        damaged_counts = state.damaged_counts.copy()
+        damaged_counts[0] -= state.damaged_count
+        remaining_counts_str = ','.join(map(str, damaged_counts))
+        if remaining_counts_str not in self.arrangements_by_remaining_counts:
+            return []
+        arrangements = self.arrangements_by_remaining_counts[remaining_counts_str]
+        if state.force_undamaged:
+            return list(filter(lambda a: a.startswith('.'), arrangements))
+        else:
+            return arrangements
+
+
+def __generate_arrangments_index(record):
+    half_length = int(len(record.springs) / 2)
+    pos = 0
+    index_start = len(record.springs)
+    area_index = len(record.areas)
+    area_offset = 0
+    for i, area in enumerate(record.areas):
+        if not area.known and pos > half_length:
+            area_index = i
+            index_start = pos
+            area_offset = 0
+            break
+        pos += area.length
     arrangements_by_remaining_counts = {}
-    for i in range(0, len(record.damaged_counts)):
-        remaining_counts = record.damaged_counts[i:]
-        remaining_counts_str = ','.join(map(str, remaining_counts))
+    if index_start == len(record.springs):
+        return SpringArrangementsIndex(area_index, area_offset, arrangements_by_remaining_counts)
+    index_springs = record.springs[index_start:]
+    remaining_counts = record.damaged_counts.copy()
+    refuse_undamaged_start = False
+    while remaining_counts:
         index_record = SpringConditionRecord(index_springs, remaining_counts)
-        index_arrangements = generate_arrangements(index_record, count_only)
-        if index_arrangements.arrangements_count > 0:
+        index_arrangements = __generate_arrangements(index_record, False, generate_index=False)
+        if refuse_undamaged_start:
+            index_arrangements = list(filter(lambda a: a.startswith('#'), index_arrangements))
+        if index_arrangements:
+            remaining_counts_str = ','.join(map(str, remaining_counts))
             arrangements_by_remaining_counts[remaining_counts_str] = index_arrangements
+        remaining_counts[0] -= 1
+        refuse_undamaged_start = True
+        if remaining_counts[0] == 0:
+            remaining_counts = remaining_counts[1:]
+            refuse_undamaged_start = False
+    return SpringArrangementsIndex(area_index, area_offset, arrangements_by_remaining_counts)
 
 
 def __initial_state(record):
@@ -125,8 +169,12 @@ def __initial_state(record):
     return FindArrangementsState(record.damaged_counts, unknown, unknown_damaged)
 
 
-def __generate_arrangements(record, count_only):
+def __generate_arrangements(record, count_only, generate_index=True):
     state = __initial_state(record)
+    if generate_index:
+        index = __generate_arrangments_index(record)
+    else:
+        index = None
     areas = record.areas
     state_stack = []
     filling_stack = []
@@ -141,12 +189,25 @@ def __generate_arrangements(record, count_only):
             else:
                 return arrangements
             continue
-        if state.area_index >= len(areas):
+        terminated = False
+        if (index and state.damaged_counts
+                and state.area_index == index.area_index
+                and state.area_offset == index.area_offset):
+            terminated = True
+            remaining = index.remaining_arrangements_for_state(state)
+            if count_only:
+                arrangements += len(remaining)
+            else:
+                for arrangement in remaining:
+                    arrangements.append(filling_start + arrangement)
+        elif state.area_index >= len(areas):
+            terminated = True
             if len(state.damaged_counts) == 0:
                 if count_only:
                     arrangements += 1
                 else:
                     arrangements.append(filling_start)
+        if terminated:
             if state_stack:
                 state = state_stack.pop()
                 if not count_only:
