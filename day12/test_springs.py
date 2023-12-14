@@ -64,7 +64,6 @@ class TestSprings(unittest.TestCase):
         record = SpringConditionRecord("..???.??.?", [1, 1, 1])
         self.assertEqual(5_752_544, count_arrangements(record.unfold(5)))
 
-    @unittest.skip('A bit too slow')
     def test_should_unfold_arrangements_5_times_for_input_line_24(self):
         record = SpringConditionRecord("??#?#?????????????.", [8, 4, 1])
         self.assertEqual(67_192_396, count_arrangements(record.unfold(5)))
@@ -83,9 +82,8 @@ class TestSpringsInputLine41(unittest.TestCase):
         self.partial_records = self.records[1:]
         self.record = self.records[0]
 
-    @unittest.skip('Too slow')
     def test_should_find_arrangements_unfolding_5_times(self):
-        self.assertEqual(0, count_arrangements(self.record.unfold(5)))
+        self.assertEqual(5486411504, count_arrangements(self.record.unfold(5)))
 
     def test_should_unfold_5_times(self):
         self.assertEqual('????#????.????????#????.????????#????.????????#????.????????#????.??? '
@@ -101,7 +99,6 @@ class TestSpringsInputLine41(unittest.TestCase):
             ['??? 1,1', 1]],
             list_of_record_and_arrangement_count(self.partial_records, multiple=5))
 
-    @unittest.skip('A bit too slow')
     def test_should_find_arrangements_unfolding_4_times(self):
         self.assertEqual([
             ['????#????.??? 1,2,1,1', 50_316_280],
