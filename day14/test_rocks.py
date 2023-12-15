@@ -12,6 +12,8 @@ class TestRocks(unittest.TestCase):
         tilted = state.tilt_to_north()
         verify(print_platform_state(tilted))
 
-    @unittest.skip('Not done yet')
     def test_should_find_load_on_north_for_example(self):
         self.assertEqual(136, total_load_on_north_from_file('example'))
+
+    def test_should_find_load_on_north_for_input(self):
+        self.assertEqual(109661, total_load_on_north_from_file('input'))
