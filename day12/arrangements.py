@@ -16,17 +16,17 @@ class SpringArrangements:
             self.arrangements_count = arrangements
 
 
-def generate_arrangements(record, count_only=False):
-    arrangements = __generate_arrangements(record, count_only)
+def generate_arrangements(record, count_only=False, log=None):
+    arrangements = __generate_arrangements(record, count_only, log)
     return SpringArrangements(record, arrangements)
 
 
-def generate_arrangements_list(record):
-    return __generate_arrangements(record, count_only=False)
+def generate_arrangements_list(record, log=None):
+    return __generate_arrangements(record, count_only=False, log=log)
 
 
-def count_arrangements(record):
-    return __generate_arrangements(record, count_only=True)
+def count_arrangements(record, log=None):
+    return __generate_arrangements(record, count_only=True, log=log)
 
 
 def compute_spring_arrangements_from_records(records, multiple=1, count_only=False, log=None):
@@ -35,7 +35,9 @@ def compute_spring_arrangements_from_records(records, multiple=1, count_only=Fal
     start = time.time()
     print('Computing arrangements for {} records'.format(num_records), file=log, flush=True)
     for i, record in enumerate(records):
-        record_arrangements = generate_arrangements(record.unfold(multiple), count_only=count_only)
+        unfolded = record.unfold(multiple)
+        print('Computing arrangements for springs: ', unfolded.springs)
+        record_arrangements = generate_arrangements(unfolded, count_only=count_only, log=log)
         arrangements.append(record_arrangements)
         print("Computed {} of {} records, count {}, time so far: {}"
               .format(i + 1, num_records, record_arrangements.arrangements_count,
@@ -106,42 +108,57 @@ class FindArrangementsState:
 
 
 class SpringArrangementsIndex:
-    def __init__(self, area_index, area_offset, arrangements_by_remaining_counts):
+    def __init__(self, index_start, area_index, area_offset, arrangements_by_remaining_counts):
+        self.index_start = index_start
         self.area_index = area_index
         self.area_offset = area_offset
+        self.empty = not arrangements_by_remaining_counts
         self.arrangements_by_remaining_counts = arrangements_by_remaining_counts
+        self.undamaged_arrangements_by_remaining_counts = {}
+        for counts, arrangements in arrangements_by_remaining_counts.items():
+            undamaged = list(filter(lambda a: a.startswith('.'), arrangements))
+            if undamaged:
+                self.undamaged_arrangements_by_remaining_counts[counts] = undamaged
 
     def remaining_arrangements_for_state(self, state):
         damaged_counts = state.damaged_counts.copy()
         damaged_counts[0] -= state.damaged_count
         remaining_counts_str = ','.join(map(str, damaged_counts))
-        if remaining_counts_str not in self.arrangements_by_remaining_counts:
-            return []
-        arrangements = self.arrangements_by_remaining_counts[remaining_counts_str]
         if state.force_undamaged:
-            return list(filter(lambda a: a.startswith('.'), arrangements))
+            if remaining_counts_str not in self.undamaged_arrangements_by_remaining_counts:
+                return []
+            return self.undamaged_arrangements_by_remaining_counts[remaining_counts_str]
         else:
-            return arrangements
+            if remaining_counts_str not in self.arrangements_by_remaining_counts:
+                return []
+            return self.arrangements_by_remaining_counts[remaining_counts_str]
 
 
 def __generate_arrangments_index(record, indexes_so_far, prev_index):
-    target_pos = int(len(record.springs) / (2 ** (indexes_so_far + 1)))
+    target_pos = int(record.num_springs / (2 ** (indexes_so_far + 1)))
     pos = 0
-    index_start = len(record.springs)
-    area_index = len(record.areas)
+    index_start = record.num_springs
+    area_index = record.num_areas
     area_offset = 0
     for i, area in enumerate(record.areas):
         if prev_index and i == prev_index.area_index:
             return prev_index
-        if not area.known and pos > target_pos:
-            area_index = i
-            index_start = pos
-            area_offset = 0
-            break
+        area_end = pos + area.length
+        if not area.known:
+            if pos > target_pos:
+                area_index = i
+                index_start = pos
+                area_offset = 0
+                break
+            elif area_end > target_pos:
+                area_index = i
+                index_start = target_pos
+                area_offset = target_pos - pos
+                break
         pos += area.length
     arrangements_by_remaining_counts = {}
-    if index_start == len(record.springs):
-        return SpringArrangementsIndex(area_index, area_offset, arrangements_by_remaining_counts)
+    if index_start == record.num_springs:
+        return SpringArrangementsIndex(index_start, area_index, area_offset, arrangements_by_remaining_counts)
     index_springs = record.springs[index_start:]
     remaining_counts = record.damaged_counts.copy()
     refuse_undamaged_start = False
@@ -159,7 +176,7 @@ def __generate_arrangments_index(record, indexes_so_far, prev_index):
         if remaining_counts[0] == 0:
             remaining_counts = remaining_counts[1:]
             refuse_undamaged_start = False
-    return SpringArrangementsIndex(area_index, area_offset, arrangements_by_remaining_counts)
+    return SpringArrangementsIndex(index_start, area_index, area_offset, arrangements_by_remaining_counts)
 
 
 def __initial_state(record):
@@ -169,10 +186,25 @@ def __initial_state(record):
     return FindArrangementsState(record.damaged_counts, unknown, unknown_damaged)
 
 
-def __generate_arrangements(record, count_only, generate_indexes=1, index=None):
+def __generate_arrangements(record, count_only, log=None, generate_indexes=1, index=None):
     state = __initial_state(record)
     for i in range(0, generate_indexes):
+        start = time.time()
+        print('Generating index', i, file=log)
         index = __generate_arrangments_index(record, i, index)
+        end = time.time()
+        print('Generated index', i, 'in', datetime.timedelta(seconds=end - start), file=log)
+        print('Record length:', record.num_springs, file=log)
+        print('Index start:', index.index_start, file=log)
+        print('Area index:', index.area_index, file=log)
+        print('Area offset:', index.area_offset, file=log)
+        if not index.empty:
+            area = record.areas[index.area_index]
+            print('Area:', area.contents, file=log)
+            before_index = max(0, area.start_index - 2)
+            after_index = min(record.num_springs, area.start_index + area.length + 2)
+            print('Around area:', record.springs[before_index:after_index], file=log)
+        print('Indexed remaining counts:', len(index.arrangements_by_remaining_counts), flush=True, file=log)
     areas = record.areas
     state_stack = []
     filling_stack = []
@@ -192,9 +224,9 @@ def __generate_arrangements(record, count_only, generate_indexes=1, index=None):
             else:
                 for arrangement in remaining:
                     arrangements.append(filling_start + arrangement)
-        elif state.area_index >= len(areas):
+        elif state.area_index >= record.num_areas:
             terminated = True
-            if len(state.damaged_counts) == 0:
+            if not state.damaged_counts:
                 if count_only:
                     arrangements += 1
                 else:

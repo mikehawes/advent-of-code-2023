@@ -3,7 +3,8 @@ import re
 
 
 class Area:
-    def __init__(self, contents):
+    def __init__(self, start_index, contents):
+        self.start_index = start_index
         self.length = len(contents)
         self.contents = contents
         self.type = self.contents[0]
@@ -12,7 +13,7 @@ class Area:
 
 
 def area_from_match(match):
-    return Area(match.group(0))
+    return Area(match.start(), match.group(0))
 
 
 class DamagedArea:
@@ -32,9 +33,11 @@ class DamagedArea:
 class SpringConditionRecord:
     def __init__(self, springs, damaged_counts, unfolded_from=None):
         self.springs = springs
+        self.num_springs = len(springs)
         self.damaged_counts = damaged_counts
         self.unfolded_from = unfolded_from
         self.areas = list(map(area_from_match, re.finditer(r'#+|\.+|\?+', springs)))
+        self.num_areas = len(self.areas)
         self.damaged_areas = list(map(DamagedArea, re.finditer(r'[?#]+', springs)))
 
     def unfold(self, multiple):

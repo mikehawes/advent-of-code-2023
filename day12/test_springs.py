@@ -52,6 +52,7 @@ class TestSprings(unittest.TestCase):
     def test_should_unfold_working_spring_arrangements_6_times_for_example(self):
         self.assertEqual(7_737_356, total_spring_arrangements_from_file('example', multiple=6))
 
+    @unittest.skip('Too slow')
     def test_should_unfold_working_spring_arrangements_5_times_for_input(self):
         with open('output.log', 'w') as output:
             self.assertEqual(0, total_spring_arrangements_from_file('input', multiple=5, log=output))
@@ -78,7 +79,6 @@ class TestSprings(unittest.TestCase):
         record = read_spring_condition_line("?#?#?#?????????????? 6,1,1,1,1,1")
         self.assertEqual(1_477_011_318_905, count_arrangements(record.unfold(5)))
 
-    @unittest.skip('Too slow, took 2 minutes')
     def test_should_unfold_arrangements_5_times_for_input_line_202(self):
         record = read_spring_condition_line("??????????#?????.. 1,6,1")
         self.assertEqual(38_789_459_242, count_arrangements(record.unfold(5)))
@@ -103,7 +103,7 @@ class TestSpringsInputLine41(unittest.TestCase):
         self.record = self.records[0]
 
     def test_should_find_arrangements_unfolding_5_times(self):
-        self.assertEqual(5486411504, count_arrangements(self.record.unfold(5)))
+        self.assertEqual(5_486_411_504, count_arrangements(self.record.unfold(5)))
 
     def test_should_unfold_5_times(self):
         self.assertEqual('????#????.????????#????.????????#????.????????#????.????????#????.??? '
