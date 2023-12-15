@@ -6,7 +6,24 @@ class PlatformState:
         self.lines = lines
 
     def tilt_to_north(self):
-        return self
+        num_lines = len(self.lines)
+        new_lines = list(map(list, self.lines))
+        for y in range(0, num_lines):
+            new_line = ''
+            for x, tile in enumerate(new_lines[y]):
+                new_tile = tile
+                if tile == '.':
+                    for y2 in range(y + 1, num_lines):
+                        tile2 = new_lines[y2][x]
+                        if tile2 == 'O':
+                            new_tile = 'O'
+                            new_lines[y2][x] = '.'
+                            break
+                        elif tile2 == '#':
+                            break
+                new_line += new_tile
+            new_lines[y] = new_line
+        return PlatformState(new_lines)
 
     def total_load_on_north(self):
         return 0
