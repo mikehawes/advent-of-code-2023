@@ -108,17 +108,21 @@ class FindArrangementsState:
 
 
 class SpringArrangementsIndex:
-    def __init__(self, index_start, area_index, area_offset, arrangements_by_remaining_counts):
+    def __init__(self, index_start, area_index, area_offset,
+                 arrangements_by_remaining_counts, undamaged_arrangements_by_remaining_counts=None):
         self.index_start = index_start
         self.area_index = area_index
         self.area_offset = area_offset
         self.empty = not arrangements_by_remaining_counts
         self.arrangements_by_remaining_counts = arrangements_by_remaining_counts
-        self.undamaged_arrangements_by_remaining_counts = {}
-        for counts, arrangements in arrangements_by_remaining_counts.items():
-            undamaged = list(filter(lambda a: a.startswith('.'), arrangements))
-            if undamaged:
-                self.undamaged_arrangements_by_remaining_counts[counts] = undamaged
+        if undamaged_arrangements_by_remaining_counts:
+            self.undamaged_arrangements_by_remaining_counts = undamaged_arrangements_by_remaining_counts
+        else:
+            self.undamaged_arrangements_by_remaining_counts = {}
+            for counts, arrangements in arrangements_by_remaining_counts.items():
+                undamaged = list(filter(lambda a: a.startswith('.'), arrangements))
+                if undamaged:
+                    self.undamaged_arrangements_by_remaining_counts[counts] = undamaged
 
     def remaining_arrangements_for_state(self, state):
         damaged_counts = state.damaged_counts.copy()
@@ -133,8 +137,13 @@ class SpringArrangementsIndex:
                 return []
             return self.arrangements_by_remaining_counts[remaining_counts_str]
 
+    def minus_offsets(self, start, area_index, area_offset):
+        return SpringArrangementsIndex(
+            self.index_start - start, self.area_index - area_index, self.area_offset - area_offset,
+            self.arrangements_by_remaining_counts, self.undamaged_arrangements_by_remaining_counts)
 
-def __generate_arrangments_index(record, indexes_so_far, prev_index):
+
+def __generate_arrangments_index(record, indexes_so_far, prev_index, log=None):
     target_pos = int(record.num_springs / (2 ** (indexes_so_far + 1)))
     pos = 0
     index_start = record.num_springs
@@ -156,26 +165,40 @@ def __generate_arrangments_index(record, indexes_so_far, prev_index):
                 area_offset = target_pos - pos
                 break
         pos += area.length
+    print('Index start:', index_start, file=log)
+    print('Area index:', area_index, file=log)
+    print('Area offset:', area_offset, file=log)
     arrangements_by_remaining_counts = {}
     if index_start == record.num_springs:
         return SpringArrangementsIndex(index_start, area_index, area_offset, arrangements_by_remaining_counts)
+
+    area = record.areas[area_index]
+    print('Area:', area.contents, file=log)
+    before_index = max(0, area.start_index - 2)
+    after_index = min(record.num_springs, area.start_index + area.length + 2)
+    print('Around area:', record.springs[before_index:after_index], file=log)
     index_springs = record.springs[index_start:]
+    print('Index springs:', index_springs, file=log)
     remaining_counts = record.damaged_counts.copy()
+    if prev_index:
+        minus_area_offset = area_offset if area_index == prev_index.area_index else 0
+        prev_index = prev_index.minus_offsets(index_start, area_index, minus_area_offset)
     refuse_undamaged_start = False
     while remaining_counts:
         index_record = SpringConditionRecord(index_springs, remaining_counts)
         index_arrangements = __generate_arrangements(
             index_record, count_only=False, generate_indexes=0, index=prev_index)
-        if refuse_undamaged_start:
-            index_arrangements = list(filter(lambda a: a.startswith('#'), index_arrangements))
         if index_arrangements:
+            if refuse_undamaged_start:
+                index_arrangements = list(filter(lambda a: a.startswith('#'), index_arrangements))
             remaining_counts_str = ','.join(map(str, remaining_counts))
             arrangements_by_remaining_counts[remaining_counts_str] = index_arrangements
         remaining_counts[0] -= 1
-        refuse_undamaged_start = True
         if remaining_counts[0] == 0:
             remaining_counts = remaining_counts[1:]
             refuse_undamaged_start = False
+        else:
+            refuse_undamaged_start = True
     return SpringArrangementsIndex(index_start, area_index, area_offset, arrangements_by_remaining_counts)
 
 
@@ -186,24 +209,15 @@ def __initial_state(record):
     return FindArrangementsState(record.damaged_counts, unknown, unknown_damaged)
 
 
-def __generate_arrangements(record, count_only, log=None, generate_indexes=1, index=None):
+def __generate_arrangements(record, count_only, log=None, generate_indexes=2, index=None):
     state = __initial_state(record)
     for i in range(0, generate_indexes):
         start = time.time()
         print('Generating index', i, file=log)
-        index = __generate_arrangments_index(record, i, index)
+        print('Record length:', record.num_springs, file=log)
+        index = __generate_arrangments_index(record, i, index, log=log)
         end = time.time()
         print('Generated index', i, 'in', datetime.timedelta(seconds=end - start), file=log)
-        print('Record length:', record.num_springs, file=log)
-        print('Index start:', index.index_start, file=log)
-        print('Area index:', index.area_index, file=log)
-        print('Area offset:', index.area_offset, file=log)
-        if not index.empty:
-            area = record.areas[index.area_index]
-            print('Area:', area.contents, file=log)
-            before_index = max(0, area.start_index - 2)
-            after_index = min(record.num_springs, area.start_index + area.length + 2)
-            print('Around area:', record.springs[before_index:after_index], file=log)
         print('Indexed remaining counts:', len(index.arrangements_by_remaining_counts), flush=True, file=log)
     areas = record.areas
     state_stack = []
