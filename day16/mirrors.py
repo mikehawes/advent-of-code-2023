@@ -4,8 +4,21 @@ class Grid:
         self.width = len(lines[0])
         self.height = len(lines)
 
-    def count_energized_tiles(self):
-        beam = LightBeam(0, 0, 1, 0)
+    def find_max_energized_tiles_from_edge(self):
+        max_energized = 0
+        for x in range(0, self.width):
+            energized_at_top = self.count_energized_tiles(beam=LightBeam(x, 0, 0, 1))
+            energized_at_bottom = self.count_energized_tiles(beam=LightBeam(x, self.height - 1, 0, -1))
+            max_energized = max(max_energized, energized_at_top, energized_at_bottom)
+        for y in range(0, self.height):
+            energized_at_left = self.count_energized_tiles(beam=LightBeam(0, y, 1, 0))
+            energized_at_right = self.count_energized_tiles(beam=LightBeam(self.width - 1, y, -1, 0))
+            max_energized = max(max_energized, energized_at_left, energized_at_right)
+        return max_energized
+
+    def count_energized_tiles(self, beam=None):
+        if beam is None:
+            beam = LightBeam(0, 0, 1, 0)
         beam_stack = [beam]
         beam_by_str = {}
         energized_by_pos = {}
