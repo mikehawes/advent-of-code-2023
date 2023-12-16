@@ -152,8 +152,6 @@ def __generate_arrangments_index(record, fraction, prev_index, count_only, log=N
     area_index = record.num_areas
     area_offset = 0
     for i, area in enumerate(record.areas):
-        if prev_index and i == prev_index.area_index:
-            return prev_index
         area_end = pos + area.length
         if not area.known:
             if pos > target_pos:
@@ -239,7 +237,7 @@ def __generate_arrangements(record, count_only, log=None, generate_indexes=True,
     if not state:
         state = __initial_state(record)
     if generate_indexes:
-        for i, fraction in enumerate([0.75, 0.5, 0.25]):
+        for i, fraction in enumerate([0.8, 0.6, 0.4, 0.2]):
             start = time.time()
             print('Generating index', i, file=log)
             print('Record length:', record.num_springs, file=log)
