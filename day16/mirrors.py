@@ -1,3 +1,25 @@
+class Grid:
+    def __init__(self, lines):
+        self.lines = lines
+        self.width = len(lines[0])
+        self.height = len(lines)
+
+    def count_energized_tiles(self):
+        beam = LightBeam(0, 0, 1, 0)
+        beam_stack = [beam]
+        beam_by_str = {}
+        energized_by_pos = {}
+        while beam_stack:
+            beam = beam_stack.pop()
+            energized_by_pos[beam.pos_str()] = True
+            beam_str = beam.to_str()
+            if beam_str in beam_by_str:
+                continue
+            beam_by_str[beam_str] = beam
+            beam_stack.extend(beam.list_next(self))
+        return len(energized_by_pos)
+
+
 class LightBeam:
     def __init__(self, x, y, x_speed, y_speed):
         self.x = x
@@ -18,15 +40,15 @@ class LightBeam:
             y_speed = self.y_speed
         return LightBeam(self.x + x_speed, self.y + y_speed, x_speed, y_speed)
 
-    def list_next(self, lines):
+    def list_next(self, grid):
         y = self.y
         x = self.x
-        tile = lines[y][x]
+        tile = grid.lines[y][x]
         next_list = self.next_at_tile(tile)
-        return list(filter(lambda beam: beam.is_on_grid(lines), next_list))
+        return list(filter(lambda beam: beam.is_on_grid(grid), next_list))
 
-    def is_on_grid(self, lines):
-        return 0 <= self.y < len(lines) and 0 <= self.x < len(lines[0])
+    def is_on_grid(self, grid):
+        return 0 <= self.y < grid.height and 0 <= self.x < grid.width
 
     def next_at_tile(self, tile):
         match tile:
@@ -62,20 +84,11 @@ class LightBeam:
                 return [self.next()]
 
 
-def count_energized_tiles_in_file(input_file):
+def load_grid_from_file(input_file):
     with open(input_file, 'r') as file:
-        lines = list(map(lambda line: line.strip(), file))
+        return Grid(list(map(lambda line: line.strip(), file)))
 
-    beam = LightBeam(0, 0, 1, 0)
-    beam_stack = [beam]
-    beam_by_str = {}
-    energized_by_pos = {}
-    while beam_stack:
-        beam = beam_stack.pop()
-        energized_by_pos[beam.pos_str()] = True
-        beam_str = beam.to_str()
-        if beam_str in beam_by_str:
-            continue
-        beam_by_str[beam_str] = beam
-        beam_stack.extend(beam.list_next(lines))
-    return len(energized_by_pos)
+
+def count_energized_tiles_in_file(input_file):
+    grid = load_grid_from_file(input_file)
+    return grid.count_energized_tiles()
