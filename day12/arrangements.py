@@ -145,8 +145,8 @@ class SpringArrangementsIndex:
             self.undamaged_arrangements_by_remaining_counts)
 
 
-def __generate_arrangments_index(record, indexes_so_far, prev_index, count_only, log=None):
-    target_pos = int(record.num_springs / (2 ** (indexes_so_far + 1)))
+def __generate_arrangments_index(record, fraction, prev_index, count_only, log=None):
+    target_pos = int(record.num_springs * fraction)
     pos = 0
     index_start = record.num_springs
     area_index = record.num_areas
@@ -207,13 +207,13 @@ def __generate_arrangments_index(record, indexes_so_far, prev_index, count_only,
         if not state.valid:
             continue
         damaged_arrangements = __generate_arrangements(
-            index_record, count_only=count_only, generate_indexes=0, index=apply_index,
+            index_record, count_only=count_only, generate_indexes=False, index=apply_index,
             state=state.chose_unknown_damaged(), filling_start='#')
         if damaged_arrangements:
             damaged_arrangements_by_remaining_counts[remaining_counts_str] = damaged_arrangements
         if allow_undamaged_start:
             undamaged_arrangements = __generate_arrangements(
-                index_record, count_only=count_only, generate_indexes=0, index=apply_index,
+                index_record, count_only=count_only, generate_indexes=False, index=apply_index,
                 state=state.chose_unknown_undamaged(), filling_start='.')
             if undamaged_arrangements:
                 undamaged_arrangements_by_remaining_counts[remaining_counts_str] = undamaged_arrangements
@@ -234,17 +234,19 @@ def __initial_state(record):
     return FindArrangementsState(record.damaged_counts, unknown, unknown_damaged)
 
 
-def __generate_arrangements(record, count_only, log=None, generate_indexes=2, index=None, state=None, filling_start=''):
+def __generate_arrangements(record, count_only, log=None, generate_indexes=True,
+                            index=None, state=None, filling_start=''):
     if not state:
         state = __initial_state(record)
-    for i in range(0, generate_indexes):
-        start = time.time()
-        print('Generating index', i, file=log)
-        print('Record length:', record.num_springs, file=log)
-        index = __generate_arrangments_index(record, i, index, count_only, log=log)
-        end = time.time()
-        print('Generated index', i, 'in', datetime.timedelta(seconds=end - start), file=log)
-        print('Indexed remaining counts:', len(index.arrangements_by_remaining_counts), flush=True, file=log)
+    if generate_indexes:
+        for i, fraction in enumerate([0.75, 0.5, 0.25]):
+            start = time.time()
+            print('Generating index', i, file=log)
+            print('Record length:', record.num_springs, file=log)
+            index = __generate_arrangments_index(record, fraction, index, count_only, log=log)
+            end = time.time()
+            print('Generated index', i, 'in', datetime.timedelta(seconds=end - start), file=log)
+            print('Indexed remaining counts:', len(index.arrangements_by_remaining_counts), flush=True, file=log)
     areas = record.areas
     state_stack = []
     filling_stack = []

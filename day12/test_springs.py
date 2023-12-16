@@ -101,17 +101,14 @@ class TestSprings(unittest.TestCase):
         record = read_spring_condition_line("??#?#?????????????. 8,4,1")
         self.assertEqual(67_192_396, count_arrangements(record.unfold(5)))
 
-    @unittest.skip('Too slow, took 30 seconds')
     def test_should_unfold_arrangements_5_times_for_input_line_78(self):
         record = read_spring_condition_line("?????????.????????# 1,1,1,2,4")
         self.assertEqual(17_850_414_810_217, count_arrangements(record.unfold(5)))
 
-    @unittest.skip('Too slow, took 40 minutes')
     def test_should_unfold_arrangements_5_times_for_input_line_167(self):
         record = read_spring_condition_line("?#?#?#?????????????? 6,1,1,1,1,1")
         self.assertEqual(1_477_011_318_905, count_arrangements(record.unfold(5)))
 
-    @unittest.skip('Terminates unexpectedly')
     def test_should_unfold_arrangements_5_times_for_input_line_202(self):
         record = read_spring_condition_line("??????????#?????.. 1,6,1")
         self.assertEqual(38_789_459_242, count_arrangements(record.unfold(5)))
