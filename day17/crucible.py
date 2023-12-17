@@ -4,10 +4,12 @@ from heapq import heappop, heappush
 
 
 class Crucible:
-    def __init__(self, location, x_moved=0, y_moved=0):
+    def __init__(self, location, x_moved=0, y_moved=0, min_move=1, max_move=3):
         self.location = location
         self.x_moved = x_moved
         self.y_moved = y_moved
+        self.min_move = min_move
+        self.max_move = max_move
         self.moved = x_moved != 0 or y_moved != 0
         if x_moved > 0:
             direction = '>'
@@ -30,9 +32,27 @@ class Crucible:
         x_move = location.x - self.location.x
         y_move = location.y - self.location.y
         if x_move != 0:
-            return Crucible(location, x_move + self.x_moved, 0)
+            return Crucible(location, x_move + self.x_moved, 0, self.min_move, self.max_move)
         else:
-            return Crucible(location, 0, y_move + self.y_moved)
+            return Crucible(location, 0, y_move + self.y_moved, self.min_move, self.max_move)
+
+    def next_locations_unbounded(self):
+        abs_x_moved = abs(self.x_moved)
+        if 0 < abs_x_moved < self.min_move:
+            return [self.location.plus(x=int(self.x_moved / abs_x_moved))]
+        abs_y_moved = abs(self.y_moved)
+        if 0 < abs_y_moved < self.min_move:
+            return [self.location.plus(y=int(self.y_moved / abs_y_moved))]
+        locations = []
+        if -self.max_move < self.x_moved <= 0:
+            locations.append(self.location.plus(x=-1))
+        if 0 <= self.x_moved < self.max_move:
+            locations.append(self.location.plus(x=1))
+        if -self.max_move < self.y_moved <= 0:
+            locations.append(self.location.plus(y=-1))
+        if 0 <= self.y_moved < self.max_move:
+            locations.append(self.location.plus(y=1))
+        return locations
 
     def __repr__(self):
         return self.str
@@ -45,7 +65,10 @@ class Grid:
         self.height = len(lines)
 
     def find_path(self, start, end):
-        crucible = Crucible(start)
+        if type(start) is Crucible:
+            crucible = start
+        else:
+            crucible = Crucible(start)
         to_end_guesses = [PathGuess(crucible, 0)]
         has_to_end_guess = {crucible.str: True}
         came_from_by_str = {}
@@ -59,7 +82,8 @@ class Grid:
             if location.x == end.x and location.y == end.y:
                 break
             from_start_guess = guesses_from_start.guess_for(crucible)
-            for next_location in self.next_locations(crucible):
+            next_locations = self.next_locations(crucible)
+            for next_location in next_locations:
                 after_option = PathGuess(crucible.move_to(next_location),
                                          from_start_guess.heat_loss + self.heat_loss(next_location))
                 if after_option.heat_loss < guesses_from_start.guess_for(after_option.crucible).heat_loss:
@@ -86,17 +110,8 @@ class Grid:
         return dist + self.heat_loss(end)
 
     def next_locations(self, crucible):
-        location = crucible.location
-        neighbors = []
-        if location.x > 0 and -3 < crucible.x_moved <= 0:
-            neighbors.append(location.plus(x=-1))
-        if location.x < self.width - 1 and 0 <= crucible.x_moved < 3:
-            neighbors.append(location.plus(x=1))
-        if location.y > 0 and -3 < crucible.y_moved <= 0:
-            neighbors.append(location.plus(y=-1))
-        if location.y < self.height - 1 and 0 <= crucible.y_moved < 3:
-            neighbors.append(location.plus(y=1))
-        return neighbors
+        return list(filter(lambda loc: 0 <= loc.x < self.width and 0 <= loc.y < self.height,
+                           crucible.next_locations_unbounded()))
 
     def top_left(self):
         return Location(0, 0)
@@ -120,7 +135,7 @@ class Location:
 
 @dataclass(order=True)
 class PathGuess:
-    crucible: Crucible | None = field(compare=False)
+    crucible: Crucible = field(compare=False)
     heat_loss: int
 
 
