@@ -9,6 +9,22 @@ class Crucible:
         self.x_moved = x_moved
         self.y_moved = y_moved
         self.moved = x_moved != 0 or y_moved != 0
+        if x_moved > 0:
+            direction = '>'
+            distance = abs(x_moved)
+        elif x_moved < 0:
+            direction = '<'
+            distance = abs(x_moved)
+        elif y_moved > 0:
+            direction = 'v'
+            distance = abs(y_moved)
+        elif y_moved < 0:
+            direction = '^'
+            distance = abs(y_moved)
+        else:
+            direction = '.'
+            distance = ''
+        self.str = '{}{}{}'.format(location, direction, distance)
 
     def move_to(self, location):
         x_move = location.x - self.location.x
@@ -19,7 +35,7 @@ class Crucible:
             return Crucible(location, 0, y_move + self.y_moved)
 
     def __repr__(self):
-        return 'at {} moved {},{}'.format(self.location.str, self.x_moved, self.y_moved)
+        return self.str
 
 
 class Grid:
@@ -30,32 +46,34 @@ class Grid:
 
     def find_path(self, start, end):
         crucible = Crucible(start)
-        to_end_guesses = [ToEndGuess(crucible, 0)]
-        has_to_end_guess = {start.str: True}
+        to_end_guesses = [PathGuess(crucible, 0)]
+        has_to_end_guess = {crucible.str: True}
         came_from_by_str = {}
-        guesses_from_start = LocationHeatLosses(self, start)
+        guesses_from_start = GuessesFromStart(self, crucible)
         count = 0
         while to_end_guesses and count < 10_000_000:
-            next_guess = heappop(to_end_guesses)
-            crucible = next_guess.crucible
+            to_end_guess = heappop(to_end_guesses)
+            crucible = to_end_guess.crucible
+            del has_to_end_guess[crucible.str]
             location = crucible.location
             if location.x == end.x and location.y == end.y:
                 break
-            options = self.next_locations(location, crucible)
-            for option in options:
-                from_start_guess = guesses_from_start.guess_for(location) + self.heat_loss(option)
-                if from_start_guess < guesses_from_start.guess_for(option):
-                    came_from_by_str[option.str] = crucible
-                    guesses_from_start.set_guess(option, from_start_guess)
-                    to_end_guess = from_start_guess + option.guess_heat_loss_to(end)
-                    if option.str not in has_to_end_guess:
-                        heappush(to_end_guesses, ToEndGuess(crucible.move_to(option), to_end_guess))
-                        has_to_end_guess[option.str] = True
+            from_start_guess = guesses_from_start.guess_for(crucible)
+            for next_location in self.next_locations(crucible):
+                after_option = PathGuess(crucible.move_to(next_location),
+                                         from_start_guess.heat_loss + self.heat_loss(next_location))
+                if after_option.heat_loss < guesses_from_start.guess_for(after_option.crucible).heat_loss:
+                    came_from_by_str[after_option.crucible.str] = crucible
+                    guesses_from_start.set_guess(after_option)
+                    new_to_end_guess = after_option.heat_loss + self.guess_heat_loss_from_to(next_location, end)
+                    if after_option.crucible.str not in has_to_end_guess:
+                        heappush(to_end_guesses, PathGuess(after_option.crucible, new_to_end_guess))
+                        has_to_end_guess[after_option.crucible.str] = True
             count += 1
         path = deque([crucible])
         path_count = 0
-        while crucible.location.str in came_from_by_str and path_count < 1_000_000:
-            crucible = came_from_by_str[crucible.location.str]
+        while crucible.str in came_from_by_str and path_count < 1_000_000:
+            crucible = came_from_by_str[crucible.str]
             path.appendleft(crucible)
             path_count += 1
         return list(path)
@@ -63,19 +81,20 @@ class Grid:
     def heat_loss(self, location):
         return self.lines[location.y][location.x]
 
-    def guess_heat_loss_to(self, location, end):
-        dist = abs(end.x - location.x) + abs(end.y - location.y)
-        return dist * 5
+    def guess_heat_loss_from_to(self, location, end):
+        dist = abs(end.x - location.x) - 1 + abs(end.y - location.y) - 1
+        return dist + self.heat_loss(end)
 
-    def next_locations(self, location, crucible):
+    def next_locations(self, crucible):
+        location = crucible.location
         neighbors = []
-        if location.x > 0 and crucible.x_moved < 1:
+        if location.x > 0 and -3 < crucible.x_moved <= 0:
             neighbors.append(location.plus(x=-1))
-        if location.x < self.width - 1 and crucible.x_moved > -1:
+        if location.x < self.width - 1 and 0 <= crucible.x_moved < 3:
             neighbors.append(location.plus(x=1))
-        if location.y > 0 and crucible.y_moved < 1:
+        if location.y > 0 and -3 < crucible.y_moved <= 0:
             neighbors.append(location.plus(y=-1))
-        if location.y < self.height - 1 and crucible.y_moved > -1:
+        if location.y < self.height - 1 and 0 <= crucible.y_moved < 3:
             neighbors.append(location.plus(y=1))
         return neighbors
 
@@ -95,33 +114,29 @@ class Location:
     def plus(self, x=0, y=0):
         return Location(self.x + x, self.y + y)
 
-    def guess_heat_loss_to(self, end):
-        dist = abs(end.x - self.x) + abs(end.y - self.y)
-        return dist * 5
-
     def __repr__(self):
         return self.str
 
 
 @dataclass(order=True)
-class ToEndGuess:
-    crucible: Crucible = field(compare=False)
-    guess: int
+class PathGuess:
+    crucible: Crucible | None = field(compare=False)
+    heat_loss: int
 
 
-class LocationHeatLosses:
-    def __init__(self, grid, start):
-        self.from_start_by_loc = {start.str: 0}
+class GuessesFromStart:
+    def __init__(self, grid, start_crucible):
+        self.from_start_by_crucible = {start_crucible.str: PathGuess(start_crucible, 0)}
         self.max_loss = grid.width * grid.height * 9
 
-    def guess_for(self, location):
-        if location.str in self.from_start_by_loc:
-            return self.from_start_by_loc[location.str]
+    def guess_for(self, crucible):
+        if crucible.str in self.from_start_by_crucible:
+            return self.from_start_by_crucible[crucible.str]
         else:
-            return self.max_loss
+            return PathGuess(crucible, self.max_loss)
 
-    def set_guess(self, location, from_start):
-        self.from_start_by_loc[location.str] = from_start
+    def set_guess(self, guess):
+        self.from_start_by_crucible[guess.crucible.str] = guess
 
 
 def load_grid_from_file(input_file):
