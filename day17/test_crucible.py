@@ -11,3 +11,8 @@ class TestCrucible(unittest.TestCase):
         grid = load_grid_from_file('example')
         path = grid.find_path(grid.top_left(), grid.bottom_right())
         verify(print_path(grid, path))
+
+    def test_should_find_path_in_input(self):
+        grid = load_grid_from_file('input')
+        path = grid.find_path(grid.top_left(), grid.bottom_right())
+        verify(print_path(grid, path))
