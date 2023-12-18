@@ -21,10 +21,29 @@ def read_dig_instructions_from_file(input_file):
         return list(map(read_dig_instruction_line, file))
 
 
+def read_hex_dig_instructions_from_file(input_file):
+    with open(input_file, 'r') as file:
+        return list(map(read_hex_dig_instruction_line, file))
+
+
 def read_dig_instruction_line(line):
     match = re.match(r'([LRUD]) ([0-9]+) \((#.+)\)', line)
     if match:
         return DigInstruction(match.group(1), int(match.group(2)))
+    else:
+        return None
+
+
+def read_hex_dig_instruction_line(line):
+    match = re.search(r'\(#(.+)\)', line)
+    directions = 'RDLU'
+    if match:
+        hex_digits = match.group(1)
+        direction_digit = int(hex_digits[-1:])
+        direction = directions[direction_digit]
+        distance_hex = hex_digits[:-1]
+        distance = int(distance_hex, 16)
+        return DigInstruction(direction, distance)
     else:
         return None
 
