@@ -12,3 +12,8 @@ class TestLagoon(unittest.TestCase):
         instructions = read_dig_instructions_from_file('example')
         lagoon = dig_lagoon(instructions)
         verify(str(lagoon))
+
+    def test_should_dig_input_lagoon(self):
+        instructions = read_dig_instructions_from_file('input')
+        lagoon = dig_lagoon(instructions)
+        verify(str(lagoon))
