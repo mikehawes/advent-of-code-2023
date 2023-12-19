@@ -15,6 +15,10 @@ class WorkflowsContext(ABC):
     def filter_by_workflow(self, workflow: str, parts: PartRange) -> PartRange | None:
         pass
 
+    @abstractmethod
+    def filter_by_remaining_workflow(self, parts: PartRange) -> PartRange | None:
+        pass
+
 
 class Step(ABC):
     @abstractmethod
@@ -50,3 +54,6 @@ class Workflows(WorkflowsContext):
 
     def filter_by_workflow(self, workflow: str, parts: PartRange) -> PartRange | None:
         return self.workflows[workflow].filter_ranges(parts, self)
+
+    def filter_by_remaining_workflow(self, parts: PartRange) -> PartRange:
+        return parts

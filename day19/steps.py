@@ -66,6 +66,20 @@ class CompareAttribute(Step):
 
 
 @dataclass(frozen=True)
+class RemainingWorkflow(WorkflowsContext):
+    context: WorkflowsContext
+    steps: list[Step]
+
+    def filter_by_workflow(self, workflow: str, parts: PartRange) -> PartRange | None:
+        return self.context.filter_by_workflow(workflow, parts)
+
+    def filter_by_remaining_workflow(self, parts: PartRange) -> PartRange | None:
+        first_rule = self.steps[0]
+        remaining = self.steps[1:]
+        return first_rule.filter_ranges(parts, RemainingWorkflow(self.context, remaining))
+
+
+@dataclass(frozen=True)
 class Workflow(Step):
     steps: list[Step]
 
@@ -77,4 +91,4 @@ class Workflow(Step):
         raise Exception('No next state found')
 
     def filter_ranges(self, parts: PartRange, context: WorkflowsContext) -> PartRange | None:
-        return parts
+        return RemainingWorkflow(context, self.steps).filter_by_remaining_workflow(parts)
