@@ -1,6 +1,7 @@
 import re
 
-from day19.workflows import Workflows, Workflow, CompareAttribute, AcceptPart, RejectPart, GoToWorkflow, Part
+from day19.steps import CompareAttribute, AcceptPart, RejectPart, GoToWorkflow
+from day19.workflows import Workflows, Workflow, Part
 
 
 def load_workflows_and_parts_from_file(input_file):
