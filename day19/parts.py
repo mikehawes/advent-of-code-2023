@@ -33,6 +33,9 @@ def print_attribute_range(item: (str, list[ScoreRange])) -> str:
 
 
 def full_part_range():
-    full_range = ScoreRange(1, 4000)
-    return PartRange(dict(map(lambda attribute: (attribute, [full_range]),
+    return range_with_all_attributes_same(ScoreRange(1, 4000))
+
+
+def range_with_all_attributes_same(set_range):
+    return PartRange(dict(map(lambda attribute: (attribute, [set_range]),
                               ['x', 'm', 'a', 's'])))

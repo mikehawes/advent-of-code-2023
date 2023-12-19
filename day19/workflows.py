@@ -10,27 +10,25 @@ class WorkflowState:
     accepted: bool = False
 
 
+class WorkflowsContext(ABC):
+    @abstractmethod
+    def filter_by_workflow(self, workflow: str, parts: PartRange) -> PartRange | None:
+        pass
+
+
 class Step(ABC):
     @abstractmethod
     def next_state(self, part: Part) -> WorkflowState | None:
         pass
 
-
-@dataclass(frozen=True)
-class Workflow:
-    steps: list[Step]
-
-    def next_state(self, part: Part) -> WorkflowState:
-        for step in self.steps:
-            state = step.next_state(part)
-            if state:
-                return state
-        raise Exception('No next state found')
+    @abstractmethod
+    def filter_ranges(self, parts: PartRange, context: WorkflowsContext) -> PartRange | None:
+        pass
 
 
 @dataclass(frozen=True)
-class Workflows:
-    workflows: dict[str, Workflow]
+class Workflows(WorkflowsContext):
+    workflows: dict[str, Step]
 
     def is_accepted(self, part: Part) -> bool:
         workflow = self.workflows['in']
@@ -48,4 +46,7 @@ class Workflows:
                        filter(self.is_accepted, parts)))
 
     def find_accepted_ranges(self) -> PartRange:
-        return full_part_range()
+        return self.filter_by_workflow('in', full_part_range())
+
+    def filter_by_workflow(self, workflow: str, parts: PartRange) -> PartRange | None:
+        return self.workflows[workflow].filter_ranges(parts, self)

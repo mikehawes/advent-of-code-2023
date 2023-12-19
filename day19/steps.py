@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
-from day19.workflows import Part, WorkflowState, Step
+from day19.parts import PartRange
+from day19.workflows import Part, WorkflowState, Step, WorkflowsContext
 
 
 @dataclass(frozen=True)
@@ -8,11 +9,17 @@ class AcceptPart(Step):
     def next_state(self, part: Part) -> WorkflowState:
         return WorkflowState(accepted=True)
 
+    def filter_ranges(self, parts: PartRange, context: WorkflowsContext) -> PartRange:
+        return parts
+
 
 @dataclass(frozen=True)
 class RejectPart(Step):
     def next_state(self, part: Part) -> WorkflowState:
         return WorkflowState(accepted=False)
+
+    def filter_ranges(self, parts: PartRange, context: WorkflowsContext) -> None:
+        return None
 
 
 @dataclass(frozen=True)
@@ -21,6 +28,9 @@ class GoToWorkflow(Step):
 
     def next_state(self, part: Part) -> WorkflowState:
         return WorkflowState(next_workflow=self.workflow)
+
+    def filter_ranges(self, parts: PartRange, context: WorkflowsContext) -> PartRange | None:
+        return context.filter_by_workflow(self.workflow, parts)
 
 
 @dataclass(frozen=True)
@@ -50,3 +60,21 @@ class CompareAttribute(Step):
             case '<':
                 return score < self.value
         raise Exception('Unknown test: {}'.format(self.test))
+
+    def filter_ranges(self, parts: PartRange, context: WorkflowsContext) -> PartRange | None:
+        return parts
+
+
+@dataclass(frozen=True)
+class Workflow(Step):
+    steps: list[Step]
+
+    def next_state(self, part: Part) -> WorkflowState:
+        for step in self.steps:
+            state = step.next_state(part)
+            if state:
+                return state
+        raise Exception('No next state found')
+
+    def filter_ranges(self, parts: PartRange, context: WorkflowsContext) -> PartRange | None:
+        return parts
