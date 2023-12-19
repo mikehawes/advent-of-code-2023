@@ -48,6 +48,6 @@ class Workflows(WorkflowsContext):
 
 def is_accepted(part, ranges):
     for part_range in ranges:
-        if part_range.accepts(part):
+        if part_range.contains(part):
             return True
     return False

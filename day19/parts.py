@@ -35,7 +35,7 @@ class PartRange:
         return prod(map(lambda r: r.max_score - r.min_score + 1,
                         self.range_by_attribute.values()))
 
-    def accepts(self, part):
+    def contains(self, part):
         for attribute in all_attributes():
             score_range = self.range_by_attribute[attribute]
             part_score = part.score_by_attribute[attribute]
