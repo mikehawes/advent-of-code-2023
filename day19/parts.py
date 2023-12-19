@@ -35,28 +35,15 @@ class PartRange:
         return prod(map(lambda r: r.max_score - r.min_score + 1,
                         self.range_by_attribute.values()))
 
-    def __str__(self):
-        return '      '.join(map(
-            print_attribute_range,
-            self.range_by_attribute.items()))
-
-
-def print_attribute_range(item: (str, ScoreRange)) -> str:
-    attribute, score = item
-    score_range = '{}-{}'.format(
-        str(score.min_score).rjust(4),
-        str(score.max_score).ljust(4))
-    return '{}: {}'.format(attribute, score_range)
-
 
 def full_part_range():
-    return range_with_all_attributes_same(ScoreRange(1, 4000))
+    return part_range_for_all_attributes(ScoreRange(1, 4000))
+
+
+def part_range_for_all_attributes(set_range):
+    return PartRange(dict(map(lambda attribute: (attribute, set_range),
+                              all_attributes())))
 
 
 def all_attributes():
     return list('xmas')
-
-
-def range_with_all_attributes_same(set_range):
-    return PartRange(dict(map(lambda attribute: (attribute, set_range),
-                              all_attributes())))

@@ -81,20 +81,6 @@ class CompareAttribute(Rule):
 
 
 @dataclass(frozen=True)
-class RemainingWorkflow(WorkflowsContext):
-    context: WorkflowsContext
-    rules: list[Rule]
-
-    def filter_by_workflow(self, workflow: str, parts: list[PartRange]) -> list[PartRange]:
-        return self.context.filter_by_workflow(workflow, parts)
-
-    def filter_by_remaining_workflow(self, parts: list[PartRange]) -> list[PartRange]:
-        first_rule = self.rules[0]
-        remaining = self.rules[1:]
-        return first_rule.filter_ranges(parts, RemainingWorkflow(self.context, remaining))
-
-
-@dataclass(frozen=True)
 class Workflow(Rule):
     rules: list[Rule]
 
@@ -107,3 +93,17 @@ class Workflow(Rule):
 
     def filter_ranges(self, parts: list[PartRange], context: WorkflowsContext) -> list[PartRange]:
         return RemainingWorkflow(context, self.rules).filter_by_remaining_workflow(parts)
+
+
+@dataclass(frozen=True)
+class RemainingWorkflow(WorkflowsContext):
+    context: WorkflowsContext
+    rules: list[Rule]
+
+    def filter_by_workflow(self, workflow: str, parts: list[PartRange]) -> list[PartRange]:
+        return self.context.filter_by_workflow(workflow, parts)
+
+    def filter_by_remaining_workflow(self, parts: list[PartRange]) -> list[PartRange]:
+        first_rule = self.rules[0]
+        remaining = self.rules[1:]
+        return first_rule.filter_ranges(parts, RemainingWorkflow(self.context, remaining))

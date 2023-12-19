@@ -17,4 +17,18 @@ def print_workflow_ranges(workflows_cases):
 
 
 def print_part_ranges(part_ranges):
-    return '\n'.join(map(str, part_ranges))
+    return '\n'.join(map(print_part_range, part_ranges))
+
+
+def print_part_range(part_range):
+    return '      '.join(map(
+        print_attribute_range,
+        part_range.range_by_attribute.items()))
+
+
+def print_attribute_range(item):
+    attribute, score = item
+    score_range = '{}-{}'.format(
+        str(score.min_score).rjust(4),
+        str(score.max_score).ljust(4))
+    return '{}: {}'.format(attribute, score_range)
