@@ -26,7 +26,7 @@ class Workflows(WorkflowsContext):
 
     def list_accepted(self, parts: list[Part]) -> list[Part]:
         accepted_ranges = self.find_accepted_ranges()
-        return list(filter(lambda p: is_accepted(p, accepted_ranges), parts))
+        return list(filter(lambda p: is_part_in_ranges(p, accepted_ranges), parts))
 
     def sum_accepted_scores(self, parts: list[Part]) -> int:
         return sum(map(lambda part: part.sum_scores(),
@@ -46,7 +46,7 @@ class Workflows(WorkflowsContext):
         return []
 
 
-def is_accepted(part, ranges):
+def is_part_in_ranges(part, ranges):
     for part_range in ranges:
         if part_range.contains(part):
             return True
