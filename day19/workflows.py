@@ -6,6 +6,9 @@ from dataclasses import dataclass
 class Part:
     score_by_attribute: dict[str, int]
 
+    def sum_scores(self) -> int:
+        return sum(self.score_by_attribute.values())
+
 
 @dataclass
 class WorkflowState:
@@ -45,3 +48,7 @@ class Workflows:
 
     def list_accepted(self, parts: list[Part]) -> list[Part]:
         return list(filter(self.is_accepted, parts))
+
+    def sum_accepted_scores(self, parts: list[Part]) -> int:
+        return sum(map(lambda part: part.sum_scores(),
+                       filter(self.is_accepted, parts)))
