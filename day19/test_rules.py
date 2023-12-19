@@ -24,5 +24,7 @@ class TestRules(unittest.TestCase):
     def test_should_filter_by_single_condition(self):
         verify(print_workflow_ranges([
             ['in{x>2662:A,R}'],
-            ['in{x<2662:A,R}']
+            ['in{x<2662:A,R}'],
+            ['in{x>2662:R,A}'],
+            ['in{x<2662:R,A}']
         ]))
