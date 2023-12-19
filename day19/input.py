@@ -1,6 +1,6 @@
 import re
 
-from day19.steps import CompareAttribute, AcceptPart, RejectPart, GoToWorkflow, Workflow
+from day19.rules import CompareAttribute, AcceptPart, RejectPart, GoToWorkflow, Workflow
 from day19.workflows import Workflows, Part
 
 
@@ -12,8 +12,8 @@ def load_workflows_and_parts_from_file(input_file):
             match = re.match(r'([a-z]+)\{(.+)}', line)
             if match:
                 name = match.group(1)
-                steps = match.group(2).split(',')
-                workflows[name] = Workflow(read_steps(steps))
+                rules = match.group(2).split(',')
+                workflows[name] = Workflow(read_rules(rules))
             else:
                 break
         for line in file:
@@ -24,23 +24,23 @@ def load_workflows_and_parts_from_file(input_file):
     return Workflows(workflows), parts
 
 
-def read_steps(steps):
-    return list(map(read_step, steps))
+def read_rules(rules):
+    return list(map(read_rule, rules))
 
 
-def read_step(step):
-    comparison_match = re.match('([xmas])([<>])([0-9]+):(.+)', step)
+def read_rule(rule):
+    comparison_match = re.match('([xmas])([<>])([0-9]+):(.+)', rule)
     if comparison_match:
         return CompareAttribute(attribute=comparison_match.group(1),
                                 test=comparison_match.group(2),
                                 value=int(comparison_match.group(3)),
                                 next_workflow=comparison_match.group(4))
-    elif step == 'A':
+    elif rule == 'A':
         return AcceptPart()
-    elif step == 'R':
+    elif rule == 'R':
         return RejectPart()
     else:
-        return GoToWorkflow(step)
+        return GoToWorkflow(rule)
 
 
 def read_part(attributes):

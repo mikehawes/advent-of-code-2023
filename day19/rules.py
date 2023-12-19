@@ -1,11 +1,11 @@
 from dataclasses import dataclass
 
 from day19.parts import PartRange
-from day19.workflows import Part, WorkflowState, Step, WorkflowsContext
+from day19.workflows import Part, WorkflowState, Rule, WorkflowsContext
 
 
 @dataclass(frozen=True)
-class AcceptPart(Step):
+class AcceptPart(Rule):
     def next_state(self, part: Part) -> WorkflowState:
         return WorkflowState(accepted=True)
 
@@ -14,7 +14,7 @@ class AcceptPart(Step):
 
 
 @dataclass(frozen=True)
-class RejectPart(Step):
+class RejectPart(Rule):
     def next_state(self, part: Part) -> WorkflowState:
         return WorkflowState(accepted=False)
 
@@ -23,7 +23,7 @@ class RejectPart(Step):
 
 
 @dataclass(frozen=True)
-class GoToWorkflow(Step):
+class GoToWorkflow(Rule):
     workflow: str
 
     def next_state(self, part: Part) -> WorkflowState:
@@ -34,7 +34,7 @@ class GoToWorkflow(Step):
 
 
 @dataclass(frozen=True)
-class CompareAttribute(Step):
+class CompareAttribute(Rule):
     attribute: str
     test: str
     value: int
@@ -68,27 +68,27 @@ class CompareAttribute(Step):
 @dataclass(frozen=True)
 class RemainingWorkflow(WorkflowsContext):
     context: WorkflowsContext
-    steps: list[Step]
+    rules: list[Rule]
 
     def filter_by_workflow(self, workflow: str, parts: PartRange) -> PartRange | None:
         return self.context.filter_by_workflow(workflow, parts)
 
     def filter_by_remaining_workflow(self, parts: PartRange) -> PartRange | None:
-        first_rule = self.steps[0]
-        remaining = self.steps[1:]
+        first_rule = self.rules[0]
+        remaining = self.rules[1:]
         return first_rule.filter_ranges(parts, RemainingWorkflow(self.context, remaining))
 
 
 @dataclass(frozen=True)
-class Workflow(Step):
-    steps: list[Step]
+class Workflow(Rule):
+    rules: list[Rule]
 
     def next_state(self, part: Part) -> WorkflowState:
-        for step in self.steps:
-            state = step.next_state(part)
+        for rule in self.rules:
+            state = rule.next_state(part)
             if state:
                 return state
         raise Exception('No next state found')
 
     def filter_ranges(self, parts: PartRange, context: WorkflowsContext) -> PartRange | None:
-        return RemainingWorkflow(context, self.steps).filter_by_remaining_workflow(parts)
+        return RemainingWorkflow(context, self.rules).filter_by_remaining_workflow(parts)

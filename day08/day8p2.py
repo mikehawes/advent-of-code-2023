@@ -17,7 +17,7 @@ def count_steps(path, graph):
             print('Prev state:', state)
             print(' End state:', next_state)
             print('Time traversing states:', datetime.timedelta(seconds=time.time() - start_time))
-            return next_state.steps
+            return next_state.rules
         if next_state.iterations % 10000000 == 0:
             print('Prev state:', state)
             print(' New state:', next_state)

@@ -20,7 +20,7 @@ class WorkflowsContext(ABC):
         pass
 
 
-class Step(ABC):
+class Rule(ABC):
     @abstractmethod
     def next_state(self, part: Part) -> WorkflowState | None:
         pass
@@ -32,7 +32,7 @@ class Step(ABC):
 
 @dataclass(frozen=True)
 class Workflows(WorkflowsContext):
-    workflows: dict[str, Step]
+    workflows: dict[str, Rule]
 
     def is_accepted(self, part: Part) -> bool:
         workflow = self.workflows['in']
