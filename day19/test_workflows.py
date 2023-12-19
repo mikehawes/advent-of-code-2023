@@ -3,6 +3,7 @@ import unittest
 from approvaltests import verify
 
 from day19.input import load_workflows_and_parts_from_file
+from day19.workflows_printer import print_part_ranges
 
 
 class TestWorkflows(unittest.TestCase):
@@ -19,7 +20,6 @@ class TestWorkflows(unittest.TestCase):
         workflows, parts = load_workflows_and_parts_from_file('input')
         self.assertEqual(362930, workflows.sum_accepted_scores(parts))
 
-    @unittest.skip('TODO')
-    def test_should_find_accepted_range_for_example(self):
+    def test_should_find_accepted_ranges_for_example(self):
         workflows, _ = load_workflows_and_parts_from_file('example')
-        verify(workflows.find_accepted_ranges())
+        verify(print_part_ranges(workflows.find_accepted_ranges()))

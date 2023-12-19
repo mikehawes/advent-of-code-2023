@@ -19,11 +19,6 @@ class ScoreRange:
 class PartRange:
     ranges_by_attribute: dict[str, list[ScoreRange]]
 
-    def __str__(self):
-        return '\n'.join(map(
-            print_attribute_range,
-            self.ranges_by_attribute.items()))
-
     def with_attribute_min(self, attribute, new_min):
         return self.map_attribute(attribute, lambda r: ScoreRange(new_min, r.max_score))
 
@@ -35,12 +30,18 @@ class PartRange:
         new_ranges[attribute] = list(map(map_attribute, self.ranges_by_attribute[attribute]))
         return PartRange(new_ranges)
 
+    def __str__(self):
+        return '      '.join(map(
+            print_attribute_range,
+            self.ranges_by_attribute.items()))
+
 
 def print_attribute_range(item: (str, list[ScoreRange])) -> str:
     attribute, scores = item
-    return '{}: {}'.format(attribute, ', '.join(map(
-        lambda score: '{}-{}'.format(score.min_score, score.max_score),
-        scores)))
+    score_range = ', '.join(map(
+        lambda score: '{}-{}'.format(str(score.min_score).rjust(4), str(score.max_score).ljust(4)),
+        scores))
+    return '{}: {}'.format(attribute, score_range)
 
 
 def full_part_range():

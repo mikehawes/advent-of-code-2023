@@ -12,11 +12,11 @@ class WorkflowState:
 
 class WorkflowsContext(ABC):
     @abstractmethod
-    def filter_by_workflow(self, workflow: str, parts: PartRange) -> PartRange | None:
+    def filter_by_workflow(self, workflow: str, parts: list[PartRange]) -> list[PartRange]:
         pass
 
     @abstractmethod
-    def filter_by_remaining_workflow(self, parts: PartRange) -> PartRange | None:
+    def filter_by_remaining_workflow(self, parts: list[PartRange]) -> list[PartRange]:
         pass
 
 
@@ -26,7 +26,7 @@ class Rule(ABC):
         pass
 
     @abstractmethod
-    def filter_ranges(self, parts: PartRange, context: WorkflowsContext) -> PartRange | None:
+    def filter_ranges(self, parts: list[PartRange], context: WorkflowsContext) -> list[PartRange]:
         pass
 
 
@@ -49,11 +49,11 @@ class Workflows(WorkflowsContext):
         return sum(map(lambda part: part.sum_scores(),
                        filter(self.is_accepted, parts)))
 
-    def find_accepted_ranges(self) -> PartRange:
-        return self.filter_by_workflow('in', full_part_range())
+    def find_accepted_ranges(self) -> list[PartRange]:
+        return self.filter_by_workflow('in', [full_part_range()])
 
-    def filter_by_workflow(self, workflow: str, parts: PartRange) -> PartRange | None:
+    def filter_by_workflow(self, workflow: str, parts: list[PartRange]) -> list[PartRange]:
         return self.workflows[workflow].filter_ranges(parts, self)
 
-    def filter_by_remaining_workflow(self, parts: PartRange) -> PartRange:
-        return parts
+    def filter_by_remaining_workflow(self, parts: PartRange) -> list[PartRange]:
+        return []

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from day19.parts import PartRange, combine_part_ranges
+from day19.parts import PartRange
 from day19.workflows import Part, WorkflowState, Rule, WorkflowsContext
 
 
@@ -9,7 +9,7 @@ class AcceptPart(Rule):
     def next_state(self, part: Part) -> WorkflowState:
         return WorkflowState(accepted=True)
 
-    def filter_ranges(self, parts: PartRange, context: WorkflowsContext) -> PartRange:
+    def filter_ranges(self, parts: list[PartRange], context: WorkflowsContext) -> list[PartRange]:
         return parts
 
 
@@ -18,8 +18,8 @@ class RejectPart(Rule):
     def next_state(self, part: Part) -> WorkflowState:
         return WorkflowState(accepted=False)
 
-    def filter_ranges(self, parts: PartRange, context: WorkflowsContext) -> None:
-        return None
+    def filter_ranges(self, parts: list[PartRange], context: WorkflowsContext) -> list[PartRange]:
+        return []
 
 
 @dataclass(frozen=True)
@@ -29,7 +29,7 @@ class GoToWorkflow(Rule):
     def next_state(self, part: Part) -> WorkflowState:
         return WorkflowState(next_workflow=self.workflow)
 
-    def filter_ranges(self, parts: PartRange, context: WorkflowsContext) -> PartRange | None:
+    def filter_ranges(self, parts: list[PartRange], context: WorkflowsContext) -> list[PartRange]:
         return context.filter_by_workflow(self.workflow, parts)
 
 
@@ -61,23 +61,23 @@ class CompareAttribute(Rule):
                 return score < self.value
         raise Exception('Unknown test: {}'.format(self.test))
 
-    def filter_ranges(self, parts: PartRange, context: WorkflowsContext) -> PartRange | None:
+    def filter_ranges(self, parts: list[PartRange], context: WorkflowsContext) -> list[PartRange]:
         parts_then, parts_else = self.get_then_and_else(parts)
         if self.next_workflow == 'R':
-            parts_then = None
+            parts_then = []
         elif self.next_workflow != 'A':
             parts_then = context.filter_by_workflow(self.next_workflow, parts_then)
         parts_else = context.filter_by_remaining_workflow(parts_else)
-        return combine_part_ranges(parts_then, parts_else)
+        return parts_then + parts_else
 
-    def get_then_and_else(self, parts: PartRange) -> (PartRange, PartRange):
+    def get_then_and_else(self, parts: list[PartRange]) -> (list[PartRange], list[PartRange]):
         match self.test:
             case '>':
-                return (parts.with_attribute_min(self.attribute, self.value + 1),
-                        parts.with_attribute_max(self.attribute, self.value))
+                return (list(map(lambda p: p.with_attribute_min(self.attribute, self.value + 1), parts)),
+                        list(map(lambda p: p.with_attribute_max(self.attribute, self.value), parts)))
             case '<':
-                return (parts.with_attribute_max(self.attribute, self.value - 1),
-                        parts.with_attribute_min(self.attribute, self.value))
+                return (list(map(lambda p: p.with_attribute_max(self.attribute, self.value - 1), parts)),
+                        list(map(lambda p: p.with_attribute_min(self.attribute, self.value), parts)))
 
 
 @dataclass(frozen=True)
@@ -85,10 +85,10 @@ class RemainingWorkflow(WorkflowsContext):
     context: WorkflowsContext
     rules: list[Rule]
 
-    def filter_by_workflow(self, workflow: str, parts: PartRange) -> PartRange | None:
+    def filter_by_workflow(self, workflow: str, parts: list[PartRange]) -> list[PartRange]:
         return self.context.filter_by_workflow(workflow, parts)
 
-    def filter_by_remaining_workflow(self, parts: PartRange) -> PartRange | None:
+    def filter_by_remaining_workflow(self, parts: list[PartRange]) -> list[PartRange]:
         first_rule = self.rules[0]
         remaining = self.rules[1:]
         return first_rule.filter_ranges(parts, RemainingWorkflow(self.context, remaining))
@@ -105,5 +105,5 @@ class Workflow(Rule):
                 return state
         raise Exception('No next state found')
 
-    def filter_ranges(self, parts: PartRange, context: WorkflowsContext) -> PartRange | None:
+    def filter_ranges(self, parts: list[PartRange], context: WorkflowsContext) -> list[PartRange]:
         return RemainingWorkflow(context, self.rules).filter_by_remaining_workflow(parts)

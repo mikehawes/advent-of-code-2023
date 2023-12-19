@@ -1,22 +1,8 @@
-import io
 import unittest
 
 from approvaltests import verify
 
-from day19.input import read_workflows
-
-
-def print_workflow_ranges(workflows_cases):
-    out = io.StringIO()
-    for workflow_lines in workflows_cases:
-        workflows = read_workflows(workflow_lines)
-        print('Workflows:', file=out)
-        for line in workflow_lines:
-            print(line, file=out)
-        print('Accepted ranges:', file=out)
-        print(workflows.find_accepted_ranges(), file=out)
-        print(file=out)
-    return out.getvalue()
+from day19.workflows_printer import print_workflow_ranges
 
 
 class TestRules(unittest.TestCase):
@@ -34,4 +20,16 @@ class TestRules(unittest.TestCase):
             ['in{x>2662:R,x>1000:A,R}'],
             ['in{x>2662:A,x<1000:A,R}'],
             ['in{x>2662:A,x>1000:A,R}']
+        ]))
+
+    def test_should_combine_workflows(self):
+        verify(print_workflow_ranges([
+            ['in{x>2662:then,R}',
+             'then{x<3000:A,R}'],
+        ]))
+
+    def test_should_handle_different_attributes(self):
+        verify(print_workflow_ranges([
+            ['in{x>2662:then,x>1000:A,R}',
+             'then{a<3000:A,R}'],
         ]))
