@@ -3,17 +3,19 @@ from dataclasses import dataclass
 from day19.workflows import Part, WorkflowState, Step
 
 
+@dataclass(frozen=True)
 class AcceptPart(Step):
     def next_state(self, part: Part) -> WorkflowState:
         return WorkflowState(accepted=True)
 
 
+@dataclass(frozen=True)
 class RejectPart(Step):
     def next_state(self, part: Part) -> WorkflowState:
         return WorkflowState(accepted=False)
 
 
-@dataclass
+@dataclass(frozen=True)
 class GoToWorkflow(Step):
     workflow: str
 
@@ -21,7 +23,7 @@ class GoToWorkflow(Step):
         return WorkflowState(next_workflow=self.workflow)
 
 
-@dataclass
+@dataclass(frozen=True)
 class CompareAttribute(Step):
     attribute: str
     test: str
