@@ -28,3 +28,8 @@ class TestRules(unittest.TestCase):
             ['in{x>2662:R,A}'],
             ['in{x<2662:R,A}']
         ]))
+
+    def test_should_include_else_condition(self):
+        verify(print_workflow_ranges([
+            ['in{x>2662:R,x>1000:A,R}']
+        ]))

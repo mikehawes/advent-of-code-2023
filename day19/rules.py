@@ -63,11 +63,12 @@ class CompareAttribute(Rule):
 
     def filter_ranges(self, parts: PartRange, context: WorkflowsContext) -> PartRange | None:
         parts_then, parts_else = self.get_then_and_else(parts)
-        if self.next_workflow == 'A':
-            return parts_then
         if self.next_workflow == 'R':
-            return parts_else
-        return parts
+            parts_then = None
+        if parts_then:
+            return parts_then
+        else:
+            return context.filter_by_remaining_workflow(parts_else)
 
     def get_then_and_else(self, parts: PartRange) -> (PartRange, PartRange):
         match self.test:

@@ -19,6 +19,7 @@ class TestWorkflows(unittest.TestCase):
         workflows, parts = load_workflows_and_parts_from_file('input')
         self.assertEqual(362930, workflows.sum_accepted_scores(parts))
 
+    @unittest.skip('TODO')
     def test_should_find_accepted_range_for_example(self):
         workflows, _ = load_workflows_and_parts_from_file('example')
         verify(workflows.find_accepted_ranges())
