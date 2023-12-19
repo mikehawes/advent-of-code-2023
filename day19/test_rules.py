@@ -31,5 +31,7 @@ class TestRules(unittest.TestCase):
 
     def test_should_include_else_condition(self):
         verify(print_workflow_ranges([
-            ['in{x>2662:R,x>1000:A,R}']
+            ['in{x>2662:R,x>1000:A,R}'],
+            ['in{x>2662:A,x<1000:A,R}'],
+            ['in{x>2662:A,x>1000:A,R}']
         ]))

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from day19.parts import PartRange
+from day19.parts import PartRange, combine_part_ranges
 from day19.workflows import Part, WorkflowState, Rule, WorkflowsContext
 
 
@@ -65,10 +65,10 @@ class CompareAttribute(Rule):
         parts_then, parts_else = self.get_then_and_else(parts)
         if self.next_workflow == 'R':
             parts_then = None
-        if parts_then:
-            return parts_then
-        else:
-            return context.filter_by_remaining_workflow(parts_else)
+        elif self.next_workflow != 'A':
+            parts_then = context.filter_by_workflow(self.next_workflow, parts_then)
+        parts_else = context.filter_by_remaining_workflow(parts_else)
+        return combine_part_ranges(parts_then, parts_else)
 
     def get_then_and_else(self, parts: PartRange) -> (PartRange, PartRange):
         match self.test:
