@@ -4,12 +4,6 @@ from dataclasses import dataclass
 from day19.parts import Part, PartRange, full_part_range
 
 
-@dataclass
-class WorkflowState:
-    next_workflow: str | None = None
-    accepted: bool = False
-
-
 class WorkflowsContext(ABC):
     @abstractmethod
     def filter_by_workflow(self, workflow: str, parts: list[PartRange]) -> list[PartRange]:
@@ -22,10 +16,6 @@ class WorkflowsContext(ABC):
 
 class Rule(ABC):
     @abstractmethod
-    def next_state(self, part: Part) -> WorkflowState | None:
-        pass
-
-    @abstractmethod
     def filter_ranges(self, parts: list[PartRange], context: WorkflowsContext) -> list[PartRange]:
         pass
 
@@ -34,20 +24,13 @@ class Rule(ABC):
 class Workflows(WorkflowsContext):
     workflows: dict[str, Rule]
 
-    def is_accepted(self, part: Part) -> bool:
-        workflow = self.workflows['in']
-        state = workflow.next_state(part)
-        while state.next_workflow:
-            workflow = self.workflows[state.next_workflow]
-            state = workflow.next_state(part)
-        return state.accepted
-
     def list_accepted(self, parts: list[Part]) -> list[Part]:
-        return list(filter(self.is_accepted, parts))
+        accepted_ranges = self.find_accepted_ranges()
+        return list(filter(lambda p: is_accepted(p, accepted_ranges), parts))
 
     def sum_accepted_scores(self, parts: list[Part]) -> int:
         return sum(map(lambda part: part.sum_scores(),
-                       filter(self.is_accepted, parts)))
+                       self.list_accepted(parts)))
 
     def find_accepted_ranges(self) -> list[PartRange]:
         return self.filter_by_workflow('in', [full_part_range()])
@@ -61,3 +44,10 @@ class Workflows(WorkflowsContext):
 
     def filter_by_remaining_workflow(self, parts: PartRange) -> list[PartRange]:
         return []
+
+
+def is_accepted(part, ranges):
+    for part_range in ranges:
+        if part_range.accepts(part):
+            return True
+    return False

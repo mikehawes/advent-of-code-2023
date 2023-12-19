@@ -35,6 +35,14 @@ class PartRange:
         return prod(map(lambda r: r.max_score - r.min_score + 1,
                         self.range_by_attribute.values()))
 
+    def accepts(self, part):
+        for attribute in all_attributes():
+            score_range = self.range_by_attribute[attribute]
+            part_score = part.score_by_attribute[attribute]
+            if part_score < score_range.min_score or part_score > score_range.max_score:
+                return False
+        return True
+
 
 def full_part_range():
     return part_range_for_all_attributes(ScoreRange(1, 4000))

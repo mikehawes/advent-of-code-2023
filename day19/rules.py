@@ -1,23 +1,17 @@
 from dataclasses import dataclass
 
 from day19.parts import PartRange
-from day19.workflows import Part, WorkflowState, Rule, WorkflowsContext
+from day19.workflows import Rule, WorkflowsContext
 
 
 @dataclass(frozen=True)
 class AcceptPart(Rule):
-    def next_state(self, part: Part) -> WorkflowState:
-        return WorkflowState(accepted=True)
-
     def filter_ranges(self, parts: list[PartRange], context: WorkflowsContext) -> list[PartRange]:
         return parts
 
 
 @dataclass(frozen=True)
 class RejectPart(Rule):
-    def next_state(self, part: Part) -> WorkflowState:
-        return WorkflowState(accepted=False)
-
     def filter_ranges(self, parts: list[PartRange], context: WorkflowsContext) -> list[PartRange]:
         return []
 
@@ -25,9 +19,6 @@ class RejectPart(Rule):
 @dataclass(frozen=True)
 class GoToWorkflow(Rule):
     workflow: str
-
-    def next_state(self, part: Part) -> WorkflowState:
-        return WorkflowState(next_workflow=self.workflow)
 
     def filter_ranges(self, parts: list[PartRange], context: WorkflowsContext) -> list[PartRange]:
         return context.filter_by_workflow(self.workflow, parts)
@@ -39,27 +30,6 @@ class CompareAttribute(Rule):
     test: str
     value: int
     next_workflow: str
-
-    def next_state(self, part: Part) -> WorkflowState | None:
-        if self.meets_condition(part):
-            match self.next_workflow:
-                case 'A':
-                    return WorkflowState(accepted=True)
-                case 'R':
-                    return WorkflowState(accepted=False)
-                case _:
-                    return WorkflowState(next_workflow=self.next_workflow)
-        else:
-            return None
-
-    def meets_condition(self, part: Part) -> bool:
-        score = part.score_by_attribute[self.attribute]
-        match self.test:
-            case '>':
-                return score > self.value
-            case '<':
-                return score < self.value
-        raise Exception('Unknown test: {}'.format(self.test))
 
     def filter_ranges(self, parts: list[PartRange], context: WorkflowsContext) -> list[PartRange]:
         parts_then, parts_else = self.get_then_and_else(parts)
@@ -83,13 +53,6 @@ class CompareAttribute(Rule):
 @dataclass(frozen=True)
 class Workflow(Rule):
     rules: list[Rule]
-
-    def next_state(self, part: Part) -> WorkflowState:
-        for rule in self.rules:
-            state = rule.next_state(part)
-            if state:
-                return state
-        raise Exception('No next state found')
 
     def filter_ranges(self, parts: list[PartRange], context: WorkflowsContext) -> list[PartRange]:
         return RemainingWorkflow(context, self.rules).filter_by_remaining_workflow(parts)
