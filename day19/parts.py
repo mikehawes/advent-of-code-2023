@@ -24,6 +24,17 @@ class PartRange:
             print_attribute_range,
             self.range_by_attribute.items()))
 
+    def with_attribute_min(self, attribute, new_min):
+        return self.map_attribute(attribute, lambda r: ScoreRange(new_min, r.max_score))
+
+    def with_attribute_max(self, attribute, new_max):
+        return self.map_attribute(attribute, lambda r: ScoreRange(r.min_score, new_max))
+
+    def map_attribute(self, attribute, map_attribute):
+        new_ranges = self.range_by_attribute.copy()
+        new_ranges[attribute] = list(map(map_attribute, self.range_by_attribute[attribute]))
+        return PartRange(new_ranges)
+
 
 def print_attribute_range(item: (str, list[ScoreRange])) -> str:
     attribute, scores = item

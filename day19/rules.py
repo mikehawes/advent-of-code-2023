@@ -62,7 +62,17 @@ class CompareAttribute(Rule):
         raise Exception('Unknown test: {}'.format(self.test))
 
     def filter_ranges(self, parts: PartRange, context: WorkflowsContext) -> PartRange | None:
-        return parts
+        parts_then, parts_else = self.get_then_and_else(parts)
+        return parts_then
+
+    def get_then_and_else(self, parts: PartRange) -> (PartRange, PartRange):
+        match self.test:
+            case '>':
+                return (parts.with_attribute_min(self.attribute, self.value + 1),
+                        parts.with_attribute_max(self.attribute, self.value))
+            case '<':
+                return (parts.with_attribute_max(self.attribute, self.value - 1),
+                        parts.with_attribute_min(self.attribute, self.value))
 
 
 @dataclass(frozen=True)

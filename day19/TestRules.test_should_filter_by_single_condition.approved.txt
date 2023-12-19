@@ -1,0 +1,16 @@
+Workflows:
+in{x>2662:A,R}
+Accepted ranges:
+x: 2663-4000
+m: 1-4000
+a: 1-4000
+s: 1-4000
+
+Workflows:
+in{x<2662:A,R}
+Accepted ranges:
+x: 1-2661
+m: 1-4000
+a: 1-4000
+s: 1-4000
+

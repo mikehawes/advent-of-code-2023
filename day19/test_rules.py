@@ -1,3 +1,4 @@
+import io
 import unittest
 
 from approvaltests import verify
@@ -5,8 +6,23 @@ from approvaltests import verify
 from day19.input import read_workflows
 
 
+def print_workflow_ranges(workflows_cases):
+    out = io.StringIO()
+    for workflow_lines in workflows_cases:
+        workflows = read_workflows(workflow_lines)
+        print('Workflows:', file=out)
+        for line in workflow_lines:
+            print(line, file=out)
+        print('Accepted ranges:', file=out)
+        print(workflows.find_accepted_ranges(), file=out)
+        print(file=out)
+    return out.getvalue()
+
+
 class TestRules(unittest.TestCase):
 
-    def test_should_filter_range_by_greater_than(self):
-        workflows = read_workflows(['in{x>2662:A,R}'])
-        verify(workflows.find_accepted_ranges())
+    def test_should_filter_by_single_condition(self):
+        verify(print_workflow_ranges([
+            ['in{x>2662:A,R}'],
+            ['in{x<2662:A,R}']
+        ]))
