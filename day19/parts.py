@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from math import prod
 
 
 @dataclass(frozen=True)
@@ -29,6 +30,10 @@ class PartRange:
         new_ranges = self.range_by_attribute.copy()
         new_ranges[attribute] = map_attribute(self.range_by_attribute[attribute])
         return PartRange(new_ranges)
+
+    def count_distinct_combinations(self):
+        return prod(map(lambda r: r.max_score - r.min_score + 1,
+                        self.range_by_attribute.values()))
 
     def __str__(self):
         return '      '.join(map(

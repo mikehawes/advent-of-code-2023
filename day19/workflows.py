@@ -52,6 +52,10 @@ class Workflows(WorkflowsContext):
     def find_accepted_ranges(self) -> list[PartRange]:
         return self.filter_by_workflow('in', [full_part_range()])
 
+    def count_accepted_values(self) -> int:
+        return sum(map(lambda r: r.count_distinct_combinations(),
+                       self.find_accepted_ranges()))
+
     def filter_by_workflow(self, workflow: str, parts: list[PartRange]) -> list[PartRange]:
         return self.workflows[workflow].filter_ranges(parts, self)
 

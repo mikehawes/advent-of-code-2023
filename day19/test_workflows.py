@@ -23,3 +23,11 @@ class TestWorkflows(unittest.TestCase):
     def test_should_find_accepted_ranges_for_example(self):
         workflows, _ = load_workflows_and_parts_from_file('example')
         verify(print_part_ranges(workflows.find_accepted_ranges()))
+
+    def test_should_count_accepted_values_for_example(self):
+        workflows, _ = load_workflows_and_parts_from_file('example')
+        self.assertEqual(167409079868000, workflows.count_accepted_values())
+
+    def test_should_count_accepted_values_for_input(self):
+        workflows, _ = load_workflows_and_parts_from_file('input')
+        self.assertEqual(116365820987729, workflows.count_accepted_values())
