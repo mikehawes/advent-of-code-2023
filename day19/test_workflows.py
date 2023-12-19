@@ -14,3 +14,7 @@ class TestWorkflows(unittest.TestCase):
     def test_should_sum_accepted_parts_for_example(self):
         workflows, parts = load_workflows_and_parts_from_file('example')
         self.assertEqual(19114, workflows.sum_accepted_scores(parts))
+
+    def test_should_sum_accepted_parts_for_input(self):
+        workflows, parts = load_workflows_and_parts_from_file('input')
+        self.assertEqual(362930, workflows.sum_accepted_scores(parts))
