@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from collections import deque
 from dataclasses import dataclass
 
 from day20.pulse import SentPulse, Pulse, SendPulse
@@ -64,17 +65,15 @@ class Circuit:
     def sort_modules_with_root(self, root):
         root_module = self.module_by_name[root]
         modules = [root_module]
-        self.add_inputs(root_module, modules, {root: True})
+        queue = deque([root_module])
+        module_found = {root: True}
+        while queue:
+            module = queue.pop()
+            for input_name in module.inputs:
+                if input_name in module_found:
+                    continue
+                module_found[input_name] = True
+                input_module = self.module_by_name[input_name]
+                modules.append(input_module)
+                queue.appendleft(input_module)
         return modules
-
-    def add_inputs(self, module, modules, module_found):
-        next_modules = []
-        for input_name in module.inputs:
-            if input_name in module_found:
-                continue
-            module_found[input_name] = True
-            input_module = self.module_by_name[input_name]
-            modules.append(input_module)
-            next_modules.append(input_module)
-        for next_module in next_modules:
-            self.add_inputs(next_module, modules, module_found)
