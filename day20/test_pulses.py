@@ -4,7 +4,7 @@ from approvaltests import verify
 
 from day20.circuit import Pulse
 from day20.input import read_module_circuit_from_file
-from day20.pulses_printer import print_sent, print_button_presses, print_modules
+from day20.pulses_printer import print_sent, print_button_presses, print_modules, print_circuits_by_root
 
 
 class TestPulses(unittest.TestCase):
@@ -64,3 +64,12 @@ class TestPulses(unittest.TestCase):
         circuit = read_module_circuit_from_file('input')
         circuit.press_button_times(1000)
         verify(print_modules(circuit.sort_modules_with_root('rx'), include_state=True))
+
+    def test_should_split_to_sub_graphs(self):
+        circuit = read_module_circuit_from_file('input')
+        circuits = circuit.split_by_output_at_module('broadcaster')
+        verify(print_circuits_by_root(circuits, 'rx'))
+
+    def test_should_find_presses_by_sub_graphs(self):
+        circuit = read_module_circuit_from_file('input')
+        self.assertEqual(0, circuit.by_split_find_presses_to_deliver('broadcaster', Pulse.LOW, 'rx'))

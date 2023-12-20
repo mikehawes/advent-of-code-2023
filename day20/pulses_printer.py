@@ -26,6 +26,12 @@ def print_modules(modules, include_state=False):
     return '\n'.join(map(lambda m: print_module(m, include_state), modules))
 
 
+def print_circuits_by_root(circuits, root):
+    return '\n\n'.join(map(
+        lambda c: print_modules(c.sort_modules_with_root(root)),
+        circuits))
+
+
 def print_module(module, include_state=False):
     return '{} -> {} ->{}'.format(
         print_inputs(module, include_state),

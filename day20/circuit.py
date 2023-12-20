@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from collections import deque
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from day20.pulse import SentPulse, Pulse, SendPulse
 
@@ -17,6 +17,14 @@ class Module(ABC):
 
     def count_state_toggles(self):
         return 0
+
+    def split_by_outputs(self):
+        return list(map(lambda output: replace(self, outputs=[output]),
+                        self.outputs))
+
+    def filter_inputs(self, modules_by_name):
+        return replace(self, inputs=list(filter(lambda name: name in modules_by_name,
+                                                self.inputs)))
 
 
 @dataclass(frozen=True)
@@ -55,7 +63,7 @@ class Circuit:
         return list(map(lambda send: SentPulse(pulse.receiver, send.module, send.pulse), send_pulses))
 
     def find_presses_to_deliver(self, pulse: Pulse, module: str):
-        for presses in range(1, 10_000):
+        for presses in range(1, 2_000_000):
             for sent in self.press_button():
                 if sent.pulse == pulse and sent.receiver == module:
                     return presses
@@ -81,3 +89,25 @@ class Circuit:
                 modules.append(input_module)
                 queue.appendleft(input_module)
         return modules
+
+    def split_by_output_at_module(self, module_name):
+        circuits = []
+        for module in self.module_by_name[module_name].split_by_outputs():
+            reachable_by_name = {}
+            self.add_reachable(module, reachable_by_name)
+            module_by_name = {}
+            for reachable in reachable_by_name.values():
+                module_by_name[reachable.name] = reachable.filter_inputs(reachable_by_name)
+            circuits.append(Circuit(module_by_name))
+        return circuits
+
+    def add_reachable(self, module, module_by_name):
+        if module.name in module_by_name:
+            return
+        module_by_name[module.name] = module
+        for output_name in module.outputs:
+            output = self.module_by_name[output_name]
+            self.add_reachable(output, module_by_name)
+
+    def by_split_find_presses_to_deliver(self, split_at: str, pulse: Pulse, target: str):
+        return 0

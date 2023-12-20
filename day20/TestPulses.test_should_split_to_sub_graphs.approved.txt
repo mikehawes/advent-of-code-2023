@@ -1,0 +1,71 @@
+                                        kh ->      rx     ->
+                                        hz ->     &kh     -> rx
+                                        hd ->     &hz     -> kh
+dt, tl, kj, pb, gr, mv, hp, mp, zq, fm, jk ->     &hd     -> hp, js, hz
+                                        hp ->     %dt     -> fm, hd
+                                        kj ->     %tl     -> jk, hd
+                                        pb ->     %kj     -> tl, hd
+                                        gr ->     %pb     -> hd, kj
+                                        mv ->     %gr     -> hd, pb
+                                        js ->     %mv     -> hd, gr
+                           broadcaster, hd ->     %hp     -> dt, hd
+                                        fm ->     %mp     -> js, hd
+                                        jk ->     %zq     -> hd
+                                        dt ->     %fm     -> mp, hd
+                                        tl ->     %jk     -> zq, hd
+                                    mp, hd ->     %js     -> mv
+                                           -> broadcaster -> hp
+
+                                        kh ->      rx     ->
+                                        xm ->     &kh     -> rx
+                                        kc ->     &xm     -> kh
+        vx, sz, gs, rt, nk, lj, lg, lq, zb ->     &kc     -> zb, xp, pd, fc, xm
+                                        nk ->     %vx     -> kc, sz
+                                        vx ->     %sz     -> kc
+                                        zb ->     %gs     -> kc, pd
+                                        fc ->     %rt     -> kc, xp
+                                        lg ->     %nk     -> kc, vx
+                                        lq ->     %lj     -> fc, kc
+                                        xp ->     %lg     -> kc, nk
+                                        pd ->     %lq     -> kc, lj
+                           broadcaster, kc ->     %zb     -> gs, kc
+                                    lj, kc ->     %fc     -> rt
+                                    rt, kc ->     %xp     -> lg
+                                    gs, kc ->     %pd     -> lq
+                                           -> broadcaster -> zb
+
+                                        kh ->      rx     ->
+                                        qh ->     &kh     -> rx
+                                        fl ->     &qh     -> kh
+                bh, lb, gz, mb, vz, bb, xv ->     &fl     -> xv, tx, sl, df, qh, zc, zm
+                                        vz ->     %bh     -> fl, gz
+                                        bb ->     %lb     -> zm, fl
+                                        bh ->     %gz     -> fl
+                                        zm ->     %mb     -> fl, sl
+                                        sl ->     %vz     -> fl, bh
+                                        df ->     %bb     -> fl, lb
+                           broadcaster, fl ->     %xv     -> zc, fl
+                                    lb, fl ->     %zm     -> mb
+                                    fl, mb ->     %sl     -> vz
+                                    tx, fl ->     %df     -> bb
+                                           -> broadcaster -> xv
+                                    zc, fl ->     %tx     -> df
+                                    fl, xv ->     %zc     -> tx
+
+                                        kh ->      rx     ->
+                                        pv ->     &kh     -> rx
+                                        tb ->     &pv     -> kh
+            pm, gf, jm, qn, gb, xh, db, cd ->     &tb     -> sx, qn, vj, qq, sk, pv
+                                        gf ->     %pm     -> tb
+                                        cd ->     %gf     -> pm, tb
+                                        qq ->     %jm     -> tb, db
+                           tb, broadcaster ->     %qn     -> sk, tb
+                                        vj ->     %gb     -> qq, tb
+                                        db ->     %xh     -> cd, tb
+                                        jm ->     %db     -> xh, tb
+                                        xh ->     %cd     -> gf, tb
+                                    tb, gb ->     %qq     -> jm
+                                           -> broadcaster -> qn
+                                    tb, sx ->     %vj     -> gb
+                                    tb, sk ->     %sx     -> vj
+                                    tb, qn ->     %sk     -> sx
