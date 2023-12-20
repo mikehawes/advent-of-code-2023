@@ -41,3 +41,7 @@ class TestPulses(unittest.TestCase):
     def test_should_find_presses_to_send_pulse_to_rx(self):
         circuit = read_module_circuit_from_file('input')
         self.assertEqual(0, circuit.find_presses_to_deliver(Pulse.LOW, 'rx'))
+
+    def test_should_count_possible_states_for_input(self):
+        circuit = read_module_circuit_from_file('input')
+        self.assertEqual(2_128_896, circuit.count_possible_states())

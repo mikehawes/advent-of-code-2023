@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from day20.circuit import Module, Pulse, SendPulse
+from day20.pulse import Module, Pulse, SendPulse
 
 
 @dataclass

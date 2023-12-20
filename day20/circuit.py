@@ -1,33 +1,8 @@
-from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from enum import Enum, auto
+from math import prod
 
-
-class Pulse(Enum):
-    LOW = auto()
-    HIGH = auto()
-
-
-@dataclass(frozen=True)
-class SendPulse:
-    module: str
-    pulse: Pulse
-
-
-@dataclass(frozen=True)
-class SentPulse:
-    sender: str
-    receiver: str
-    pulse: Pulse
-
-
-class Module(ABC):
-    @abstractmethod
-    def receive(self, pulse: Pulse, from_module: str) -> list[SendPulse]:
-        pass
-
-    def set_inputs(self, inputs: list[str]):
-        pass
+from day20.modules import FlipFlopModule, ConjunctionModule
+from day20.pulse import Module, SentPulse, Pulse
 
 
 @dataclass(frozen=True)
@@ -62,7 +37,21 @@ class Circuit:
         return list(map(lambda send: SentPulse(pulse.receiver, send.module, send.pulse), send_pulses))
 
     def find_presses_to_deliver(self, pulse: Pulse, module: str):
-        for presses in range(1, 3_000_000):
+        for presses in range(1, 10_000):
             for sent in self.press_button():
                 if sent.pulse == pulse and sent.receiver == module:
                     return presses
+
+    def count_possible_states(self):
+        flip_flops = sum(1 for _ in filter(is_flip_flop, self.module_by_name.values()))
+        conjunction_inputs_product = prod(map(lambda c: len(c.last_pulse_by_input),
+                                              filter(is_conjunction, self.module_by_name.values())))
+        return flip_flops * 2 * conjunction_inputs_product
+
+
+def is_flip_flop(module):
+    return isinstance(module, FlipFlopModule)
+
+
+def is_conjunction(module):
+    return isinstance(module, ConjunctionModule)
