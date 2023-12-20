@@ -54,3 +54,13 @@ class TestPulses(unittest.TestCase):
     def test_should_sort_input_rx_first(self):
         circuit = read_module_circuit_from_file('input')
         verify(print_modules(circuit.sort_modules_with_root('rx')))
+
+    def test_should_print_state_after_one_button_press(self):
+        circuit = read_module_circuit_from_file('input')
+        circuit.press_button()
+        verify(print_modules(circuit.sort_modules_with_root('rx'), include_state=True))
+
+    def test_should_print_state_after_1000_button_presses(self):
+        circuit = read_module_circuit_from_file('input')
+        circuit.press_button_times(1000)
+        verify(print_modules(circuit.sort_modules_with_root('rx'), include_state=True))

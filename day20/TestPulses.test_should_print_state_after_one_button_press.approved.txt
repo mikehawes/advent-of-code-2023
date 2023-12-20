@@ -1,0 +1,59 @@
+                                                              kh ->      rx     ->
+                                          pv:0, qh:0, xm:0, hz:0 ->     &kh     -> rx
+                                                            tb:1 ->     &pv     -> kh
+                                                            fl:1 ->     &qh     -> kh
+                                                            kc:1 ->     &xm     -> kh
+                                                            hd:1 ->     &hz     -> kh
+                  pm:0, gf:0, jm:0, qn:1, gb:0, xh:0, db:0, cd:0 ->     &tb     -> sx, qn, vj, qq, sk, pv
+                        bh:0, lb:0, gz:0, mb:0, vz:0, bb:0, xv:1 ->     &fl     -> xv, tx, sl, df, qh, zc, zm
+            vx:0, sz:0, gs:0, rt:0, nk:0, lj:0, lg:0, lq:0, zb:1 ->     &kc     -> zb, xp, pd, fc, xm
+dt:0, tl:0, kj:0, pb:0, gr:0, mv:0, hp:1, mp:0, zq:0, fm:0, jk:0 ->     &hd     -> hp, js, hz
+                                                              gf ->    %pm:0    -> tb
+                                                              cd ->    %gf:0    -> pm, tb
+                                                              qq ->    %jm:0    -> tb, db
+                                                 tb, broadcaster ->    %qn:1    -> sk, tb
+                                                              vj ->    %gb:0    -> qq, tb
+                                                              db ->    %xh:0    -> cd, tb
+                                                              jm ->    %db:0    -> xh, tb
+                                                              xh ->    %cd:0    -> gf, tb
+                                                              vz ->    %bh:0    -> fl, gz
+                                                              bb ->    %lb:0    -> zm, fl
+                                                              bh ->    %gz:0    -> fl
+                                                              zm ->    %mb:0    -> fl, sl
+                                                              sl ->    %vz:0    -> fl, bh
+                                                              df ->    %bb:0    -> fl, lb
+                                                 broadcaster, fl ->    %xv:1    -> zc, fl
+                                                              nk ->    %vx:0    -> kc, sz
+                                                              vx ->    %sz:0    -> kc
+                                                              zb ->    %gs:0    -> kc, pd
+                                                              fc ->    %rt:0    -> kc, xp
+                                                              lg ->    %nk:0    -> kc, vx
+                                                              lq ->    %lj:0    -> fc, kc
+                                                              xp ->    %lg:0    -> kc, nk
+                                                              pd ->    %lq:0    -> kc, lj
+                                                 broadcaster, kc ->    %zb:1    -> gs, kc
+                                                              hp ->    %dt:0    -> fm, hd
+                                                              kj ->    %tl:0    -> jk, hd
+                                                              pb ->    %kj:0    -> tl, hd
+                                                              gr ->    %pb:0    -> hd, kj
+                                                              mv ->    %gr:0    -> hd, pb
+                                                              js ->    %mv:0    -> hd, gr
+                                                 broadcaster, hd ->    %hp:1    -> dt, hd
+                                                              fm ->    %mp:0    -> js, hd
+                                                              jk ->    %zq:0    -> hd
+                                                              dt ->    %fm:0    -> mp, hd
+                                                              tl ->    %jk:0    -> zq, hd
+                                                          tb, gb ->    %qq:0    -> jm
+                                                                 -> broadcaster -> hp, zb, xv, qn
+                                                          tb, sx ->    %vj:0    -> gb
+                                                          lb, fl ->    %zm:0    -> mb
+                                                          fl, mb ->    %sl:0    -> vz
+                                                          tx, fl ->    %df:0    -> bb
+                                                          lj, kc ->    %fc:0    -> rt
+                                                          rt, kc ->    %xp:0    -> lg
+                                                          gs, kc ->    %pd:0    -> lq
+                                                          mp, hd ->    %js:0    -> mv
+                                                          tb, sk ->    %sx:0    -> vj
+                                                          zc, fl ->    %tx:0    -> df
+                                                          tb, qn ->    %sk:0    -> sx
+                                                          fl, xv ->    %zc:0    -> tx

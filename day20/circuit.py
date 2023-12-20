@@ -34,6 +34,10 @@ class Circuit:
             pulses = next_pulses
         return sent
 
+    def press_button_times(self, presses):
+        for i in range(0, presses):
+            self.press_button()
+
     def find_pulse_product_for_presses(self, presses):
         total_low = 0
         total_high = 0

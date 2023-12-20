@@ -22,14 +22,17 @@ def print_pulse(pulse: Pulse):
         return '???'
 
 
-def print_modules(modules):
-    return '\n'.join(map(print_module, modules))
+def print_modules(modules, include_state=False):
+    return '\n'.join(map(lambda m: print_module(m, include_state), modules))
 
 
-def print_module(module):
+def print_module(module, include_state=False):
     return '{} -> {} ->{}'.format(
-        ', '.join(module.inputs).rjust(42),
-        '{}{}'.format(print_type(module), module.name).center(11),
+        print_inputs(module, include_state),
+        '{}{}{}'.format(print_type(module),
+                        module.name,
+                        '' if not include_state else print_state(module)
+                        ).center(11),
         '' if not module.outputs else ' ' + ', '.join(module.outputs)
     )
 
@@ -41,3 +44,28 @@ def print_type(module):
         return '&'
     else:
         return ''
+
+
+def print_inputs(module, include_state=False):
+    if include_state and isinstance(module, ConjunctionModule):
+        inputs = map(lambda i: '{}:{}'.format(i, pulse_as_binary(module.last_pulse_by_input[i])),
+                     module.inputs)
+    else:
+        inputs = module.inputs
+    return ', '.join(inputs).rjust(42 if not include_state else 64)
+
+
+def print_state(module):
+    if isinstance(module, FlipFlopModule):
+        return ':{}'.format(1 if module.on else 0)
+    else:
+        return ''
+
+
+def print_last_pulse_by_input(item):
+    input_name, pulse = item
+    return '{}:{}'.format(input_name, 1 if pulse == Pulse.HIGH else 0)
+
+
+def pulse_as_binary(pulse):
+    return 1 if pulse == Pulse.HIGH else 0
