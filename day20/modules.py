@@ -19,8 +19,8 @@ class FlipFlopModule(Module):
         self.on = not self.on
         return send_to_all_outputs(new_pulse, self.outputs)
 
-    def count_possible_states(self):
-        return 2
+    def count_state_toggles(self):
+        return 1
 
 
 @dataclass
@@ -39,8 +39,8 @@ class ConjunctionModule(Module):
         for module in inputs:
             self.last_pulse_by_input[module] = Pulse.LOW
 
-    def count_possible_states(self):
-        return 2 ** len(self.last_pulse_by_input)
+    def count_state_toggles(self):
+        return len(self.last_pulse_by_input)
 
 
 @dataclass

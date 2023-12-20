@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from math import prod
 
 from day20.pulse import SentPulse, Pulse, SendPulse
 
@@ -13,8 +12,8 @@ class Module(ABC):
     def set_inputs(self, inputs: list[str]):
         pass
 
-    def count_possible_states(self):
-        return 1
+    def count_state_toggles(self):
+        return 0
 
 
 @dataclass(frozen=True)
@@ -55,4 +54,7 @@ class Circuit:
                     return presses
 
     def count_possible_states(self):
-        return prod(map(lambda m: m.count_possible_states(), self.module_by_name.values()))
+        return 2 ** self.count_state_toggles()
+
+    def count_state_toggles(self):
+        return sum(map(lambda m: m.count_state_toggles(), self.module_by_name.values()))
