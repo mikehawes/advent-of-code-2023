@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from collections import deque
 from dataclasses import dataclass, replace
+from math import lcm
 
 from day20.pulse import SentPulse, Pulse, SendPulse
 
@@ -63,7 +64,7 @@ class Circuit:
         return list(map(lambda send: SentPulse(pulse.receiver, send.module, send.pulse), send_pulses))
 
     def find_presses_to_deliver(self, pulse: Pulse, module: str):
-        for presses in range(1, 2_000_000):
+        for presses in range(1, 5_000_000):
             for sent in self.press_button():
                 if sent.pulse == pulse and sent.receiver == module:
                     return presses
@@ -110,4 +111,11 @@ class Circuit:
             self.add_reachable(output, module_by_name)
 
     def by_split_find_presses_to_deliver(self, split_at: str, pulse: Pulse, target: str):
-        return 0
+        circuits = self.split_by_output_at_module(split_at)
+        presses = list(map(lambda c: c.find_presses_to_deliver(pulse, target), circuits))
+        a = presses[0]
+        b = presses[1]
+        multiple = lcm(a, b)
+        for other in presses[2:]:
+            multiple = lcm(multiple, other)
+        return multiple
