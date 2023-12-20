@@ -1,8 +1,20 @@
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from math import prod
 
-from day20.modules import FlipFlopModule, ConjunctionModule
-from day20.pulse import Module, SentPulse, Pulse
+from day20.pulse import SentPulse, Pulse, SendPulse
+
+
+class Module(ABC):
+    @abstractmethod
+    def receive(self, pulse: Pulse, from_module: str) -> list[SendPulse]:
+        pass
+
+    def set_inputs(self, inputs: list[str]):
+        pass
+
+    def count_possible_states(self):
+        return 1
 
 
 @dataclass(frozen=True)
@@ -43,15 +55,4 @@ class Circuit:
                     return presses
 
     def count_possible_states(self):
-        flip_flops = sum(1 for _ in filter(is_flip_flop, self.module_by_name.values()))
-        conjunction_inputs_product = prod(map(lambda c: len(c.last_pulse_by_input),
-                                              filter(is_conjunction, self.module_by_name.values())))
-        return flip_flops * 2 * conjunction_inputs_product
-
-
-def is_flip_flop(module):
-    return isinstance(module, FlipFlopModule)
-
-
-def is_conjunction(module):
-    return isinstance(module, ConjunctionModule)
+        return prod(map(lambda m: m.count_possible_states(), self.module_by_name.values()))
