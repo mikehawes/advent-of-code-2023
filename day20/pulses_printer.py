@@ -29,12 +29,17 @@ def print_modules(modules, include_state=False):
 def print_module(module, include_state=False):
     return '{} -> {} ->{}'.format(
         print_inputs(module, include_state),
-        '{}{}{}'.format(print_type(module),
-                        module.name,
-                        '' if not include_state else print_state(module)
-                        ).center(11),
+        print_module_label(module, include_state),
         '' if not module.outputs else ' ' + ', '.join(module.outputs)
     )
+
+
+def print_module_label(module, include_state=False):
+    return '{}{}{}'.format(
+        print_type(module),
+        module.name,
+        '' if not include_state else print_state(module)
+    ).center(11)
 
 
 def print_type(module):
