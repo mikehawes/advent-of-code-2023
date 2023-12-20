@@ -4,7 +4,7 @@ from approvaltests import verify
 
 from day20.circuit import Pulse
 from day20.input import read_module_circuit_from_file
-from day20.pulses_printer import print_sent, print_button_presses
+from day20.pulses_printer import print_sent, print_button_presses, print_modules
 
 
 class TestPulses(unittest.TestCase):
@@ -50,3 +50,7 @@ class TestPulses(unittest.TestCase):
     def test_should_count_state_toggles_for_input(self):
         circuit = read_module_circuit_from_file('input')
         self.assertEqual(91, circuit.count_state_toggles())
+
+    def test_should_sort_input_rx_first(self):
+        circuit = read_module_circuit_from_file('input')
+        verify(print_modules(circuit.sort_modules_with_root('rx')))
