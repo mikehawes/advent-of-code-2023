@@ -60,3 +60,9 @@ class Circuit:
         receiver = self.module_by_name[pulse.receiver]
         send_pulses = receiver.receive(pulse.pulse, pulse.sender)
         return list(map(lambda send: SentPulse(pulse.receiver, send.module, send.pulse), send_pulses))
+
+    def find_presses_to_deliver(self, pulse: Pulse, module: str):
+        for presses in range(1, 3_000_000):
+            for sent in self.press_button():
+                if sent.pulse == pulse and sent.receiver == module:
+                    return presses
