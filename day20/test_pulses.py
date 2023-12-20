@@ -19,3 +19,15 @@ class TestPulses(unittest.TestCase):
             circuit.press_button(),
             circuit.press_button(),
             circuit.press_button()]))
+
+    def test_should_find_pulse_product_for_example_1(self):
+        circuit = read_module_circuit_from_file('example1')
+        self.assertEqual(32_000_000, circuit.find_pulse_product_for_presses(1000))
+
+    def test_should_find_pulse_product_for_example_2(self):
+        circuit = read_module_circuit_from_file('example2')
+        self.assertEqual(11_687_500, circuit.find_pulse_product_for_presses(1000))
+
+    def test_should_find_pulse_product_for_input(self):
+        circuit = read_module_circuit_from_file('input')
+        self.assertEqual(731_517_480, circuit.find_pulse_product_for_presses(1000))

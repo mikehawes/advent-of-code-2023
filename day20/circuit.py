@@ -45,6 +45,17 @@ class Circuit:
             pulses = next_pulses
         return sent
 
+    def find_pulse_product_for_presses(self, presses):
+        total_low = 0
+        total_high = 0
+        for i in range(0, presses):
+            for sent in self.press_button():
+                if sent.pulse == Pulse.LOW:
+                    total_low += 1
+                else:
+                    total_high += 1
+        return total_low * total_high
+
     def next_sent_pulses(self, pulse: SentPulse):
         receiver = self.module_by_name[pulse.receiver]
         send_pulses = receiver.receive(pulse.pulse, pulse.sender)
