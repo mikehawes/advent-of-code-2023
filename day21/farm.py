@@ -27,7 +27,10 @@ class FarmMap:
     width: int
     height: int
 
-    def count_tiles_reachable(self, steps, wrap=False):
+    def count_possible_end_tiles(self, steps, wrap=False):
+        return len(self.find_possible_end_tiles(steps, wrap))
+
+    def find_possible_end_tiles(self, steps, wrap=False):
         if wrap:
             traverse = self.wrapping_traverse
         else:
@@ -38,7 +41,7 @@ class FarmMap:
                 map(lambda location: location.traverse_adjacent(traverse),
                     locations)
             ))
-        return len(locations)
+        return locations
 
     def traverse(self, location):
         if location.x < 0 or location.x >= self.width:
