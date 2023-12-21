@@ -20,6 +20,10 @@ class TestFarm(unittest.TestCase):
         farm = read_farm_map_from_file('example')
         verify(print_reachable_counts(farm, [6, 10, 50, 100], wrap=True))
 
-    def test_should_print_all_end_steps_for_example_with_wrapping(self):
+    def test_should_print_some_end_steps_for_example_with_wrapping(self):
         farm = read_farm_map_from_file('example')
         verify(print_all_end_steps(farm, [6, 10, 50], wrap=True))
+
+    def test_should_print_some_end_steps_for_input_with_wrapping(self):
+        farm = read_farm_map_from_file('input')
+        verify(print_all_end_steps(farm, [50, 100], wrap=True))
