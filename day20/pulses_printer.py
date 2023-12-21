@@ -40,6 +40,13 @@ def print_module(module, include_state=False):
     )
 
 
+def print_module_label_with_inputs(module):
+    if isinstance(module, ConjunctionModule):
+        return '{} -> {}'.format(print_inputs(module, True), print_module_label(module))
+    else:
+        return print_module_label(module, True)
+
+
 def print_module_label(module, include_state=False):
     return '{}{}{}'.format(
         print_type(module),

@@ -43,6 +43,10 @@ class TestPulses(unittest.TestCase):
         circuit = read_module_circuit_from_file('input')
         self.assertEqual(0, circuit.find_presses_to_deliver(Pulse.LOW, 'rx'))
 
+    def test_should_count_possible_states_for_example2(self):
+        circuit = read_module_circuit_from_file('example2')
+        self.assertEqual(32, circuit.count_possible_states())
+
     def test_should_count_possible_states_for_input(self):
         circuit = read_module_circuit_from_file('input')
         self.assertEqual(2_475_880_078_570_760_549_798_248_448, circuit.count_possible_states())
@@ -70,7 +74,19 @@ class TestPulses(unittest.TestCase):
         circuits = circuit.split_by_output_at_module('broadcaster')
         verify(print_circuits_by_root(circuits, 'rx'))
 
-    @unittest.skip('Also not working')
     def test_should_find_presses_by_sub_graphs(self):
         circuit = read_module_circuit_from_file('input')
-        self.assertEqual(0, circuit.by_split_find_presses_to_deliver('broadcaster', Pulse.LOW, 'rx'))
+        self.assertEqual(244_178_746_156_661, circuit.by_split_find_presses_to_deliver('broadcaster', Pulse.LOW, 'rx'))
+
+    def test_should_count_possible_states_for_sub_graphs(self):
+        circuit = read_module_circuit_from_file('input')
+        circuits = circuit.split_by_output_at_module('broadcaster')
+        self.assertEqual([33_554_432, 8_388_608, 2_097_152, 4_194_304],
+                         list(map(lambda c: c.count_possible_states(), circuits)))
+
+    def test_should_find_presses_by_sub_graph(self):
+        circuit = read_module_circuit_from_file('input')
+        circuits = circuit.split_by_output_at_module('broadcaster')
+        self.assertEqual([4079, 3931, 3761, 4049], list(map(
+            lambda c: c.find_presses_to_deliver(Pulse.LOW, 'rx', max_presses=1_000_000),
+            circuits)))

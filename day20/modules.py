@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from day20.circuit import Module
 from day20.pulse import Pulse, SendPulse
@@ -24,9 +24,10 @@ class FlipFlopModule(Module):
 
 @dataclass
 class ConjunctionModule(Module):
-    last_pulse_by_input: dict[str, Pulse] = field(default_factory=dict)
+    last_pulse_by_input: dict[str, Pulse] = None
 
     def __post_init__(self):
+        self.last_pulse_by_input = {}
         for module in self.inputs:
             self.last_pulse_by_input[module] = Pulse.LOW
 
@@ -38,7 +39,7 @@ class ConjunctionModule(Module):
             return send_to_all_outputs(Pulse.HIGH, self.outputs)
 
     def count_state_toggles(self):
-        return len(self.last_pulse_by_input)
+        return len(self.inputs)
 
 
 @dataclass

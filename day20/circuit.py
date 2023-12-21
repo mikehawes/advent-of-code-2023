@@ -63,8 +63,8 @@ class Circuit:
         send_pulses = receiver.receive(pulse.pulse, pulse.sender)
         return list(map(lambda send: SentPulse(pulse.receiver, send.module, send.pulse), send_pulses))
 
-    def find_presses_to_deliver(self, pulse: Pulse, module: str):
-        for presses in range(1, 5_000_000):
+    def find_presses_to_deliver(self, pulse: Pulse, module: str, max_presses=10_000):
+        for presses in range(1, max_presses):
             for sent in self.press_button():
                 if sent.pulse == pulse and sent.receiver == module:
                     return presses
@@ -110,9 +110,10 @@ class Circuit:
             output = self.module_by_name[output_name]
             self.add_reachable(output, module_by_name)
 
-    def by_split_find_presses_to_deliver(self, split_at: str, pulse: Pulse, target: str):
+    def by_split_find_presses_to_deliver(self, split_at: str, pulse: Pulse, target: str, max_subgraph_presses=10_000):
         circuits = self.split_by_output_at_module(split_at)
-        presses = list(map(lambda c: c.find_presses_to_deliver(pulse, target), circuits))
+        presses = list(map(lambda c: c.find_presses_to_deliver(pulse, target, max_presses=max_subgraph_presses),
+                           circuits))
         a = presses[0]
         b = presses[1]
         multiple = lcm(a, b)
