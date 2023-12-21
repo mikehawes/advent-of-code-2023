@@ -1,0 +1,6 @@
+Farm is 11x11 (121 tiles), repeating infinitely
+Steps      Potential end tiles
+6          16
+10         50
+50         1594
+100        6536

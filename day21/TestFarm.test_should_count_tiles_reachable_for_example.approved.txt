@@ -1,0 +1,5 @@
+Farm is 11x11 (121 tiles), fenced
+Steps      Potential end tiles
+6          16
+10         33
+50         42
