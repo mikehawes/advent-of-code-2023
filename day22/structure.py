@@ -1,4 +1,5 @@
 from dataclasses import replace, dataclass
+from itertools import chain
 
 from day22.brick import SandBrick, Location
 from day22.snapshot import BricksSnapshot
@@ -40,3 +41,30 @@ class SupportStructure:
                 if len(self.below_by_brick_loc[above.location]) == 1:
                     return False
         return True
+
+    def total_would_fall_for_each_brick(self):
+        total = 0
+        for brick in self.snapshot.bricks:
+            would_fall = self.which_bricks_would_fall(brick)
+            total += len(would_fall)
+        return total
+
+    def which_bricks_would_fall(self, brick):
+        result = {}
+        self.add_bricks_would_fall([brick], result)
+        return result
+
+    def add_bricks_would_fall(self, remove_bricks, result):
+        locations = set(map(lambda brick: brick.location, remove_bricks))
+        above_bricks = chain.from_iterable(
+            map(lambda brick: self.above_by_brick_loc[brick.location],
+                filter(lambda brick: brick.location in self.above_by_brick_loc,
+                       remove_bricks)))
+        supported_bricks = list(filter(lambda brick: all(map(lambda below: below.location in locations,
+                                                             self.below_by_brick_loc[brick.location])),
+                                       above_bricks))
+        if not supported_bricks:
+            return
+        for supported in supported_bricks:
+            result[supported.location] = True
+        self.add_bricks_would_fall(supported_bricks, result)
