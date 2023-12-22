@@ -1,7 +1,6 @@
 from dataclasses import dataclass, replace
 
 from day22.brick import SandBrick, Size, Location
-from day22.structure import SupportStructure
 
 
 @dataclass(frozen=True)
@@ -37,14 +36,6 @@ class BricksSnapshot:
                 for location in new_brick.locations_covered():
                     bricks_by_location[location] = new_brick
         return BricksSnapshot.from_list(bricks)
-
-    def count_disintegratable_bricks(self):
-        structure = SupportStructure.from_snapshot(self)
-        disintegratable_count = 0
-        for brick in self.bricks:
-            if structure.is_disintegratable(brick):
-                disintegratable_count += 1
-        return disintegratable_count
 
     def overlapping_bricks(self, brick):
         return overlapping_bricks(brick, self.bricks_by_location)

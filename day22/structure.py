@@ -1,15 +1,17 @@
 from dataclasses import replace, dataclass
 
 from day22.brick import SandBrick, Location
+from day22.snapshot import BricksSnapshot
 
 
 @dataclass(frozen=True)
 class SupportStructure:
+    snapshot: BricksSnapshot
     above_by_brick_loc: dict[Location, list[SandBrick]]
     below_by_brick_loc: dict[Location, list[SandBrick]]
 
     @staticmethod
-    def from_snapshot(snapshot):
+    def from_snapshot(snapshot: BricksSnapshot):
         above_by_brick_loc = {}
         below_by_brick_loc = {}
         for brick in snapshot.bricks:
@@ -23,7 +25,14 @@ class SupportStructure:
                     above_by_brick_loc[loc].append(brick)
                 else:
                     above_by_brick_loc[loc] = [brick]
-        return SupportStructure(above_by_brick_loc, below_by_brick_loc)
+        return SupportStructure(snapshot, above_by_brick_loc, below_by_brick_loc)
+
+    def count_disintegratable_bricks(self):
+        disintegratable_count = 0
+        for brick in self.snapshot.bricks:
+            if self.is_disintegratable(brick):
+                disintegratable_count += 1
+        return disintegratable_count
 
     def is_disintegratable(self, brick):
         if brick.location in self.above_by_brick_loc:
