@@ -32,3 +32,8 @@ class TestSand(unittest.TestCase):
         snapshot = BricksSnapshot.from_list(load_bricks_from_file('example')).settle()
         structure = SupportStructure.from_snapshot(snapshot)
         self.assertEqual(7, structure.total_would_fall_for_each_brick())
+
+    def test_should_total_would_fall_for_each_brick_for_input(self):
+        snapshot = BricksSnapshot.from_list(load_bricks_from_file('input')).settle()
+        structure = SupportStructure.from_snapshot(snapshot)
+        self.assertEqual(66923, structure.total_would_fall_for_each_brick())  # Too low!

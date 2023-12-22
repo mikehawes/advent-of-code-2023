@@ -51,20 +51,21 @@ class SupportStructure:
 
     def which_bricks_would_fall(self, brick):
         result = {}
-        self.add_bricks_would_fall([brick], result)
+        bricks = [brick]
+        while bricks:
+            bricks = self.which_of_above_would_fall(bricks)
+            for brick in bricks:
+                result[brick.location] = True
         return result
 
-    def add_bricks_would_fall(self, remove_bricks, result):
+    def which_of_above_would_fall(self, remove_bricks):
         locations = set(map(lambda brick: brick.location, remove_bricks))
-        above_bricks = chain.from_iterable(
+        return list(filter(lambda brick: all(map(lambda below: below.location in locations,
+                                                 self.below_by_brick_loc[brick.location])),
+                           self.above_bricks(remove_bricks)))
+
+    def above_bricks(self, bricks):
+        return chain.from_iterable(
             map(lambda brick: self.above_by_brick_loc[brick.location],
                 filter(lambda brick: brick.location in self.above_by_brick_loc,
-                       remove_bricks)))
-        supported_bricks = list(filter(lambda brick: all(map(lambda below: below.location in locations,
-                                                             self.below_by_brick_loc[brick.location])),
-                                       above_bricks))
-        if not supported_bricks:
-            return
-        for supported in supported_bricks:
-            result[supported.location] = True
-        self.add_bricks_would_fall(supported_bricks, result)
+                       bricks)))
