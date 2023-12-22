@@ -32,7 +32,8 @@ def print_bricks_snapshot_dimension(snapshot: BricksSnapshot, desc, dimension, o
                 loc_list[other_dimension] = other
                 loc = Location.from_list(loc_list)
                 if loc in snapshot.bricks_by_location:
-                    labels[snapshot.bricks_by_location[loc].label] = True
+                    brick = snapshot.bricks_by_location[loc]
+                    labels[brick.label()] = True
             num_bricks = len(labels)
             if num_bricks > 1:
                 out.write('?')

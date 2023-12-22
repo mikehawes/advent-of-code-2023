@@ -37,7 +37,7 @@ class Size:
 class SandBrick:
     location: Location
     size: Size
-    label: str
+    index: int
 
     def max_location(self):
         size = self.size.as_list()
@@ -63,3 +63,7 @@ class SandBrick:
             return self.location.z + self.size.z
         else:
             return self.location.z
+
+    def label(self):
+        letter_index = self.index % 26
+        return chr(ord('A') + letter_index)

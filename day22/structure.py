@@ -36,11 +36,7 @@ class SupportStructure:
         return disintegratable_count
 
     def is_disintegratable(self, brick):
-        if brick.location in self.above_by_brick_loc:
-            for above in self.above_by_brick_loc[brick.location]:
-                if len(self.below_by_brick_loc[above.location]) == 1:
-                    return False
-        return True
+        return not self.which_of_above_would_fall([brick])
 
     def total_would_fall_for_each_brick(self):
         total = 0
@@ -65,7 +61,7 @@ class SupportStructure:
                            self.above_bricks(remove_bricks)))
 
     def above_bricks(self, bricks):
-        return chain.from_iterable(map(self.above_brick, bricks))
+        return set(chain.from_iterable(map(self.above_brick, bricks)))
 
     def above_brick(self, brick):
         if brick.location in self.above_by_brick_loc:
