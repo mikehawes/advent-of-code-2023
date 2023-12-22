@@ -19,16 +19,20 @@ def print_bricks_snapshot_dimension(snapshot: BricksSnapshot, desc, dimension, o
     print(''.join(map(str, range(0, size))), file=out)
     for z in range(snapshot.size.z - 1, 0, -1):
         for value in range(0, size):
-            other_filled = 0
+            labels = {}
             for other in range(0, other_size):
                 loc_list = [0, 0, z]
                 loc_list[dimension] = value
                 loc_list[other_dimension] = other
                 loc = Location.from_list(loc_list)
                 if loc in snapshot.bricks_by_location:
-                    other_filled += 1
-            if other_filled > 0:
-                out.write('#')
+                    labels[snapshot.bricks_by_location[loc].label] = True
+            num_bricks = len(labels)
+            if num_bricks > 1:
+                out.write('?')
+            elif num_bricks == 1:
+                label = next(iter(labels.keys()))
+                out.write(label)
             else:
                 out.write('.')
         out.write(' {}'.format(z))
