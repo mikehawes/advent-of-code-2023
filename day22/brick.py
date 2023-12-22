@@ -28,12 +28,27 @@ class Location:
 
 @dataclass(frozen=True)
 class Size:
-    x: int
-    y: int
-    z: int
+    x: int = 1
+    y: int = 1
+    z: int = 1
 
     def as_list(self):
         return [self.x, self.y, self.z]
+
+    @staticmethod
+    def of_brick(x, y, z):
+        size = Size(x, y, z)
+        num_greater_than_1 = 0
+        for value in size.as_list():
+            if value > 1:
+                num_greater_than_1 += 1
+        if num_greater_than_1 > 1:
+            raise Exception('expected brick to have length in only one dimension')
+        return size
+
+    @staticmethod
+    def of_snapshot(x, y, z):
+        return Size(x, y, z)
 
 
 @dataclass(frozen=True)
@@ -48,7 +63,7 @@ class SandBrick:
         max_list = []
         for i in range(0, 3):
             if size[i] > 0:
-                max_list.append(location[i] + size[i])
+                max_list.append(location[i] + size[i] - 1)
             else:
                 max_list.append(location[i])
         return Location.from_list(max_list)
@@ -68,8 +83,12 @@ class SandBrick:
             return self.location.z
 
     def label(self):
-        letter_index = self.index % 26
-        return chr(ord('A') + letter_index)
+        return label_for_index(self.index)
 
     def plus_location(self, x=0, y=0, z=0):
         return replace(self, location=self.location.plus(x, y, z))
+
+
+def label_for_index(index):
+    letter_index = index % 26
+    return chr(ord('A') + letter_index)

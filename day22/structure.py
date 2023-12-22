@@ -45,6 +45,17 @@ class SupportStructure:
             total += len(would_fall)
         return total
 
+    def max_would_fall_for_brick(self):
+        max_fall = 0
+        max_brick = None
+        for brick in self.snapshot.bricks:
+            would_fall = self.which_bricks_would_fall(brick)
+            num_fall = len(would_fall)
+            if num_fall > max_fall:
+                max_fall = num_fall
+                max_brick = brick
+        return max_fall, max_brick
+
     def which_bricks_would_fall(self, brick):
         result = {}
         bricks = [brick]

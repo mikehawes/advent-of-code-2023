@@ -50,7 +50,7 @@ def find_snapshot_size(bricks: list[SandBrick]) -> Size:
         max_x = max(loc.x, max_x)
         max_y = max(loc.y, max_y)
         max_z = max(loc.z, max_z)
-    return Size(max_x, max_y, max_z)
+    return Size.of_snapshot(max_x + 1, max_y + 1, max_z + 1)
 
 
 def index_brick_locations(bricks: list[SandBrick]) -> dict[Location, SandBrick]:
