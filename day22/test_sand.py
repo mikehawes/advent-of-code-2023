@@ -23,4 +23,4 @@ class TestSand(unittest.TestCase):
 
     def test_should_count_disintegratable_bricks_for_input(self):
         snapshot = BricksSnapshot.from_list(load_bricks_from_file('input')).settle()
-        self.assertEqual(0, snapshot.count_disintegratable_bricks())
+        self.assertEqual(375, snapshot.count_disintegratable_bricks())
