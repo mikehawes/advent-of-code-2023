@@ -18,6 +18,10 @@ class TestSand(unittest.TestCase):
         snapshot = BricksSnapshot.from_list(load_bricks_from_file('example'))
         verify(print_bricks_snapshot(snapshot.settle()))
 
+    def test_should_settle_snapshot_for_input(self):
+        snapshot = BricksSnapshot.from_list(load_bricks_from_file('input'))
+        verify(print_bricks_snapshot(snapshot.settle()))
+
     def test_should_count_disintegratable_bricks_for_example(self):
         snapshot = BricksSnapshot.from_list(load_bricks_from_file('example')).settle()
         structure = SupportStructure.from_snapshot(snapshot)

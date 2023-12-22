@@ -6,12 +6,18 @@ from day22.snapshot import BricksSnapshot
 
 def print_bricks_snapshot(snapshot: BricksSnapshot):
     out = io.StringIO()
-    print_bricks_snapshot_dimension(snapshot, 'x', 0, 1, out)
-    print_bricks_snapshot_dimension(snapshot, 'y', 1, 0, out)
+    x_view = print_bricks_snapshot_dimension(snapshot, 'x', 0, 1).splitlines()
+    y_view = print_bricks_snapshot_dimension(snapshot, 'y', 1, 0).splitlines()
+    x_width = 0
+    for x_line in x_view:
+        x_width = max(x_width, len(x_line))
+    for i, x_line in enumerate(x_view):
+        print(x_line.ljust(x_width), '  ', y_view[i], file=out)
     return out.getvalue()
 
 
-def print_bricks_snapshot_dimension(snapshot: BricksSnapshot, desc, dimension, other_dimension, out):
+def print_bricks_snapshot_dimension(snapshot: BricksSnapshot, desc, dimension, other_dimension):
+    out = io.StringIO()
     size_list = snapshot.size.as_list()
     size = size_list[dimension]
     other_size = size_list[other_dimension]
@@ -40,3 +46,4 @@ def print_bricks_snapshot_dimension(snapshot: BricksSnapshot, desc, dimension, o
             out.write(' z')
         print(file=out)
     print('-' * size, '0', file=out)
+    return out.getvalue()
