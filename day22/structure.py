@@ -1,4 +1,4 @@
-from dataclasses import replace, dataclass
+from dataclasses import dataclass
 from itertools import chain
 
 from day22.brick import SandBrick, Location
@@ -16,7 +16,7 @@ class SupportStructure:
         above_by_brick_loc = {}
         below_by_brick_loc = {}
         for brick in snapshot.bricks:
-            below = replace(brick, location=replace(brick.location, z=brick.location.z - 1))
+            below = brick.plus_location(z=-1)
             below_bricks = list(filter(lambda b: b != brick,
                                        snapshot.overlapping_bricks(below)))
             below_by_brick_loc[brick.location] = below_bricks

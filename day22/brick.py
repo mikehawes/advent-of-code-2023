@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 
 @dataclass(frozen=True)
@@ -16,11 +16,14 @@ class Location:
 
     def indexed_plus(self, i, plus):
         if i == 0:
-            return Location(self.x + plus, self.y, self.z)
+            return self.plus(x=plus)
         elif i == 1:
-            return Location(self.x, self.y + plus, self.z)
+            return self.plus(y=plus)
         elif i == 2:
-            return Location(self.x, self.y, self.z + plus)
+            return self.plus(z=plus)
+
+    def plus(self, x=0, y=0, z=0):
+        return Location(self.x + x, self.y + y, self.z + z)
 
 
 @dataclass(frozen=True)
@@ -67,3 +70,6 @@ class SandBrick:
     def label(self):
         letter_index = self.index % 26
         return chr(ord('A') + letter_index)
+
+    def plus_location(self, x=0, y=0, z=0):
+        return replace(self, location=self.location.plus(x, y, z))
