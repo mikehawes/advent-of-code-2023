@@ -57,3 +57,9 @@ class SandBrick:
             for j in range(0, size[i]):
                 locations.append(self.location.indexed_plus(i, j))
         return locations
+
+    def min_z(self):
+        if self.size.z < 0:
+            return self.location.z + self.size.z
+        else:
+            return self.location.z
