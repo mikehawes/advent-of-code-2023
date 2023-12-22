@@ -6,13 +6,9 @@ from day22.snapshot import BricksSnapshot
 
 def print_bricks_snapshot(snapshot: BricksSnapshot):
     out = io.StringIO()
-    x_view = print_bricks_snapshot_dimension(snapshot, 'x', 0, 1).splitlines()
-    y_view = print_bricks_snapshot_dimension(snapshot, 'y', 1, 0).splitlines()
-    x_width = 0
-    for x_line in x_view:
-        x_width = max(x_width, len(x_line))
-    for i, x_line in enumerate(x_view):
-        print(x_line.ljust(x_width), '  ', y_view[i], file=out)
+    x_view = print_bricks_snapshot_dimension(snapshot, 'x', 0, 1)
+    y_view = print_bricks_snapshot_dimension(snapshot, 'y', 1, 0)
+    print_adjacent([x_view, y_view], out)
     return out.getvalue()
 
 
@@ -48,3 +44,27 @@ def print_bricks_snapshot_dimension(snapshot: BricksSnapshot, desc, dimension, o
         print(file=out)
     print('-' * size, '0', file=out)
     return out.getvalue()
+
+
+def print_adjacent(printouts, out):
+    widths = []
+    printouts_lines = []
+    max_length = 0
+    for printout in printouts:
+        printout_lines = printout.splitlines()
+        printouts_lines.append(printout_lines)
+        width = 0
+        for line in printout_lines:
+            width = max(width, len(line))
+        widths.append(width)
+        max_length = max(max_length, len(printout_lines))
+    for i in range(0, max_length):
+        parts = []
+        for j in range(0, len(printouts)):
+            printout_lines = printouts_lines[j]
+            if i < len(printout_lines):
+                line = printout_lines[i]
+            else:
+                line = ''
+            parts.append(line.ljust(widths[j]))
+        print('    '.join(parts).rstrip(), file=out)
