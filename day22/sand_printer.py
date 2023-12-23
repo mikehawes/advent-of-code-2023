@@ -50,7 +50,7 @@ def print_bricks_layers(snapshot: BricksSnapshot):
                 out.write('  ')
             printed = {}
             for brick in y_bricks:
-                if brick.location in printed:
+                if brick.location in printed or brick.location.y != y:
                     continue
                 out.write(' {}'.format(print_brick(brick, structure)))
                 printed[brick.location] = True
