@@ -1,0 +1,142 @@
+Hike with 4922 steps
+ *
+ * *** *** *****   *** WWWWWWW   WWW     *** *** *** *** HHH HHH HHHHHHH HHH ***** ***** ******* *** *** NNN   NNN NNNNN NNNNN NNNNNNNNNNNNN
+ * * * * * *   *   * * W     W   W W     * * * * * * * * H H H H H     H H H *   * *   * *     * * * * * N N   N N N   N N   N N           N
+ * * * * * * *** *** * WWW WWW WWW WWW *** *** * * * * * H HHH HHH HHHHH H H *** * * *** ***** * * *** * N NNN N N N NNN NNN N NNNNN NNNNN N
+ * * * * * * *   *   *   W W   W     W *       * * * * * H         H     H H   * * * *       * * *     * N   N N N N N     N N     N N   N N
+ *** * * * * *** * ***   W WWW W WWW W ***** *** * *** * H HHHHHHHHH HHHHH HHH * * * *** *** * * * ***** N NNN N N N NNN NNN N NNNNN NNN NNN
+     * * * *   * * *     W   W W W W W     * *   *     * H H         H       H * * *   * * * * * * *     N N   N N N   N N   N N       N
+ ***** * * *   *** * WWW W WWW W W WWW ***** * *** *** * H H   HHHHH HHHHH HHH * * * *** * * * * * ***   N NNN N N NNN NNN NNN NNNNN NNN NNN
+ *     * * *       * W W W W   W W     *     * *   * * * H H   H   H     H H   * * * *   * * * * *   *   N   N N N   N     N       N N   N N
+ * *** * *** ***** * W W W WWW W W>*>* ***** * * *** *** H HHH H HHH   HHH H *** *** * *** *** * * *** NNN NNN N N   N NNNNN NNN NNN NNN N N
+ * * * *     *   * v W W W   W W   v *     * * * *       H   H H H     H   H *       * *       * * *   N   N   N N   N N     N N N     N N N
+ *** *** *** * *** *>W W W   W W *** ******* * * * *>*>H H HHH H HHH HHH HHH * ***** * ***** *** * *   NNN N NNN NNN N N NNN N N NNN NNN N N
+         * * * *   v   W W   W W *           * * * * v H H H   H   H H   H   * *   * *     * *   * *     N N N     N N N N N N N   N N   N N
+   ***** * *** * ***   W W WWW W ***   ***   *** *** * H H HHH HHH H H HHH   *** *** * *** * *** * *>*>NNN N N NNNNN N N N N N N NNN NNNNN N
+   *   * *     * *     W W W   W   *   * *           * H H   H   H H H H         *   * * * *   * *   v     N N N     N N N N N N N         N
+ *** *** ***** * ***** W W WWWWW   *** * ***** ******* HHH   HHH H H H H H>*>* *** *** * * * *** *   * NNNNN N N NNN N N N N N N N NNNNNNNNN
+ *   *       * *     * W W           * *     * *               H H H H H H v * *   *   * * * *   *   * N     N N N N N N N N N N N N
+ *** ********* ***** * W W *********** *   *** *******   HHHHHHH H H H HHH * * *** * *** *** *** * *** N NNN N N N N N N N N N N N N NNN NNN
+   *               * * W W *           *   *         *   H       H H H     * *   * * *         * * *   N N N N N N N N N N N N N N N N N N N
+   *************** * * W W *** ******* *** * *** *** *** HHH HHH H HHH   *** ***** *** *** ***** * *** N N N N N N N N N N N N N N NNN N N N
+                 * * * W W   * *     *   * * * * * *   *   H H H H       *             * * *     *   * N N N N N N N N N N N N N N     N N N
+ ***************** *** WWW   * * ***** *** *** * * * ***   HHH H H ******* *** *** ***** * * ***** *** NNN NNN N N NNN N N NNN NNN NNN NNN N
+ *                           * * *     *       * * * *         H H *       * * * * *     * * *     *           N N     N N         N N     N
+ *****************   VVV     *** ***** * ******* * *** *** HHHHH H *** *** * *** * * ***** *** ***** ***   *** N NNNNN NNN   NNN NNN N NNN N
+                 *   V V             * * *       *     * * H     H   * * * *     * * *         *     * *   * * N     N       N N N   N N N N
+ ******* *** *** * VVV VVV VVV ***** *** *****   ***** * * HHHHH HHH *** * * ***** * * PPPPP *** *** * *** * * NNNNNNN NNN NNN N N   NNN NNN
+ *     * * * * * * V     V V V *   *         *       * * *     H   H     * * *     * * P   P *   * * *   * * *         N N N   N N
+ * *** *** *** *** V VVVVV V V *** *   ******* ******* * ***   HHHHH   *** * * ***** * P PPP ***** ***   *** ***   NNN N N NNN N NNNNNNNNNNN
+ * * *             V V     V V   * *   *       *       *   *           *   * * *     * P P                     *   N N N N   N N           N
+ *** * *** *** VVV V VVV VVV VVV * ***** ***** *** *** * *** FFFFFFFFF ***** * * ***** P P PPP PPPPPPP ********* NNN N N N NNN NNN NNNNNNN N
+     * * * * * V V V   V V     V *       *   *   * * * * *   F       F       * * *     P P P P P     P *         N   N N N N     N N     N N
+ ***** * * * * V V VVV V V VVVVV *** *** * ***   *** *** * FFF FFFFFFF   FFF *** *** PPP P P P PPP PPP * ******* NNN NNN NNN     NNN NNN N N
+ *     * * * v V V   V V V V       * * * * *             * F   F         F F       * P   P P P   P P   * *     *   N                 N N N N
+ ******* *** *>V VVV V V V VVV VVV *** *** *   JJJ   ***** FFF F FFF FFFFF F ******* PPP P P PPPPP PPP *** *** *** N NNNNNNNNNNNNNNN N N NNN
+             v     V V V V   V V V         *   J J   v       F F F F F     F *         P P P         P     * *   * N N             N N N
+ *********   ***** VVV VVV VVV V VVVVVVV *** JJJ J J>*>F FFF F F F F FFFFF F * *** PPP P P PPPPPPP PPP PPP * *** * N N NNNNNNNNNNNNN N NNNNN
+ *       *       *         V   V       V *   J   J J v F F F F F F F     F F * * * P P P P       P P   P P v   * * N N N             N     N
+ ******* * ***** ***** VVVVV   VVVVVVV V *** JJJ JJJ * F F F F F F FFF   F F *** * P P P PPP PPP P PPP P P>*>L *** NNN NNNNNNNNNNNNNNN NNN N
+       * * *   *     * V             V V   v   J     * F F F F F F   F   F F     v P P P   P P P P   P P   v L                         N N N
+ ***   * * *** * ***** V VVVVV VVV VVV V V>*>JJJ ***** FFF F F FFF   FFF F F FFF>*>P PPP   P P P P PPP P *** L LLL LLL LLL NNNNNNNNN NNN N N
+ * *   * *   * * *     V V   V V V V   V V v     *         F F         F F F F   v         P P P P P   P *   L L L L L L L v       N N   N N
+ * *** * *   * * ***** V V   V V VVV   VVV ***** *** ***   FFF ******* F F F FFF * *** *** P P P P P PPP *   L L L L L L L>5   III NNN   NNN
+ *   * * *   * *     * V V   V V               *   * * *       *     * F F F   F * * * * * P P P P P P   *   L L L L L L   v   I I
+ *** * * *** * ******* V V VVV V   ***   *** ***   *** ********* ***** FFF FFFFF *** *** * P P P P P P   *** LLL L L L L   IIIII I HHH HHH
+   * * *   * *         V V V   V   * *   * * *                   *                       * P P P P P P     *     L L L L         I H H H H
+ *** * *** * * ******* V V VVV V *** * *** * * ***************** ***** ***************** * PPP PPP PPP ***** JJJ LLL LLL IIIIIIIII H HHH HHH
+ *   *   * * * *     * V V   V V *   * *   * * *               *     * *               * *             *     J J         I         H       H
+ *** ***** *** * ***** VVV VVV V *** ***   *** *** *** ******* * ***** *********** *** *** RRR   RRRRR ***** J J   JJJ   IIIIIIIII H HHHHHHH
+   *           * *         V   V   *             * * * *     * * *               * * *     R R   R   R     * J J   J J           I H H
+   ************* ***** UUU VVVVV   *** ***   *** *** *** ***** *** DDD DDD DDD   *** *** RRR RRR RRR R ***** J J JJJ JJJ IIIIIIIII H H HHH
+                     * U U           * * *   * *         *         D D D D D D         * R     R   R R *     J J J     J I         H H H H
+ ********************* U U UUUUU *** *** ***** * LLL *****   DDD   D D D D D D DDD ***** RRRRR R   R R ***   J J JJJ JJJ IIIIIIIII H HHH HHH
+ *                     U U U   U * *           * L L *       D D   D D D D D D D D *         R R   R R   v   J J   J J           v H       H
+ * ***** ************* U U UUU U * ************* L L ******* D D   D D D D D D D D ***     RRR R RRR RRR>*>J J J JJJ JJJ JJJJJ J>4 H HHHHHHH
+ * *   * *           * U U   U U v               L L       * D D   D D D D D D D D   v     R   R R       v J J J J     J J   J J v H H
+ *** *** * ***** *** * U U UUU U>*>LLL LLL   LLLLL LLL ***** D D   D D D D D D D DDD>*>R RRR   R R ******* JJJ JJJ JJJJJ JJJ JJJ H H H HHH
+     *   * *   * * * * U U U     v   L L L   L       L *     D D   D D D D D D D     v R R     R R *               J       J     H H H H H
+ *** ***** *** *** *** U UUU   ***   LLL LLL L LLLLLLL ***** D D DDD D D D D D DDD *** RRR *** RRR ***** ***   JJJJJ JJJ JJJ HHHHH H HHH HHH
+ * *         *         U       *           L L L           * D D D   D D D D D   D *       * *         * * *   J     J J J   H     H       H
+ * * *** *** *** UUUUU UUUUUUU ******* *** LLL LLL   LLL *** D D DDD D D D D D DDD ********* * ***     *** *** JJJ JJJ JJJ   HHHHHHH HHH HHH
+ * * * * * *   * U   U       U       * * *       L   L L v   D D   D D D D D D D             * * *           *   J J                 H H H
+ * *** *** ***** U UUU UUU UUU ******* * ******* LLL L L>*>DDD D DDD D D D D D DDD   ******* * * ************* JJJ J HHHHHHHHHHHHHHHHH HHH
+ *               U U   U U U   *       *       *   L L   v     D D   D D D D D   D   *     * * *               J   J H
+ *** ***** ***   U UUUUU UUU   *** *** *** ***** LLL LLL * *** DDD   DDD DDD D DDD *** *** *** *************   J JJJ HHHHHHHHHHHHHHHHHHHHHHH
+   * *   * * v   U               * * *   * *     L     L * * *               D D   *   * *                 *   J J                         H
+   * *   * * *>UUU *********** *** * ***** * *** LLL LLL * * ********* DDDDDDD D   ***** * ******* ******* *** J J HHH   HHH HHHHHHHHHHHHHHH
+   * *   * * v     *         * *   *       * * *   L L   * *         * D       D         * *     * *     *   * J J H H   H H H
+ *** *** *** *** *** ********* ***** ******* * *** L L   * * ***** *** DDDDDDD DDD ******* * ***** ***** ***** JJJ H HHHHH HHH HHH HHH   HHH
+ *     *       * *   *               *       *   * L L   * * *   * *         D   D *       * *         *           H           H H H H   H H
+ * ***** ***** *** *** TTT TTT TTT   ********* *** L L   *** *** ***     *** DDDDD ********* ***   *** *********   HHHHH HHHHH H HHH H HHH H
+ * *     *   *     *   T T T T T T             *   L L         *         * *                   *   * *         *       H H   H H     H H   H
+ *** *** *** *******   T T T T T TTT ***********   LLL NNN NNN *** ***   * *   ******* ********* *** * ********* HHH   HHH   HHH HHHHH H HHH
+     * *   *           T T T T T   T *                 N N N N   * * *   * *   *     * *         *   * *         H H             H     H H
+ ***** ***** ********* T TTT T TTT T *** *** ***   NNN N N N N   *** ***** *** ***** * ********* *** * ***** HHHHH H HHH   HHH HHH HHHHH H
+ *           *       * T     T   T T   * * * * *   N N N N N N               *     * *         *   * *     * H     H H H   H H H   H     H
+ ******* *** * ******* TTTTT TTT T T   *** *** *** N N N N N NNN ***** ***** * ***** ***********   * ******* H HHHHH H H HHH H HHHHH HHH HHH
+       * * * * *           T   T T T             * N N N N N   N *   * *   * * *                   *         H H     H H H   H       H H   H
+ ******* * *** ********* TTT TTT T T TTT   ******* N N N N N NNN *   ***   *** ******* ***   TTTTT ***** HHH H H HHH H H H HHH HHH   H H HHH
+ *       *             * T   T   T T T T   v       N N N N N N   v                   * * *   T   T     v H H H H H H H H H H   H H   H H v
+ ******* * ************* TTT TTT T T T TTT>*>NNN NNN N N NNN NNN>*>B BBB BBB   ******* * *** TTT T TTT>*>H H H H H H H H H HHH H HHHHH H>3
+       * * *               T   T T T T     v   N N   N N         v B B B B B   *       *   *   T T T   v   H H H H H H H H   H H         v
+   *** *** *********   TTT TTT TTT TTT   *** NNN N NNN NNN *** *** BBB BBB BBB ********* ***   T T TTT *** H H H H H H H H HHH H GGG   GGG
+   * *             *   T T   T           *   N   N N     N * * *             B           *     T T   T   * H H H H H H H H H   H G G   G
+ *** *************** TTT T TTT ***********   NNN N N NNNNN * * *** BBBBBBBBBBB BBB *******   TTT T TTT *** H H H H H H H H HHHHH G GGG G GGG
+ *                   T   T T   *               N N N N     * *   * B           B B *         T   T T   *   H H H H H H H H       G   G G G G
+ * *********** *** TTT TTT TTT ************* NNN N NNN   *** * *** BBB   BBB BBB B ********* TTT T T   *** HHH HHH HHH HHH GGGGG G GGG GGG G
+ * *         * * v T   T     T             * N   N       *   * *     B   B B B   B         *   T T T     *                 G   G G G       G
+ * *   ***   *** *>T   TTTTTTT ***   ******* NNNNN   *** *** * ***** BBB B B B BBB BBB   *** TTT T TTT *** *** GGG GGG GGG GGG GGG GGG GGG G
+ * *   * *       v             * *   *               * *   * *     *   B B B B B   B B   v   T   T   T *   * * G G G G G G   G       G G G G
+ *** *** ******* ********* ***** ***** ***   ***   *** ***** * ***** BBB B B B BBB B BBB>*>T TTT TTTTT ***** * G GGG GGG G   GGGGGGG G G G G
+     *         *         * *           * *   * *   *         * *     B   B B B   B B     v T   T             * G         G         G G G G G
+ ***** ******* * *** *** * ************* ***** * *** *** *** * *** BBB BBB BBB BBB BBB *** T TTT   *********** GGGGGGGGG G GGG GGG G G G GGG
+ *     *     * * * * * * *                     * *   * * * * *   * B   B       B     B *   T T     *                   G G G G G G G G G
+ * ***** ***** *** *** *** SSSSSSS ************* ***** *** * ***** BBB BBBBBBB BBBBB B *** T TTTTT ************* GGGGGGG GGG GGG G G G GGGGG
+ * *     *                 S     S *                       *         B       B     B B   * T     T             * G               G G G     G
+ *** *** * *** ******* SSS SSS SSS *********** ******* *** * ZZZ ZZZ B BBBBBBB BBBBB B *** TTTTTTT ******* ***** GGG GGG GGG GGG GGG GGGGGGG
+     * * * * * *     * S S   S S             * *     * * * * Z Z Z Z B B       B     B *           *     * *       G G G G G G G
+ *** * * *** *** ***** S S SSS SSS   *** ***** ***** *** *** Z Z Z Z BBB ZZZ   BBBBBBB * VVV VVVVV * *** ***   FFF G G G G GGG G   GGGGGGGGG
+ * * * *         *     S S S     S   * * *         *         Z Z Z Z     Z Z           * V V V   V * * *       F F G G G G     G   G       G
+ * *** * *** *** ***** S S SSS SSS *** ***   PPPPP *** ZZZ   Z Z Z Z ZZZ Z Z   ZZZ ZZZ * V V V VVV * * ******* F F GGG GGG GGG GGGGG GGG GGG
+ *     * * * * *     * S S   S S   *         P   P   * Z Z   Z Z Z Z Z Z Z Z   Z Z Z Z v V V V V   * *       * F F         G G       G G G
+ ***** * * *** * ***** S SSS S S   ***   PPP PPP P   * Z Z ZZZ Z Z Z Z Z Z Z ZZZ Z Z Z>*>V VVV V   *** ******* F F GGGGGGGGG GGGGGGGGG GGG
+     * * *     * *     S   S S S     v   P P   P P   v Z Z Z   Z Z Z Z Z Z Z Z   Z Z   v       V       *       F F G
+ ***** *** *** *** SSS SSS S S S SSS>*>PPP P PPP PPP>*>Z Z ZZZ Z Z Z Z Z Z Z ZZZ Z Z *** VVVVV VVV ***** ***** F F GGGGGGGGG GGGGGGGGG GGGGG
+ *         * *     S S   S S S S S   v     P P       v   Z   Z Z Z Z Z Z Z Z   Z Z Z *   V   V   V *     *   * F F         G G       G G   G
+ ***** ***** ***** S SSS S S S S SSS ***   PPP   *** *** ZZZ Z Z Z Z Z Z Z Z ZZZ ZZZ *** VVV VVVVV ******* *** F FFF FFF   G G GGGGGGG GGG G
+     * *         * S   S S S S S   S   *         * *   *   Z Z Z Z Z Z Z Z Z Z         *   V               *   F   F F F   G G G         G G
+ ***** * ********* SSS S S S S S SSS   ******* *** * ***   Z Z Z Z Z Z Z Z Z Z *** *****   VVVVVVVVV ******* FFF FFF F FFF GGG GGG GGGGGGG G
+ *     * *           S S S S S S S           * *   * *     Z Z Z Z Z Z Z Z Z Z * * *               V *       F   F   F   F       G G       G
+ *** *** ********* SSS S S S S SSS *********** *** *** *** Z Z Z Z Z Z ZZZ Z Z * * *****     VVVVVVV *** FFF FFF F   F FFF GGGGG GGG GGG GGG
+   * *           * S   S S S S     *             *     * * Z Z Z Z Z Z     Z Z * *     *     V         v F F   F F   F F   v   G     G G G
+   *** ***   *** * SSS SSS SSS   *** *** ******* ******* * ZZZ Z Z Z ZZZ ZZZ Z * ******* VVVVV VVVVVVV>*>F F FFF FFF F FFF>2   GGGGGGG GGG
+       * *   * * v   S           *   * * *     *         *     Z Z Z   Z Z   Z *         V     V       v   F F     F F     v
+ ******* ***** * *>S SSSSSSS *** ***** *** ***** ********* *** ZZZ Z ZZZ Z ZZZ *** ***   V VVV VVVVV   *** F FFFFF F FFF FFF   FFF FFF FFFFF
+ *             * v S       S * *           *     *         * *     Z Z   Z Z     * * *   V V V     V     * F     F F   F F     F F F F F   F
+ ************* *** SSSSSSS S * *********** ***   ******* *** ***   ZZZ   Z ZZZ   *** *** VVV V VVVVV *** * F FFF F F FFF F FFF F FFF F F FFF
+             *           S S *           *   *         * *     *         Z   Z         *     V V     * * * F F F F F F   F F F F     F F F
+ *** *** *** *********** S S *** ******* ***** ***   *** * ***** *** *** Z ZZZ ********* *** V V ***** *** F F FFF F FFF F F F F FFFFF F FFF
+ * * * * * *           * S S   * *     *       * *   *   * *     * * * * Z Z   *         * * V V *         F F     F   F F F F F F     F   F
+ * *** *** ******* ***** SSS   *** *** *** ***** * ***   * * *** * *** * ZZZ   *********** * V V ***** *** F FFF FFF FFF FFF F F F FFF F FFF
+ *               * *               * *   * *     * *     * * * * *     *                   * V V     * * * F   F F   F       F F F F F F F
+ *************** * ******* *** ***** ***** * ***** ******* * * * *** ***   ***************** VVV *** *** * F FFF FFF FFFFF FFF F F F FFF FFF
+               * *       * * * *           * *             * * *   * *     *                     * *     * F F     F     F F   F F F       F
+ *************** * ***** *** * ************* ***** ******* * * *   * * *** ******* *********** *** ***** * FFF FFFFF FFFFF FFFFF FFF   FFFFF
+ *               * *   *     *                   * *     * * * *   * * * *       * *         * *       * *     F     F                 F
+ ******* *** *** ***   *******   *** ************* ***** *** * *** * *** *   *** *** ********* ******* *** *** FFFFFFF   *** *** FFFFFFF FFF
+       * * * * *                 * * *                 *     *   * *     *   * *     *               *     * *           * * * * F       F F
+ ***   *** *** ***** *** *** ***** * ********* RRR ***** *** * *** * ***** *** *******   XXX   ***   *** *** *** *** ***** * * * FFFFF FFF F
+ * *               * * * * * *     *         * R R *     * * * *   * *     *             X X   * *     * *     * * * *     * * *     F F   F
+ * ***************** * * * * * ***** ********* R R ***   * * * * *** * *** ******* ***** X X *** ******* * ***** * * * ***** * ***   FFF FFF
+ *                   * * * * * *     *         R R   *   * * * * *   * * *       * *   * X X *           * *     * * * *     *   *       F
+ * *** *** ***** *** * * * * * * *** ******* RRR RRR *** * * * * *** * * *   *** *** *** X X ***** ******* ***** * * * ***** *** * ***** FFF
+ * * * * * *   * * * * * * * * * * *       * R     R   * * * * *   * * * *   * *     v   X X     * *           * * * *     *   * * *   *   F
+ *** *** * * *** * * * * * * * * * *   ***** RRR RRR *** * * * *** * * * *** * * ***>*>X X X XXX *** *********** * * * *****   * * * *** FFF
+         * * *   * * * * * * * * * *   v       R R   v   * * *   * * * *   * * * *     X X X X X     v           * * * *       * * * *   v
+ ********* * *** * *** * * * * * * ***>*>RRR RRR R R>*>* * * *** * * * *** *** * ***   X X XXX X XXX>*>* *** *** * * * * *** *** *** * *>*
+ *         *   * *     * * * * * *         R R   R R   * * *   * * * *   *     *   *   X X     X X     * * * * * * * * * * * *       * * v
+ ***** *** * *** * ***** * * * * * RRRRRRRRR RRR R RRR * * * *** * * * *** ***** *** XXX XXXXX X XXX *** * * * * * * * * * * * ******* * *
+     * * * * *   * *     * * * * * R           R R   R * * * *   * * * *   *     *   X       X X   X *   * * * * * * * * * * * *       * *
+     *** *** ***** ******* *** *** RRRRRRRRRRRRR RRRRR *** ***   *** ***   *******   XXXXXXXXX XXXXX ***** *** *** *** *** *** ********* ***
+                                                                                                                                           *

@@ -27,7 +27,7 @@ class Junction:
     exits: list[Location]
 
     @staticmethod
-    def at_tile(number: int, location: Location, tiles: list[list[str]]):
+    def at_tile(number: int, location: Location, tiles: list[list[str]], avoid_climbing=True):
         attached = []
         entrances = []
         exits = []
@@ -35,6 +35,8 @@ class Junction:
             (location.plus(x=-1), '<', '>'), (location.plus(x=1), '>', '<'),
             (location.plus(y=-1), '^', 'v'), (location.plus(y=1), 'v', '^')]:
             contents = attached_location.get_contents(tiles)
+            if contents is None:
+                continue
             if contents != '#':
                 attached.append(attached_location)
             if contents == '.':
@@ -44,6 +46,9 @@ class Junction:
                 exits.append(attached_location)
             elif contents == inward_ramp:
                 entrances.append(attached_location)
+        if not avoid_climbing:
+            entrances = attached
+            exits = attached
         return Junction(number, location, attached, entrances, exits)
 
     def exits_from(self, location):
@@ -68,23 +73,23 @@ class TrailsMap:
     junction_by_loc: dict[Location, Junction]
 
     @staticmethod
-    def from_lists(tiles: list[list[str]]):
-        trails, junctions_by_loc = find_trails_and_junctions(tiles)
+    def from_lists(tiles: list[list[str]], avoid_climbing=True):
+        trails, junctions_by_loc = find_trails_and_junctions(tiles, avoid_climbing)
         return TrailsMap(tiles, len(tiles[0]), len(tiles),
                          trails, index_trail_by_location(trails), junctions_by_loc)
 
     @staticmethod
-    def from_file(input_file):
+    def from_file(input_file, avoid_climbing=True):
         with open(input_file, 'r') as file:
-            return TrailsMap.from_lists(list(map(lambda line: list(line.strip()), file)))
+            return TrailsMap.from_lists(list(map(lambda line: list(line.strip()), file)), avoid_climbing)
 
     def all_from_junction(self, junction):
         return map(lambda loc: self.trail_by_loc[loc], junction.exits)
 
 
-def find_trails_and_junctions(tiles: list[list[str]]):
+def find_trails_and_junctions(tiles: list[list[str]], avoid_climbing=True):
     visited = {}
-    start = Junction.at_tile(0, Location(1, 0), tiles)
+    start = Junction.at_tile(0, Location(1, 0), tiles, avoid_climbing)
     visit = [(start, Location(1, 1))]
     trails = []
     junctions_by_loc = {start.location: start}
@@ -99,7 +104,7 @@ def find_trails_and_junctions(tiles: list[list[str]]):
             if location in junctions_by_loc:
                 junction = junctions_by_loc[location]
             else:
-                junction = Junction.at_tile(junction_number, location, tiles)
+                junction = Junction.at_tile(junction_number, location, tiles, avoid_climbing)
             exits = junction.exits_from(last_location)
             if len(junction.attached) > 2 or not exits:
                 if location not in junctions_by_loc:

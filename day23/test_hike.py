@@ -20,3 +20,11 @@ class TestHike(unittest.TestCase):
     def test_should_find_longest_hike_in_input(self):
         trails = TrailsMap.from_file('input')
         verify(print_hike(find_longest_hike(trails)))
+
+    def test_should_find_longest_hike_in_example_with_climbing(self):
+        trails = TrailsMap.from_file('example', avoid_climbing=False)
+        verify(print_hike(find_longest_hike(trails)))
+
+    def test_should_find_longest_hike_in_input_with_climbing(self):
+        trails = TrailsMap.from_file('input', avoid_climbing=False)
+        verify(print_hike(find_longest_hike(trails)))  # Too low!
