@@ -62,6 +62,18 @@ class Trail:
     start: Junction
     end: Junction
 
+    def locations_from(self, junction):
+        if junction.number == self.start.number:
+            return self.locations + [self.end.location]
+        else:
+            return [self.start.location] + self.locations
+
+    def other_end_from(self, junction):
+        if junction.number == self.start.number:
+            return self.end
+        else:
+            return self.start
+
 
 @dataclass(frozen=True)
 class TrailsMap:
