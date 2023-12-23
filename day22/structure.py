@@ -29,19 +29,26 @@ class SupportStructure:
         return SupportStructure(snapshot, above_by_brick, below_by_brick)
 
     def which_bricks_would_fall(self, brick):
-        result = {}
+        would_fall = []
         bricks = [brick]
         while bricks:
             bricks = self.which_of_above_would_fall(bricks)
-            for brick in bricks:
-                result[brick.location] = True
-        return result.keys()
+            would_fall.extend(bricks)
+        return would_fall
 
     def which_of_above_would_fall(self, remove_bricks):
-        locations = set(map(lambda brick: brick.location, remove_bricks))
-        return list(filter(lambda brick: all(map(lambda below: below.location in locations,
-                                                 self.below_brick_or_fail(brick))),
-                           self.above_bricks(remove_bricks)))
+        remove_indexes = set(map(lambda brick: brick.index, remove_bricks))
+        would_fall = {}
+        for remove_brick in remove_bricks:
+            for above in self.above_brick(remove_brick):
+                fall = True
+                for below in self.below_brick(above):
+                    if below.index not in remove_indexes:
+                        fall = False
+                if fall:
+                    if above.index not in would_fall:
+                        would_fall[above.index] = above
+        return would_fall.values()
 
     def above_bricks(self, bricks):
         return set(chain.from_iterable(map(self.above_brick, bricks)))
