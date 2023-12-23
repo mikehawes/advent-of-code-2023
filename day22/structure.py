@@ -28,34 +28,6 @@ class SupportStructure:
                     above_by_brick[index] = [brick]
         return SupportStructure(snapshot, above_by_brick, below_by_brick)
 
-    def count_disintegratable_bricks(self):
-        disintegratable_count = 0
-        for brick in self.snapshot.bricks:
-            if self.is_disintegratable(brick):
-                disintegratable_count += 1
-        return disintegratable_count
-
-    def is_disintegratable(self, brick):
-        return not self.which_of_above_would_fall([brick])
-
-    def total_would_fall_for_each_brick(self):
-        total = 0
-        for brick in self.snapshot.bricks:
-            would_fall = self.which_bricks_would_fall(brick)
-            total += len(would_fall)
-        return total
-
-    def max_would_fall_for_brick(self):
-        max_fall = 0
-        max_brick = None
-        for brick in self.snapshot.bricks:
-            would_fall = self.which_bricks_would_fall(brick)
-            num_fall = len(would_fall)
-            if num_fall > max_fall:
-                max_fall = num_fall
-                max_brick = brick
-        return max_fall, max_brick
-
     def which_bricks_would_fall(self, brick):
         result = {}
         bricks = [brick]
@@ -63,7 +35,7 @@ class SupportStructure:
             bricks = self.which_of_above_would_fall(bricks)
             for brick in bricks:
                 result[brick.location] = True
-        return result
+        return result.keys()
 
     def which_of_above_would_fall(self, remove_bricks):
         locations = set(map(lambda brick: brick.location, remove_bricks))
