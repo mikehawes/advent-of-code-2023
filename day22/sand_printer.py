@@ -5,12 +5,38 @@ from day22.snapshot import BricksSnapshot
 from day22.structure import SupportStructure
 
 
-def print_bricks_snapshot(snapshot: BricksSnapshot):
+def print_bricks_snapshot(snapshot: BricksSnapshot, layers=False):
     out = io.StringIO()
-    x_view = print_bricks_snapshot_dimension(snapshot, 'x', 0, 1)
-    y_view = print_bricks_snapshot_dimension(snapshot, 'y', 1, 0)
-    bricks = print_bricks_by_z_value(snapshot)
-    print_adjacent([x_view, y_view, bricks], out)
+    if layers:
+        adjacent = [
+            print_bricks_layers(snapshot)
+        ]
+    else:
+        adjacent = [
+            print_bricks_snapshot_dimension(snapshot, 'x', 0, 1),
+            print_bricks_snapshot_dimension(snapshot, 'y', 1, 0),
+            print_bricks_by_z_value(snapshot)
+        ]
+    print_adjacent(adjacent, out)
+    return out.getvalue()
+
+
+def print_bricks_layers(snapshot: BricksSnapshot):
+    out = io.StringIO()
+    for z in range(snapshot.size.z - 1, 0, -1):
+        print(str(z).rjust(3) + 'x'.center(snapshot.size.x).rstrip(), file=out)
+        for y in range(0, snapshot.size.y):
+            out.write('   ')
+            for x in range(0, snapshot.size.x):
+                location = Location(x, y, z)
+                if location not in snapshot.bricks_by_location:
+                    out.write('.')
+                else:
+                    brick = snapshot.bricks_by_location[location]
+                    out.write(brick.label())
+            if y == snapshot.size.y // 2:
+                out.write(' y')
+            print(file=out)
     return out.getvalue()
 
 
