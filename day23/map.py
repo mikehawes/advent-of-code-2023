@@ -78,7 +78,7 @@ class TrailsMap:
         with open(input_file, 'r') as file:
             return TrailsMap.from_lists(list(map(lambda line: list(line.strip()), file)))
 
-    def trails_from_junction(self, junction):
+    def all_from_junction(self, junction):
         return map(lambda loc: self.trail_by_loc[loc], junction.exits)
 
 

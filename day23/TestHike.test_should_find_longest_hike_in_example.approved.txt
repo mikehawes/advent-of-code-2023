@@ -1,23 +1,24 @@
- 0
- AAAAAAA         LLL
-       A         L L
-   AAAAA J>8>L   L L
-   v     J v L   L L
-   1>JJJ J K LLLLL LLL
-   v   J J K         L
-   BBB J J KKKKKKK LLL
-     B J J       K L
- BBBBB J J KKKKKKK LLL
- B     J J K         v
- B BBB JJJ KKK   HHH>7
- B B v       v   H   v
- BBB 2>F FFF>6>H H   I
-     v F F   v H H   I
- CCCCC FFF GGG H H III
- C         G   H H I
- CCC   CCC GGG HHH I
+Hike with 94 steps
+ *
+ *******         LLL
+       *         L L
+   ***** *>*>L   L L
+   v     * v L   L L
+   *>*** * * LLLLL LLL
+   v   * * *         L
+   BBB * * ******* LLL
+     B * *       * L
+ BBBBB * * ******* LLL
+ B     * * *         v
+ B BBB *** ***   ***>*
+ B B v       v   *   v
+ BBB 2>F FFF>*>* *   *
+     v F F   v * *   *
+ CCCCC FFF GGG * * ***
+ C         G   * * *
+ CCC   CCC GGG *** *
    C   C C   v     v
- CCC CCC C C>3>D D>4
+ CCC CCC C C>3>D D>*
  C   C   C C   D D v
- CCCCC   CCC   DDD EEE
-                     5
+ CCCCC   CCC   DDD ***
+                     *
