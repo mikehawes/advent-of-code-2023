@@ -3,6 +3,10 @@ import io
 from day23.map import Location, TrailsMap
 
 
+def print_hike(hike):
+    return print_trails_map(hike.trails)
+
+
 def print_trails_map(trails: TrailsMap):
     out = io.StringIO()
     for y in range(0, trails.height):
