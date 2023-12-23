@@ -1,23 +1,23 @@
- A
- AAAAAAA         III
-       A         I I
-   AAAAA G>G>I   I I
-   v     G v I   I I
-   A>GGG G H IIIII III
-   v   G G H         I
-   BBB G G HHHHHHH III
-     B G G       H I
- BBBBB G G HHHHHHH III
- B     G G H         v
- B BBB GGG HHH   FFF>F
- B B v       v   F   v
- BBB B>D DDD>D>F F   F
-     v D D   v F F   F
- CCCCC DDD EEE F F FFF
- C         E   F F F
- CCC   CCC EEE FFF F
+ .
+ AAAAAAA         LLL
+       A         L L
+   AAAAA J>.>L   L L
+   v     J v L   L L
+   .>JJJ J K LLLLL LLL
+   v   J J K         L
+   BBB J J KKKKKKK LLL
+     B J J       K L
+ BBBBB J J KKKKKKK LLL
+ B     J J K         v
+ B BBB JJJ KKK   HHH>.
+ B B v       v   H   v
+ BBB .>F FFF>.>H H   I
+     v F F   v H H   I
+ CCCCC FFF GGG H H III
+ C         G   H H I
+ CCC   CCC GGG HHH I
    C   C C   v     v
- CCC CCC C C>C>C C>C
- C   C   C C   C C v
- CCCCC   CCC   CCC CCC
-                     C
+ CCC CCC C C>.>D D>.
+ C   C   C C   D D v
+ CCCCC   CCC   DDD EEE
+                     .

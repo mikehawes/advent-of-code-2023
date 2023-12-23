@@ -19,9 +19,42 @@ class Location:
 
 
 @dataclass(frozen=True)
+class Junction:
+    location: Location
+    attached: list[Location]
+    entrances: list[Location]
+    exits: list[Location]
+
+    @staticmethod
+    def at_tile(location: Location, tiles: list[list[str]]):
+        attached = []
+        entrances = []
+        exits = []
+        for attached_location, outward_ramp, inward_ramp in [
+            (location.plus(x=-1), '<', '>'), (location.plus(x=1), '>', '<'),
+            (location.plus(y=-1), '^', 'v'), (location.plus(y=1), 'v', '^')]:
+            contents = attached_location.get_contents(tiles)
+            if contents != '#':
+                attached.append(attached_location)
+            if contents == '.':
+                entrances.append(attached_location)
+                exits.append(attached_location)
+            elif contents == outward_ramp:
+                exits.append(attached_location)
+            elif contents == inward_ramp:
+                entrances.append(attached_location)
+        return Junction(location, attached, entrances, exits)
+
+    def exits_from(self, location):
+        return list(filter(lambda loc: loc != location, self.exits))
+
+
+@dataclass(frozen=True)
 class Trail:
     number: int
     locations: list[Location]
+    start: Junction
+    end: Junction
 
 
 @dataclass(frozen=True)
@@ -43,41 +76,31 @@ class TrailsMap:
 
 def find_trails(tiles: list[list[str]]):
     visited = {}
-    visit = [Location(1, 0)]
+    start = Junction.at_tile(Location(1, 0), tiles)
+    visit = [(start, Location(1, 1))]
     trails = []
     trail_number = 0
     while visit:
         trail = []
-        next_on_trail = [visit.pop()]
-        while len(next_on_trail) == 1:
-            location = next_on_trail[0]
-            trail.append(location)
+        junction_before_trail, trail_start = visit.pop()
+        last_location = junction_before_trail.location
+        location = trail_start
+        while location:
             visited[location] = True
-            next_on_trail = get_next(location, tiles, visited)
-        trails.append(Trail(trail_number, trail))
-        trail_number += 1
-        if next_on_trail:
-            visit.extend(next_on_trail)
+            junction = Junction.at_tile(location, tiles)
+            exits = junction.exits_from(last_location)
+            if len(junction.attached) > 2 or not exits:
+                trails.append(Trail(trail_number, trail, junction_before_trail, junction))
+                trail_number += 1
+                visit.extend(map(lambda loc: (junction, loc),
+                                 filter(lambda loc: loc not in visited,
+                                        exits)))
+                location = None
+            else:
+                trail.append(location)
+                last_location = location
+                location = exits[0]
     return trails
-
-
-def get_next(current: Location, tiles: list[list[str]], visited: dict[Location, bool]):
-    return list(filter(lambda loc: loc is not None,
-                       map(lambda item: follow_next(current, item, tiles, visited),
-                           [(lambda loc: loc.plus(x=-1), '<'), (lambda loc: loc.plus(x=1), '>'),
-                            (lambda loc: loc.plus(y=-1), '^'), (lambda loc: loc.plus(y=1), 'v')])))
-
-
-def follow_next(current: Location, item, tiles: list[list[str]], visited: dict[Location, bool]):
-    next_in_direction, permitted_ramp = item
-    location = next_in_direction(current)
-    if location in visited:
-        return None
-    contents = location.get_contents(tiles)
-    if contents == '.' or contents == permitted_ramp:
-        return location
-    else:
-        return None
 
 
 def index_trail_by_location(trails: list[Trail]):
