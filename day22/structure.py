@@ -1,32 +1,32 @@
 from dataclasses import dataclass
 from itertools import chain
 
-from day22.brick import SandBrick, Location
+from day22.brick import SandBrick
 from day22.snapshot import BricksSnapshot
 
 
 @dataclass(frozen=True)
 class SupportStructure:
     snapshot: BricksSnapshot
-    above_by_brick_loc: dict[Location, list[SandBrick]]
-    below_by_brick_loc: dict[Location, list[SandBrick]]
+    above_by_brick: dict[int, list[SandBrick]]
+    below_by_brick: dict[int, list[SandBrick]]
 
     @staticmethod
     def from_snapshot(snapshot: BricksSnapshot):
-        above_by_brick_loc = {}
-        below_by_brick_loc = {}
+        above_by_brick = {}
+        below_by_brick = {}
         for brick in snapshot.bricks:
             below = brick.plus_location(z=-1)
             below_bricks = list(filter(lambda b: b != brick,
                                        snapshot.overlapping_bricks(below)))
-            below_by_brick_loc[brick.location] = below_bricks
+            below_by_brick[brick.index] = below_bricks
             for below_brick in below_bricks:
-                loc = below_brick.location
-                if loc in above_by_brick_loc:
-                    above_by_brick_loc[loc].append(brick)
+                index = below_brick.index
+                if index in above_by_brick:
+                    above_by_brick[index].append(brick)
                 else:
-                    above_by_brick_loc[loc] = [brick]
-        return SupportStructure(snapshot, above_by_brick_loc, below_by_brick_loc)
+                    above_by_brick[index] = [brick]
+        return SupportStructure(snapshot, above_by_brick, below_by_brick)
 
     def count_disintegratable_bricks(self):
         disintegratable_count = 0
@@ -75,16 +75,16 @@ class SupportStructure:
         return set(chain.from_iterable(map(self.above_brick, bricks)))
 
     def above_brick(self, brick):
-        if brick.location in self.above_by_brick_loc:
-            return self.above_by_brick_loc[brick.location]
+        if brick.index in self.above_by_brick:
+            return self.above_by_brick[brick.index]
         else:
             return []
 
     def below_brick(self, brick):
-        if brick.location in self.below_by_brick_loc:
-            return self.below_by_brick_loc[brick.location]
+        if brick.index in self.below_by_brick:
+            return self.below_by_brick[brick.index]
         else:
             return []
 
     def below_brick_or_fail(self, brick):
-        return self.below_by_brick_loc[brick.location]
+        return self.below_by_brick[brick.index]
