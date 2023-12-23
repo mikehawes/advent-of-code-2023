@@ -1,6 +1,6 @@
 import io
 
-from day22.brick import Location, label_for_index, Size
+from day22.brick import Location, label_for_index, Size, SandBrick
 from day22.snapshot import BricksSnapshot
 from day22.structure import SupportStructure
 
@@ -23,10 +23,14 @@ def print_bricks_snapshot(snapshot: BricksSnapshot, layers=False):
 
 def print_bricks_layers(snapshot: BricksSnapshot):
     out = io.StringIO()
+    structure = SupportStructure.from_snapshot(snapshot)
     for z in range(snapshot.size.z - 1, 0, -1):
-        print(str(z).rjust(3) + 'x'.center(snapshot.size.x).rstrip(), file=out)
         for y in range(0, snapshot.size.y):
-            out.write('   ')
+            if y == snapshot.size.y // 2:
+                out.write(' y ')
+            else:
+                out.write('   ')
+            y_bricks = []
             for x in range(0, snapshot.size.x):
                 location = Location(x, y, z)
                 if location not in snapshot.bricks_by_location:
@@ -34,9 +38,17 @@ def print_bricks_layers(snapshot: BricksSnapshot):
                 else:
                     brick = snapshot.bricks_by_location[location]
                     out.write(brick.label())
-            if y == snapshot.size.y // 2:
-                out.write(' y')
+                    y_bricks.append(brick)
+            if y_bricks:
+                out.write('  ')
+            printed = {}
+            for brick in y_bricks:
+                if brick.location in printed:
+                    continue
+                out.write(' {}'.format(print_brick(brick, structure)))
+                printed[brick.location] = True
             print(file=out)
+        print(str(z).rjust(3) + 'x'.center(snapshot.size.x).rstrip(), file=out)
     return out.getvalue()
 
 
@@ -86,14 +98,18 @@ def print_bricks_by_z_value(snapshot: BricksSnapshot):
         bricks = snapshot.bricks_by_min_z[z]
         outputs = []
         for brick in bricks:
-            would_fall = structure.which_bricks_would_fall(brick)
-            outputs.append('{}{}<{} {} f{}>'.format(
-                brick.label(), brick.index,
-                print_location(brick.location),
-                print_brick_size(brick.size),
-                len(would_fall)))
+            outputs.append(print_brick(brick, structure))
         print(', '.join(outputs), file=out)
     return out.getvalue()
+
+
+def print_brick(brick: SandBrick, structure: SupportStructure):
+    would_fall = structure.which_bricks_would_fall(brick)
+    return '{}{}<{} {} f{}>'.format(
+        brick.label(), brick.index,
+        print_location(brick.location),
+        print_brick_size(brick.size),
+        len(would_fall))
 
 
 def print_location(location: Location):
