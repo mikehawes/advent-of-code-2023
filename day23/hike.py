@@ -44,15 +44,20 @@ def find_longest_hike(trails: TrailsMap) -> Hike:
     options = [hike]
     max_length = 0
     longest_hike = hike
+    possible_hikes = 0
+    hikes_to_end = 0
     while options:
         hike = options.pop()
+        possible_hikes += 1
         if hike.end().number == end.number:
+            hikes_to_end += 1
             hike_length = hike.steps()
             if hike_length > max_length:
                 longest_hike = hike
                 max_length = hike_length
         else:
             options.extend(hike.extend_with_all_options())
+    print('Found {} possible hikes, {} to the end'.format(possible_hikes, hikes_to_end))
     return longest_hike
 
 

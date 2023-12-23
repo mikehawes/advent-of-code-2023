@@ -122,6 +122,7 @@ def find_trails_and_junctions(tiles: list[list[str]], avoid_climbing=True):
                 trail.append(location)
                 last_location = location
                 location = exits[0]
+    print('Found {} trails, {} junctions'.format(len(trails), len(junctions_by_loc)))
     return trails, junctions_by_loc
 
 
