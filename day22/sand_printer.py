@@ -1,14 +1,16 @@
 import io
 
-from day22.brick import Location, label_for_index
+from day22.brick import Location, label_for_index, Size
 from day22.snapshot import BricksSnapshot
+from day22.structure import SupportStructure
 
 
 def print_bricks_snapshot(snapshot: BricksSnapshot):
     out = io.StringIO()
     x_view = print_bricks_snapshot_dimension(snapshot, 'x', 0, 1)
     y_view = print_bricks_snapshot_dimension(snapshot, 'y', 1, 0)
-    print_adjacent([x_view, y_view], out)
+    bricks = print_bricks_by_z_value(snapshot)
+    print_adjacent([x_view, y_view, bricks], out)
     return out.getvalue()
 
 
@@ -44,6 +46,41 @@ def print_bricks_snapshot_dimension(snapshot: BricksSnapshot, desc, dimension, o
         print(file=out)
     print('-' * size, '0', file=out)
     return out.getvalue()
+
+
+def print_bricks_by_z_value(snapshot: BricksSnapshot):
+    out = io.StringIO()
+    print(file=out)
+    print(file=out)
+    structure = SupportStructure.from_snapshot(snapshot)
+    for z in range(snapshot.size.z - 1, 0, -1):
+        if z not in snapshot.bricks_by_min_z:
+            print(file=out)
+            continue
+        bricks = snapshot.bricks_by_min_z[z]
+        outputs = []
+        for brick in bricks:
+            would_fall = structure.which_bricks_would_fall(brick)
+            outputs.append('{}{}<{} {} f{}>'.format(
+                brick.label(), brick.index,
+                print_location(brick.location),
+                print_brick_size(brick.size),
+                len(would_fall)))
+        print(', '.join(outputs), file=out)
+    return out.getvalue()
+
+
+def print_location(location: Location):
+    return ','.join(map(str, location.as_list()))
+
+
+def print_brick_size(size: Size):
+    if size.x > 1:
+        return 'x{}'.format(size.x)
+    elif size.y > 1:
+        return 'y{}'.format(size.y)
+    else:
+        return 'z{}'.format(size.z)
 
 
 def print_adjacent(printouts, out):

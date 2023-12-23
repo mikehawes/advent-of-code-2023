@@ -1,12 +1,12 @@
  x          y
 012        012
 .G. 9      .G. 9
-.G. 8      .G. 8
+.G. 8      .G. 8      G6<1,1,8 z2 f0>
 ... 7      ... 7
-FFF 6      .F. 6
-..E 5 z    EEE 5 z
-D.. 4      DDD 4
-CCC 3      ..C 3
-BBB 2      B.. 2
-.A. 1      AAA 1
+FFF 6      .F. 6      F5<0,1,6 x3 f0>
+..E 5 z    EEE 5 z    E4<2,0,5 y3 f1>
+D.. 4      DDD 4      D3<0,0,4 y3 f0>
+CCC 3      ..C 3      C2<0,2,3 x3 f1>
+BBB 2      B.. 2      B1<0,0,2 x3 f0>
+.A. 1      AAA 1      A0<1,0,1 y3 f1>
 --- 0      --- 0
