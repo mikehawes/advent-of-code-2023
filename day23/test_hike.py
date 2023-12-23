@@ -16,3 +16,7 @@ class TestHike(unittest.TestCase):
     def test_should_find_longest_hike_in_example(self):
         trails = TrailsMap.from_file('example')
         verify(print_hike(find_longest_hike(trails)))
+
+    def test_should_find_longest_hike_in_input(self):
+        trails = TrailsMap.from_file('input')
+        verify(print_hike(find_longest_hike(trails)))
