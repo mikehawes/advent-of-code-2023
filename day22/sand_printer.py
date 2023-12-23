@@ -34,7 +34,14 @@ def print_bricks_layers(snapshot: BricksSnapshot):
             for x in range(0, snapshot.size.x):
                 location = Location(x, y, z)
                 if location not in snapshot.bricks_by_location:
-                    out.write('.')
+                    if z > 1:
+                        below = location.plus(z=-1)
+                        if below in snapshot.bricks_by_location:
+                            out.write('#')
+                        else:
+                            out.write('.')
+                    else:
+                        out.write('-')
                 else:
                     brick = snapshot.bricks_by_location[location]
                     out.write(brick.label())
