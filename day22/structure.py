@@ -32,13 +32,15 @@ class SupportStructure:
     def which_bricks_would_fall(self, brick):
         would_fall = []
         bricks = [brick]
+        removing = [brick]
         z = brick.location.z
         while bricks:
             bricks_by_at_z = defaultdict(list)
             for b in bricks:
                 bricks_by_at_z[b.location.z == z].append(b)
-            bricks = list(self.which_of_above_would_fall(bricks, bricks_by_at_z[True]))
+            bricks = list(self.which_of_above_would_fall(removing, bricks_by_at_z[True]))
             would_fall.extend(bricks)
+            removing.extend(bricks)
             bricks.extend(bricks_by_at_z[False])
             z += 1
         return would_fall
