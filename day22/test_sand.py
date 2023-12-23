@@ -31,6 +31,10 @@ class TestSand(unittest.TestCase):
         snapshot = BricksSnapshot.from_list(load_bricks_from_file('input'))
         verify(print_bricks_snapshot(snapshot.settle()))
 
+    def test_should_view_layers_for_input_in_air(self):
+        snapshot = BricksSnapshot.from_list(load_bricks_from_file('input'))
+        verify(print_bricks_snapshot(snapshot, layers=True))
+
     def test_should_view_layers_for_input(self):
         snapshot = BricksSnapshot.from_list(load_bricks_from_file('input'))
         verify(print_bricks_snapshot(snapshot.settle(), layers=True))
@@ -53,11 +57,11 @@ class TestSand(unittest.TestCase):
     def test_should_total_would_fall_for_each_brick_for_input(self):
         snapshot = BricksSnapshot.from_list(load_bricks_from_file('input')).settle()
         would_fall = WhichBricksWouldFall.from_snapshot(snapshot)
-        self.assertEqual(66923, would_fall.total_would_fall_for_each_brick())  # Too low!
+        self.assertEqual(68015, would_fall.total_would_fall_for_each_brick())  # Too low!
 
     def test_should_find_max_would_fall_for_a_brick_for_input(self):
         snapshot = BricksSnapshot.from_list(load_bricks_from_file('input')).settle()
         which_would_fall = WhichBricksWouldFall.from_snapshot(snapshot)
         would_fall, brick = which_would_fall.max_would_fall_for_brick()
-        self.assertEqual([1018, SandBrick(Location(5, 5, 8), Size(x=3), index=325)],
+        self.assertEqual([1031, SandBrick(Location(5, 5, 8), Size(x=3), index=325)],
                          [would_fall, brick])

@@ -1,3 +1,4 @@
+from collections import defaultdict
 from dataclasses import dataclass
 from itertools import chain
 
@@ -31,15 +32,21 @@ class SupportStructure:
     def which_bricks_would_fall(self, brick):
         would_fall = []
         bricks = [brick]
+        z = brick.location.z
         while bricks:
-            bricks = self.which_of_above_would_fall(bricks)
+            bricks_by_at_z = defaultdict(list)
+            for b in bricks:
+                bricks_by_at_z[b.location.z == z].append(b)
+            bricks = list(self.which_of_above_would_fall(bricks, bricks_by_at_z[True]))
             would_fall.extend(bricks)
+            bricks.extend(bricks_by_at_z[False])
+            z += 1
         return would_fall
 
-    def which_of_above_would_fall(self, remove_bricks):
+    def which_of_above_would_fall(self, remove_bricks, remove_bricks_at_z):
         remove_indexes = set(map(lambda brick: brick.index, remove_bricks))
         would_fall = {}
-        for remove_brick in remove_bricks:
+        for remove_brick in remove_bricks_at_z:
             for above in self.above_brick(remove_brick):
                 fall = True
                 for below in self.below_brick(above):
