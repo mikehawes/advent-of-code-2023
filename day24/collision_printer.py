@@ -14,6 +14,8 @@ def print_2d_intersections(hailstones: list[Hailstone]):
         else:
             print("Hailstones' paths cross at x={:1.3f}, y={:1.3f}.".format(
                 intersection.x, intersection.y), file=out)
+            print('Time for stone {}: {:1.3f}'.format(intersection.stone1.number, intersection.stone1_time), file=out)
+            print('Time for stone {}: {:1.3f}'.format(intersection.stone2.number, intersection.stone2_time), file=out)
         print(file=out)
     return out.getvalue()
 

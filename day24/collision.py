@@ -9,6 +9,8 @@ class Intersection2D:
     stone2: Hailstone
     x: float | None
     y: float | None
+    stone1_time: float | None
+    stone2_time: float | None
 
 
 def count_2d_intersections_in_area(hailstones: list[Hailstone], min_position: Position, max_position: Position):
@@ -21,8 +23,7 @@ def list_2d_intersections(hailstones: list[Hailstone]):
         for j in range(i + 1, len(hailstones)):
             stone1 = hailstones[i]
             stone2 = hailstones[j]
-            x, y = find_2d_intersection(stone1, stone2)
-            intersections.append(Intersection2D(stone1, stone2, x, y))
+            intersections.append(find_2d_intersection(stone1, stone2))
     return intersections
 
 
@@ -36,7 +37,9 @@ def find_2d_intersection(stone1: Hailstone, stone2: Hailstone):
     da = stone2.velocity.x
     db = stone2.velocity.y
     if dx / dy == da / db:
-        return None, None
+        return Intersection2D(stone1, stone2, None, None, None, None)
     x = (b0 - y0 + x0 * dy / dx - a0 * db / da) / (dy / dx - db / da)
     y = (a0 - x0 + y0 * dx / dy - b0 * da / db) / (dx / dy - da / db)
-    return x, y
+    t1 = (x - x0) / dx
+    t2 = (x - a0) / da
+    return Intersection2D(stone1, stone2, x, y, t1, t2)
