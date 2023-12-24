@@ -14,7 +14,13 @@ class Intersection2D:
 
 
 def count_2d_intersections_in_area(hailstones: list[Hailstone], min_position: Position, max_position: Position):
-    pass
+    num_intersections = 0
+    for intersection in list_2d_intersections(hailstones):
+        if intersection.x is None or intersection.stone1_time < 0 or intersection.stone2_time < 0:
+            continue
+        if min_position.x <= intersection.x <= max_position.x and min_position.y <= intersection.y <= max_position.y:
+            num_intersections += 1
+    return num_intersections
 
 
 def list_2d_intersections(hailstones: list[Hailstone]):
