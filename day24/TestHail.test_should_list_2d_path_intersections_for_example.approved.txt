@@ -1,0 +1,40 @@
+Hailstone 0: 19, 13, 30 @ -2, 1, -2
+Hailstone 1: 18, 19, 22 @ -1, -1, -2
+Hailstones' paths cross at x=14.333, y=15.333.
+
+Hailstone 0: 19, 13, 30 @ -2, 1, -2
+Hailstone 2: 20, 25, 34 @ -2, -2, -4
+Hailstones' paths cross at x=11.667, y=16.667.
+
+Hailstone 0: 19, 13, 30 @ -2, 1, -2
+Hailstone 3: 12, 31, 28 @ -1, -2, -1
+Hailstones' paths cross at x=6.200, y=19.400.
+
+Hailstone 0: 19, 13, 30 @ -2, 1, -2
+Hailstone 4: 20, 19, 15 @ 1, -5, -3
+Hailstones' paths cross at x=21.444, y=11.778.
+
+Hailstone 1: 18, 19, 22 @ -1, -1, -2
+Hailstone 2: 20, 25, 34 @ -2, -2, -4
+Hailstones' paths are parallel; they never intersect.
+
+Hailstone 1: 18, 19, 22 @ -1, -1, -2
+Hailstone 3: 12, 31, 28 @ -1, -2, -1
+Hailstones' paths cross at x=-6.000, y=-5.000.
+
+Hailstone 1: 18, 19, 22 @ -1, -1, -2
+Hailstone 4: 20, 19, 15 @ 1, -5, -3
+Hailstones' paths cross at x=19.667, y=20.667.
+
+Hailstone 2: 20, 25, 34 @ -2, -2, -4
+Hailstone 3: 12, 31, 28 @ -1, -2, -1
+Hailstones' paths cross at x=-2.000, y=3.000.
+
+Hailstone 2: 20, 25, 34 @ -2, -2, -4
+Hailstone 4: 20, 19, 15 @ 1, -5, -3
+Hailstones' paths cross at x=19.000, y=24.000.
+
+Hailstone 3: 12, 31, 28 @ -1, -2, -1
+Hailstone 4: 20, 19, 15 @ 1, -5, -3
+Hailstones' paths cross at x=16.000, y=39.000.
+
