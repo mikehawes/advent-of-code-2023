@@ -3,33 +3,33 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class Position:
-    x: int
-    y: int
-    z: int
+    x: float
+    y: float
+    z: float
 
     @staticmethod
-    def from_list(coordinates: list[int]):
+    def from_list(coordinates: list[float]):
         return Position(coordinates[0], coordinates[1], coordinates[2])
 
     @staticmethod
-    def all(value: int):
+    def all(value: float):
         return Position(value, value, value)
 
-    def as_list(self) -> list[int]:
+    def as_list(self) -> list[float]:
         return [self.x, self.y, self.z]
 
 
 @dataclass(frozen=True)
 class Velocity:
-    x: int
-    y: int
-    z: int
+    x: float
+    y: float
+    z: float
 
     @staticmethod
-    def from_list(speeds: list[int]):
+    def from_list(speeds: list[float]):
         return Velocity(speeds[0], speeds[1], speeds[2])
 
-    def as_list(self) -> list[int]:
+    def as_list(self) -> list[float]:
         return [self.x, self.y, self.z]
 
 
@@ -48,6 +48,6 @@ def load_hailstones_from_file(input_file) -> list[Hailstone]:
 def read_hailstone_line(item: tuple[int, str]) -> Hailstone:
     number, line = item
     parts = line.split('@')
-    position = list(map(lambda coordinate: int(coordinate.strip()), parts[0].split(',')))
-    velocity = list(map(lambda speed: int(speed.strip()), parts[1].split(',')))
+    position = list(map(lambda coordinate: float(coordinate.strip()), parts[0].split(',')))
+    velocity = list(map(lambda speed: float(speed.strip()), parts[1].split(',')))
     return Hailstone(number, Position.from_list(position), Velocity.from_list(velocity))

@@ -1,15 +1,20 @@
-Hailstone 0: 19, 13, 30 @ -2, 1, -2
-1Px + 2Py + PyVx - PxVy - 13Vx + 19Vy - 45 = 0
--2Px + 2Pz + PzVx - PxVz - 30Vx + 19Vz - 22 = 0
--2Py - 1Pz + PzVy - PyVz - 30Vy + 13Vz + 56 = 0
-Hailstone 1: 18, 19, 22 @ -1, -1, -2
--1Px + 1Py + PyVx - PxVy - 19Vx + 18Vy - 1 = 0
--2Px + 1Pz + PzVx - PxVz - 22Vx + 18Vz + 14 = 0
--2Py + 1Pz + PzVy - PyVz - 22Vy + 19Vz + 16 = 0
-Hailstone 2: 20, 25, 34 @ -2, -2, -4
--2Px + 2Py + PyVx - PxVy - 25Vx + 20Vy - 10 = 0
--4Px + 2Pz + PzVx - PxVz - 34Vx + 20Vz + 12 = 0
--4Py + 2Pz + PzVy - PyVz - 34Vy + 25Vz + 32 = 0
+Solution:
+Position: 24.000, 13.000, 10.000
+Velocity: -3.000, 1.000, 2.000
+Position total: 47.000
+
+Hailstone 0: 19, 13, 30 @ -2, 1, -2                 -2Px - 1Py - 6Vx - 1Vy + 44 = 0
+1Px + 2Py + PyVx - PxVy - 13Vx + 19Vy - 45 = 0      0Px - 1Pz + 8Vx - 1Vz + 36 = 0
+-2Px + 2Pz + PzVx - PxVz - 30Vx + 19Vz - 22 = 0     0Py + 2Pz + 8Vy + 6Vz - 40 = 0
+-2Py - 1Pz + PzVy - PyVz - 30Vy + 13Vz + 56 = 0     -1Px + 1Py - 6Vx + 2Vy - 9 = 0
+Hailstone 1: 18, 19, 22 @ -1, -1, -2                -2Px + 1Pz - 12Vx + 2Vz - 2 = 0
+-1Px + 1Py + PyVx - PxVy - 19Vx + 18Vy - 1 = 0      -2Py + 1Pz - 12Vy + 6Vz + 16 = 0
+-2Px + 1Pz + PzVx - PxVz - 22Vx + 18Vz + 14 = 0     0Px - 1Py - 6Vx - 8Vy + 3 = 0
+-2Py + 1Pz + PzVy - PyVz - 22Vy + 19Vz + 16 = 0     3Px - 1Pz + 6Vx - 8Vz - 28 = 0
+Hailstone 2: 20, 25, 34 @ -2, -2, -4                3Py + 0Pz + 6Vy + 6Vz - 57 = 0
+-2Px + 2Py + PyVx - PxVy - 25Vx + 20Vy - 10 = 0     -3Px - 2Py + 12Vx + 8Vy + 126 = 0
+-4Px + 2Pz + PzVx - PxVz - 34Vx + 20Vz + 12 = 0     -2Px - 2Pz + 13Vx + 8Vz + 91 = 0
+-4Py + 2Pz + PzVy - PyVz - 34Vy + 25Vz + 32 = 0     -2Py + 3Pz + 13Vy - 12Vz + 7 = 0
 Hailstone 3: 12, 31, 28 @ -1, -2, -1
 -2Px + 1Py + PyVx - PxVy - 31Vx + 12Vy - 7 = 0
 -1Px + 1Pz + PzVx - PxVz - 28Vx + 12Vz - 16 = 0

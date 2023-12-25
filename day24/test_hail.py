@@ -24,3 +24,7 @@ class TestHail(unittest.TestCase):
     def test_should_print_equations_for_3d_intersections_for_example(self):
         hailstones = load_hailstones_from_file('example')
         verify(print_3d_collision_equations(hailstones))
+
+    def test_should_print_equations_for_3d_intersections_for_input(self):
+        hailstones = load_hailstones_from_file('input')
+        verify(print_3d_collision_equations(hailstones))
