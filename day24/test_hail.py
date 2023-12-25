@@ -2,9 +2,9 @@ import unittest
 
 from approvaltests import verify
 
-from day24.collision import count_2d_intersections_in_area
-from day24.collision_printer import print_2d_intersections, print_3d_intersection_equations
 from day24.hail import load_hailstones_from_file, Position
+from day24.hail_printer import print_2d_intersections, print_3d_collision_equations
+from day24.intersection_2d import count_2d_intersections_in_area
 
 
 class TestHail(unittest.TestCase):
@@ -23,4 +23,4 @@ class TestHail(unittest.TestCase):
 
     def test_should_print_equations_for_3d_intersections_for_example(self):
         hailstones = load_hailstones_from_file('example')
-        verify(print_3d_intersection_equations(hailstones))
+        verify(print_3d_collision_equations(hailstones))

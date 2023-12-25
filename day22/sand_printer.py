@@ -4,10 +4,10 @@ from day22.brick import Location, label_for_index, Size, SandBrick
 from day22.fall import WhichBricksWouldFall
 from day22.snapshot import BricksSnapshot
 from day22.structure import SupportStructure
+from util.print_adjacent import print_adjacent
 
 
 def print_bricks_snapshot(snapshot: BricksSnapshot, layers=False):
-    out = io.StringIO()
     if layers:
         adjacent = [
             print_bricks_layers(snapshot)
@@ -18,8 +18,7 @@ def print_bricks_snapshot(snapshot: BricksSnapshot, layers=False):
             print_bricks_snapshot_dimension(snapshot, 'y', 1, 0),
             print_bricks_by_z_value(snapshot)
         ]
-    print_adjacent(adjacent, out)
-    return out.getvalue()
+    return print_adjacent(adjacent)
 
 
 def print_bricks_layers(snapshot: BricksSnapshot):
@@ -54,7 +53,7 @@ def print_bricks_layers(snapshot: BricksSnapshot):
             for brick in y_bricks:
                 if brick.location in printed or brick.location.y != y:
                     continue
-                out.write(' {}'.format(print_brick(brick, structure, would_fall)))
+                out.write(' {}'.format(print_brick(brick, would_fall)))
                 printed[brick.location] = True
             print(file=out)
         print(str(z).rjust(3) + 'x'.center(snapshot.size.x).rstrip(), file=out)
@@ -108,12 +107,12 @@ def print_bricks_by_z_value(snapshot: BricksSnapshot):
         bricks = snapshot.bricks_by_min_z[z]
         outputs = []
         for brick in bricks:
-            outputs.append(print_brick(brick, structure, would_fall))
+            outputs.append(print_brick(brick, would_fall))
         print(', '.join(outputs), file=out)
     return out.getvalue()
 
 
-def print_brick(brick: SandBrick, structure: SupportStructure, fall: WhichBricksWouldFall):
+def print_brick(brick: SandBrick, fall: WhichBricksWouldFall):
     would_fall = fall.which_bricks_would_fall(brick)
     return '{}{}<{} {} f{}>'.format(
         brick.label(), brick.index,
@@ -133,27 +132,3 @@ def print_brick_size(size: Size):
         return 'y{}'.format(size.y)
     else:
         return 'z{}'.format(size.z)
-
-
-def print_adjacent(printouts, out):
-    widths = []
-    printouts_lines = []
-    max_length = 0
-    for printout in printouts:
-        printout_lines = printout.splitlines()
-        printouts_lines.append(printout_lines)
-        width = 0
-        for line in printout_lines:
-            width = max(width, len(line))
-        widths.append(width)
-        max_length = max(max_length, len(printout_lines))
-    for i in range(0, max_length):
-        parts = []
-        for j in range(0, len(printouts)):
-            printout_lines = printouts_lines[j]
-            if i < len(printout_lines):
-                line = printout_lines[i]
-            else:
-                line = ''
-            parts.append(line.ljust(widths[j]))
-        print('    '.join(parts).rstrip(), file=out)

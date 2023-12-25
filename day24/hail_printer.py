@@ -1,7 +1,9 @@
 import io
 
-from day24.collision import list_2d_intersections
+from day24.collision_3d import first_equations_for_collisions
 from day24.hail import Hailstone
+from day24.intersection_2d import list_2d_intersections
+from util.print_adjacent import print_adjacent
 
 
 def print_2d_intersections(hailstones: list[Hailstone]):
@@ -20,23 +22,29 @@ def print_2d_intersections(hailstones: list[Hailstone]):
     return out.getvalue()
 
 
-def print_3d_intersection_equations(hailstones: list[Hailstone]):
+def print_3d_collision_equations(hailstones: list[Hailstone]):
+    return print_adjacent([
+        print_3d_intersection_first_equations(hailstones)
+    ])
+
+
+def print_3d_intersection_first_equations(hailstones: list[Hailstone]):
     out = io.StringIO()
-    for hailstone in hailstones:
-        print(print_hailstone(hailstone), file=out)
-        p = hailstone.position.as_list()
-        v = hailstone.velocity.as_list()
-        for i in range(0, 3):
-            for j in range(i + 1, 3):
-                c1 = ['x', 'y', 'z'][i]
-                c2 = ['x', 'y', 'z'][j]
-                pc1 = v[j]
-                pc2 = -v[i]
-                vc1 = -p[j]
-                vc2 = p[i]
-                remaining = p[j] * v[i] - p[i] * v[j]
-                print(f'{pc1}P{c1} {space_sign(pc2)}P{c2} + P{c2}V{c1} - P{c1}V{c2} '
-                      f'{space_sign(vc1)}V{c1} {space_sign(vc2)}V{c2} {space_sign(remaining)} = 0', file=out)
+    equations = first_equations_for_collisions(hailstones)
+    last_hailstone = None
+    for equation in equations:
+        if equation.hailstone != last_hailstone:
+            print(print_hailstone(equation.hailstone), file=out)
+            last_hailstone = equation.hailstone
+
+        c1 = ['x', 'y', 'z'][equation.coordinate_1]
+        c2 = ['x', 'y', 'z'][equation.coordinate_2]
+        pc1 = equation.position_c1
+        pc2 = equation.position_c2
+        vc1 = equation.velocity_c1
+        vc2 = equation.velocity_c2
+        print(f'{vc2}P{c1} {space_sign(-vc1)}P{c2} + P{c2}V{c1} - P{c1}V{c2} '
+              f'{space_sign(-pc2)}V{c1} {space_sign(pc1)}V{c2} {space_sign(pc2 * vc1 - pc1 * vc2)} = 0', file=out)
     return out.getvalue()
 
 
