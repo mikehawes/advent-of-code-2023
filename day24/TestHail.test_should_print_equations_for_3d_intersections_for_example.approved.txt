@@ -1,7 +1,7 @@
 Solution:
-Position: 24.000, 13.000, 10.000
-Velocity: -3.000, 1.000, 2.000
-Position total: 47.000
+Position: 24, 13, 10
+Velocity: -3, 1, 2
+Position total: 47
 
 Hailstone 0: 19, 13, 30 @ -2, 1, -2                 -2Px - 1Py - 6Vx - 1Vy + 44 = 0
 1Px + 2Py + PyVx - PxVy - 13Vx + 19Vy - 45 = 0      0Px - 1Pz + 8Vx - 1Vz + 36 = 0

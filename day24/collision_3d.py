@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from decimal import Decimal
 
 import numpy as np
 
@@ -9,11 +10,11 @@ from day24.hail import Hailstone, Position, Velocity
 class Collision3DFirstEquation:
     coordinate_1: int
     coordinate_2: int
-    coefficient_p1: float
-    coefficient_p2: float
-    coefficient_v1: float
-    coefficient_v2: float
-    ordinate: float
+    coefficient_p1: Decimal
+    coefficient_p2: Decimal
+    coefficient_v1: Decimal
+    coefficient_v2: Decimal
+    ordinate: Decimal
 
 
 @dataclass
@@ -22,11 +23,11 @@ class Collision3DSecondEquation:
     equation_2: Collision3DFirstEquation
     coordinate_1: int
     coordinate_2: int
-    coefficient_p1: float
-    coefficient_p2: float
-    coefficient_v1: float
-    coefficient_v2: float
-    ordinate: float
+    coefficient_p1: Decimal
+    coefficient_p2: Decimal
+    coefficient_v1: Decimal
+    coefficient_v2: Decimal
+    ordinate: Decimal
 
     @staticmethod
     def subtracting_equations(equation1: Collision3DFirstEquation, equation2: Collision3DFirstEquation):
@@ -38,7 +39,7 @@ class Collision3DSecondEquation:
                                          coefficient_v2=equation2.coefficient_v2 - equation1.coefficient_v2,
                                          ordinate=equation2.ordinate - equation1.ordinate)
 
-    def coefficients_list(self) -> list[float]:
+    def coefficients_list(self) -> list[Decimal]:
         p_coefficients = [0.0, 0.0, 0.0]
         v_coefficients = [0.0, 0.0, 0.0]
         p_coefficients[self.coordinate_1] = self.coefficient_p1
@@ -81,7 +82,9 @@ def second_equations_for_collisions(
 
 
 def solve_collision_equations(equations: list[Collision3DSecondEquation]) -> tuple[Position, Velocity]:
-    coefficients_arrays = np.array(list(map(lambda e: e.coefficients_list(), equations)))
-    ordinates = np.array(list(map(lambda e: -e.ordinate, equations)))
-    results = list(map(lambda value: round(value, 2), np.linalg.lstsq(coefficients_arrays, ordinates)[0]))
+    coefficients_arrays = np.array(list(map(lambda e: list(map(lambda value: np.double(value),
+                                                               e.coefficients_list())),
+                                            equations[0:6])))
+    ordinates = np.array(list(map(lambda e: np.double(-e.ordinate), equations[0:6])))
+    results = list(map(lambda value: Decimal(round(value, 4)), np.linalg.solve(coefficients_arrays, ordinates)))
     return Position(results[0], results[1], results[2]), Velocity(results[3], results[4], results[5])

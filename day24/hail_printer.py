@@ -1,4 +1,5 @@
 import io
+from decimal import Decimal
 
 from day24.collision_3d import first_equations_for_collisions, Collision3DFirstEquation, \
     second_equations_for_collisions, Collision3DSecondEquation, solve_collision_equations
@@ -65,7 +66,7 @@ def print_3d_intersection_solution(position: Position, velocity: Velocity):
     print('Solution:', file=out)
     print('Position:', print_vector_list(position.as_list()), file=out)
     print('Velocity:', print_vector_list(velocity.as_list()), file=out)
-    print('Position total: {:.3f}'.format(sum(position.as_list())), file=out)
+    print('Position total: {:g}'.format(Decimal(round(sum(position.as_list())))), file=out)
     return out.getvalue()
 
 
@@ -77,7 +78,7 @@ def print_hailstone(hailstone: Hailstone):
 
 
 def print_vector_list(values):
-    return ', '.join(map(lambda value: f'{value:.3f}', values))
+    return ', '.join(map(lambda value: f'{value:g}', values))
 
 
 def space_sign(value):
