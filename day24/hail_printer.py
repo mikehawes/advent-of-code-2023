@@ -1,6 +1,7 @@
 import io
 
-from day24.collision_3d import first_equations_for_collisions, Collision3DFirstEquation
+from day24.collision_3d import first_equations_for_collisions, Collision3DFirstEquation, \
+    second_equations_for_collisions, Collision3DSecondEquation
 from day24.hail import Hailstone
 from day24.intersection_2d import list_2d_intersections
 from util.print_adjacent import print_adjacent
@@ -24,8 +25,10 @@ def print_2d_intersections(hailstones: list[Hailstone]):
 
 def print_3d_collision_equations(hailstones: list[Hailstone]):
     first_equations = first_equations_for_collisions(hailstones)
+    second_equations = second_equations_for_collisions(hailstones, first_equations)
     return print_adjacent([
-        print_3d_intersection_first_equations(hailstones, first_equations)
+        print_3d_intersection_first_equations(hailstones, first_equations),
+        print_3d_intersection_second_equations(second_equations)
     ])
 
 
@@ -37,12 +40,20 @@ def print_3d_intersection_first_equations(hailstones: list[Hailstone],
         for equation in equations[hailstone.number]:
             c1 = ['x', 'y', 'z'][equation.coordinate_1]
             c2 = ['x', 'y', 'z'][equation.coordinate_2]
-            pc1 = equation.position_c1
-            pc2 = equation.position_c2
-            vc1 = equation.velocity_c1
-            vc2 = equation.velocity_c2
-            print(f'{vc2}P{c1} {space_sign(-vc1)}P{c2} + P{c2}V{c1} - P{c1}V{c2} '
-                  f'{space_sign(-pc2)}V{c1} {space_sign(pc1)}V{c2} {space_sign(pc2 * vc1 - pc1 * vc2)} = 0', file=out)
+            print(f'{equation.conjugate_p1}P{c1} {space_sign(equation.conjugate_p2)}P{c2} + P{c2}V{c1} - P{c1}V{c2} '
+                  f'{space_sign(equation.conjugate_v1)}V{c1} {space_sign(equation.conjugate_v2)}V{c2} '
+                  f'{space_sign(equation.remainder)} = 0', file=out)
+    return out.getvalue()
+
+
+def print_3d_intersection_second_equations(equations: list[Collision3DSecondEquation]):
+    out = io.StringIO()
+    for equation in equations:
+        c1 = ['x', 'y', 'z'][equation.coordinate_1]
+        c2 = ['x', 'y', 'z'][equation.coordinate_2]
+        print(f'{equation.conjugate_p1}P{c1} {space_sign(equation.conjugate_p2)}P{c2} '
+              f'{space_sign(equation.conjugate_v1)}V{c1} {space_sign(equation.conjugate_v2)}V{c2} '
+              f'{space_sign(equation.remainder)} = 0', file=out)
     return out.getvalue()
 
 
