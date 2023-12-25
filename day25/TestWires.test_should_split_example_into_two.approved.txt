@@ -1,0 +1,2 @@
+['bvb', 'hfx', 'jqt', 'ntq', 'rhn', 'xhk']
+['cmg', 'frs', 'lhk', 'lsr', 'nvd', 'pzl', 'qnr', 'rsh', 'rzs']
