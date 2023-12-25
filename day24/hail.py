@@ -15,6 +15,9 @@ class Position:
     def all(value: int):
         return Position(value, value, value)
 
+    def as_list(self) -> list[int]:
+        return [self.x, self.y, self.z]
+
 
 @dataclass(frozen=True)
 class Velocity:
@@ -25,6 +28,9 @@ class Velocity:
     @staticmethod
     def from_list(speeds: list[int]):
         return Velocity(speeds[0], speeds[1], speeds[2])
+
+    def as_list(self) -> list[int]:
+        return [self.x, self.y, self.z]
 
 
 @dataclass

@@ -1,0 +1,20 @@
+Hailstone 0: 19, 13, 30 @ -2, 1, -2
+1Px + 2Py + PyVx - PxVy - 13Vx + 19Vy - 45 = 0
+-2Px + 2Pz + PzVx - PxVz - 30Vx + 19Vz - 22 = 0
+-2Py - 1Pz + PzVy - PyVz - 30Vy + 13Vz + 56 = 0
+Hailstone 1: 18, 19, 22 @ -1, -1, -2
+-1Px + 1Py + PyVx - PxVy - 19Vx + 18Vy - 1 = 0
+-2Px + 1Pz + PzVx - PxVz - 22Vx + 18Vz + 14 = 0
+-2Py + 1Pz + PzVy - PyVz - 22Vy + 19Vz + 16 = 0
+Hailstone 2: 20, 25, 34 @ -2, -2, -4
+-2Px + 2Py + PyVx - PxVy - 25Vx + 20Vy - 10 = 0
+-4Px + 2Pz + PzVx - PxVz - 34Vx + 20Vz + 12 = 0
+-4Py + 2Pz + PzVy - PyVz - 34Vy + 25Vz + 32 = 0
+Hailstone 3: 12, 31, 28 @ -1, -2, -1
+-2Px + 1Py + PyVx - PxVy - 31Vx + 12Vy - 7 = 0
+-1Px + 1Pz + PzVx - PxVz - 28Vx + 12Vz - 16 = 0
+-1Py + 2Pz + PzVy - PyVz - 28Vy + 31Vz - 25 = 0
+Hailstone 4: 20, 19, 15 @ 1, -5, -3
+-5Px - 1Py + PyVx - PxVy - 19Vx + 20Vy + 119 = 0
+-3Px - 1Pz + PzVx - PxVz - 15Vx + 20Vz + 75 = 0
+-3Py + 5Pz + PzVy - PyVz - 15Vy + 19Vz - 18 = 0
