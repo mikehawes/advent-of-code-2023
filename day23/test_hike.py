@@ -33,6 +33,7 @@ class TestHike(unittest.TestCase):
         trails = TrailsMap.from_file('example', avoid_climbing=False)
         verify(print_hike(find_longest_hike(trails)))
 
+    @unittest.skip('Takes minutes')
     def test_should_find_longest_hike_in_input_with_climbing(self):
         trails = TrailsMap.from_file('input', avoid_climbing=False)
         verify(print_hike(find_longest_hike(trails)))

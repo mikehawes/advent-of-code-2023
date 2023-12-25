@@ -115,10 +115,10 @@ class PathIndex:
         for offset, end_nodes in end_nodes_by_offset.items():
             if len(end_nodes) == len(state.current_nodes):
                 end_path_offset = (state.path_offset + offset) % self.path_len
-                return NodePathState(current_nodes=end_nodes, steps=state.rules + offset, path_offset=end_path_offset,
+                return NodePathState(current_nodes=end_nodes, steps=state.steps + offset, path_offset=end_path_offset,
                                      iterations=state.iterations + 1, at_end=True)
         new_path_offset = (state.path_offset + self.index_length) % self.path_len
-        return NodePathState(current_nodes=next_nodes, steps=state.rules + self.index_length,
+        return NodePathState(current_nodes=next_nodes, steps=state.steps + self.index_length,
                              path_offset=new_path_offset, iterations=state.iterations + 1)
 
     def __repr__(self):
@@ -147,7 +147,7 @@ class Graph:
         return NodePathState(current_nodes=self.start_nodes(), steps=0, path_offset=0)
 
     def next_state(self, state, path, max_steps):
-        steps = state.rules
+        steps = state.steps
         nodes = state.current_nodes
         offset = state.path_offset
         stage_steps = 0

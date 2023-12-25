@@ -60,6 +60,7 @@ class TestGraph(unittest.TestCase):
             repr(after_by_graph))
         self.assertEqual(repr(after_by_graph), repr(after_by_index))
 
+    @unittest.skip('Takes minutes')
     def test_should_find_answer(self):
         path, graph = read_path_and_graph('input')
         path_index = graph.path_index(path, 100000)

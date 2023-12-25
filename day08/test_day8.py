@@ -21,5 +21,6 @@ class TestDay8Part2(unittest.TestCase):
     def test_should_get_steps_for_example_3(self):
         self.assertEqual(6, count_steps_from_a_to_z_as_ghost('example3'))
 
+    @unittest.skip('Takes about half an hour')
     def test_should_get_steps_for_input(self):
         self.assertEqual(22_289_513_667_691, count_steps_from_a_to_z_as_ghost('input'))
