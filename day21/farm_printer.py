@@ -1,5 +1,6 @@
 import io
 import math
+from collections import defaultdict
 from itertools import groupby
 
 
@@ -36,20 +37,24 @@ def print_all_end_steps(farm, steps_cases, wrap=False):
         maps_left = math.floor(first_x / farm.width)
         maps_right = math.ceil(last_x / farm.width)
         x_values_by_y = {}
+        reachable_by_map_pos = defaultdict(lambda: 0)
         for y, locations in groupby(tiles_sorted_by_y, lambda loc: loc.y):
             x_values_by_y[y] = dict(map(lambda loc: (loc.x, True), locations))
         for y in range(maps_top * farm.height, maps_bottom * farm.height):
             farm_y = y % farm.height
-            y_even = (y // farm.height) % 2
+            maps_y = y // farm.height
+            maps_y_even = maps_y % 2
             if y in x_values_by_y:
                 x_values = x_values_by_y[y]
             else:
                 x_values = {}
             for x in range(maps_left * farm.width, maps_right * farm.width):
                 farm_x = x % farm.width
-                x_even = (x // farm.width) % 2
-                empty_tile = "'" if x_even != y_even else '.'
+                maps_x = x // farm.width
+                maps_x_even = maps_x % 2
+                empty_tile = "'" if maps_x_even != maps_y_even else '.'
                 if x in x_values:
+                    reachable_by_map_pos[(maps_x, maps_y)] += 1
                     out.write('O')
                 else:
                     tile = farm.lines[farm_y][farm_x]
@@ -57,5 +62,16 @@ def print_all_end_steps(farm, steps_cases, wrap=False):
                         tile = empty_tile
                     out.write(tile)
             print(file=out)
+        print('Found reachable by map copy:', file=out)
+        reachable_by_map = []
+        for maps_y in range(maps_top, maps_bottom):
+            reachable_by_map_x = []
+            for maps_x in range(maps_left, maps_right):
+                reachable_by_map_x.append(reachable_by_map_pos[(maps_x, maps_y)])
+            reachable_by_map.append(reachable_by_map_x)
+        print('\n'.join(map(lambda by_map_x: '|'.join(map(lambda count: str(count).center(4),
+                                                          by_map_x)).rstrip(),
+                            reachable_by_map)), file=out)
+        print('Total reachable:', sum(map(sum, reachable_by_map)), file=out)
         print(file=out)
     return out.getvalue()
