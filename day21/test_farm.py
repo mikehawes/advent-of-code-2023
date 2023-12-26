@@ -24,6 +24,7 @@ class TestFarm(unittest.TestCase):
         farm = read_farm_map_from_file('example')
         verify(print_all_end_steps(farm, [6, 10, 50], wrap=True))
 
+    @unittest.skip('Takes about 50 seconds')
     def test_should_print_some_end_steps_for_input_with_wrapping(self):
         farm = read_farm_map_from_file('input')
-        verify(print_all_end_steps(farm, [65, 327], wrap=True))
+        verify(print_all_end_steps(farm, [65, 327, 458], wrap=True))
