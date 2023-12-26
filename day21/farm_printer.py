@@ -40,16 +40,22 @@ def print_all_end_steps(farm, steps_cases, wrap=False):
             x_values_by_y[y] = dict(map(lambda loc: (loc.x, True), locations))
         for y in range(maps_top * farm.height, maps_bottom * farm.height):
             farm_y = y % farm.height
+            y_even = (y // farm.height) % 2
             if y in x_values_by_y:
                 x_values = x_values_by_y[y]
             else:
                 x_values = {}
             for x in range(maps_left * farm.width, maps_right * farm.width):
                 farm_x = x % farm.width
+                x_even = (x // farm.width) % 2
+                empty_tile = "'" if x_even != y_even else '.'
                 if x in x_values:
                     out.write('O')
                 else:
-                    out.write(farm.lines[farm_y][farm_x])
+                    tile = farm.lines[farm_y][farm_x]
+                    if tile == '.':
+                        tile = empty_tile
+                    out.write(tile)
             print(file=out)
         print(file=out)
     return out.getvalue()
